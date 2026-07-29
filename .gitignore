@@ -22,7 +22,7 @@ DerivedData/
 Pods/
 Podfile.lock
 Manifest.lock
-
+#!1111
 # 编译日志、临时文件
 *.log
 *.swp
