@@ -1,2 +1,29 @@
 
-xcuserdata
+# 系统文件
+.DS_Store
+.AppleDouble
+._*
+
+# Xcode 用户配置、缓存
+xcuserdata/
+xcuserdatad/
+*.xcuserstate
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.mode2v3
+*.perspectivev3
+*.xccheckout
+*.xcscmblueprint
+build/
+DerivedData/
+
+# CocoaPods 依赖（核心）
+Pods/
+Podfile.lock
+Manifest.lock
+
+# 编译日志、临时文件
+*.log
+*.swp
+*.o
