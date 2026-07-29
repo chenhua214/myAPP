@@ -1,0 +1,84 @@
+//
+//  PrefixHeader.pch
+//  JDKJAPP
+//
+//  Created by chenyi on 2026/1/12.
+//
+
+#ifndef PrefixHeader_pch
+#define PrefixHeader_pch
+#import <Masonry.h>
+#import "CommonMacro.h"
+#import "NSString+BSCommon.h"
+#import <YYCategories/YYCategories.h>
+#import <YYModel/YYModel.h>
+#import "BSBLEDefine.h"
+#import "BSUserDefaults.h"
+#import "UIColor+BSExpanded.h"
+#import "UIFont+BSCommon.h"
+#import "UITabBar+BSAddition.h"
+#import "NSObject+BSHUD.h"
+#import "BSStringUtil.h"
+#import "BSConfigManager.h"
+#import "BSDeviceUtil.h"
+#import "BSLanguageTool.h"
+#import "BSAlertMessageTool.h"
+#import "BSAlertMessageTool+Events.h"
+#import "NSObject+BSIpad.h"
+#import "UIApplication+BSAddition.h"
+
+#import "AppColorHeader.h"
+#import "BSEnumDefine.h"
+#import "AppDelegate.h"
+#import "BSGuestModeHelper.h"
+#import "NSObject+BSGCDTimer.h"
+
+#pragma mark - UI视图
+#import "UIButton+BSExpandTouch.h"
+#import "UIButton+BSCommon.h"
+#import "UIView+BSCommon.h"
+#import "UIView+BSCorner.h"
+#import "UIView+BSFrame.h"
+#import "UIView+Status.h"
+#import "UIViewController+YGNavigationBar.h"
+#import "UIImage+BSRoundCorner.h"
+
+#pragma mark - 系统语言
+#define BSLocalizedString(key, comment) [BSLanguageTool get:(key) alter:@""]
+#define NSLocalizedStringkey(key) [BSLanguageTool get:(key)]
+
+#define NSLocalizedStringFromTable(key, tbl, comment) \
+      [NSBundle.mainBundle localizedStringForKey:(key) value:@"" table:(tbl)]
+#define NSLocalizedStringFromTableInBundle(key, tbl, bundle, comment) \
+      [bundle localizedStringForKey:(key) value:@"" table:(tbl)]
+#define NSLocalizedStringWithDefaultValue(key, tbl, bundle, val, comment) \
+      [bundle localizedStringForKey:(key) value:(val) table:(tbl)]
+
+
+
+static inline CGFloat bsValue(CGFloat value) {
+    if(isIpad) return value;
+    CGFloat width = (kSCREEN_HEIGHT > kSCREEN_WIDTH) ? kSCREEN_WIDTH : kSCREEN_HEIGHT;
+    CGFloat v = value / 375.0f *  width;
+    return v;
+}
+
+static inline CGFloat bsValue390(CGFloat value) {
+    if(isIpad) return value;
+    CGFloat width = (kSCREEN_HEIGHT > kSCREEN_WIDTH) ? kSCREEN_WIDTH : kSCREEN_HEIGHT;
+    CGFloat v = value / 390.0f *  width;
+    return v;
+}
+
+#define Height812(y) ((y) * kSCREEN_HEIGHT / 812.0f)
+#define RelativeHeight(y,h) ((y) * kSCREEN_HEIGHT / (h * 1.0) )
+#define RelativeWidth(x,w)  ((x) * kSCREEN_WIDTH /  (w * 1.0) )
+#ifdef DEBUG
+
+#define AppLog(...)                 NSLog(@"[%@] %@ (%s [Line:%d])", AppLogTagDebug, [NSString stringWithFormat:__VA_ARGS__], __FUNCTION__, __LINE__)
+#define NSLog(...)                  NSLog(@"%@", [NSString stringWithFormat:__VA_ARGS__])
+#else
+#define AppLog(...)             while(0) {}
+#define NSLog(...)              while(0) {}
+#endif
+#endif /* PrefixHeader_pch */
