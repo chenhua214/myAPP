@@ -1,17 +1,17 @@
 //
-//  tttttttTests.m
-//  tttttttTests
+//  BeillenTests.m
+//  BeillenTests
 //
 //  Created by chenyi on 2026/1/26.
 //
 
 #import <XCTest/XCTest.h>
 
-@interface tttttttTests : XCTestCase
+@interface BeillenTests : XCTestCase
 
 @end
 
-@implementation tttttttTests
+@implementation BeillenTests
 
 - (void)setUp {
     // Put setup code here. This method is called before the invocation of each test method in the class.

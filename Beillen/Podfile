@@ -1,7 +1,7 @@
 # Uncomment the next line to define a global platform for your project
 # platform :ios, '9.0'
 
-target 'ttttttt' do
+target 'Beillen' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
   pod 'Masonry'
@@ -10,14 +10,14 @@ target 'ttttttt' do
   pod 'YYModel'
   pod 'MBProgressHUD'
   pod 'ReactiveObjC'
-  # Pods for ttttttt
+  # Pods for Beillen
 
-  target 'tttttttTests' do
+  target 'BeillenTests' do
     inherit! :search_paths
     # Pods for testing
   end
 
-  target 'tttttttUITests' do
+  target 'BeillenUITests' do
     # Pods for testing
   end
 

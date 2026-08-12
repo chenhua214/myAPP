@@ -32,9 +32,10 @@
 /* Begin PBXFileReference section */
 		0A53E533E851C04DC7144A8B /* Pods-ttttttt.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ttttttt.release.xcconfig"; path = "Target Support Files/Pods-ttttttt/Pods-ttttttt.release.xcconfig"; sourceTree = "<group>"; };
 		2BCA1BE406F4051C4458A07B /* Pods_ttttttt.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ttttttt.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		2C9E58BC2F275B560000264A /* ttttttt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ttttttt.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		2C9E58D72F275B570000264A /* tttttttTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = tttttttTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		2C9E58E12F275B570000264A /* tttttttUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = tttttttUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2C8DE84D302C658B00A2B630 /* Beillen-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Beillen-Bridging-Header.h"; sourceTree = "<group>"; };
+		2C9E58BC2F275B560000264A /* Beillen.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Beillen.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2C9E58D72F275B570000264A /* BeillenTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BeillenTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2C9E58E12F275B570000264A /* BeillenUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BeillenUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		52036854B55F46BE46FF07BA /* Pods-tttttttTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tttttttTests.release.xcconfig"; path = "Target Support Files/Pods-tttttttTests/Pods-tttttttTests.release.xcconfig"; sourceTree = "<group>"; };
 		58582E86049AC677AA5ADF8A /* Pods-ttttttt-tttttttUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ttttttt-tttttttUITests.release.xcconfig"; path = "Target Support Files/Pods-ttttttt-tttttttUITests/Pods-ttttttt-tttttttUITests.release.xcconfig"; sourceTree = "<group>"; };
 		6AD1293C60D8411B3FAA1780 /* Pods_tttttttTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_tttttttTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -45,32 +46,22 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		2C9E58E92F275B570000264A /* Exceptions for "ttttttt" folder in "ttttttt" target */ = {
+		2C9E58E92F275B570000264A /* Exceptions for "Beillen" folder in "Beillen" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
-			target = 2C9E58BB2F275B560000264A /* ttttttt */;
+			target = 2C9E58BB2F275B560000264A /* Beillen */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		2C9E58BE2F275B560000264A /* ttttttt */ = {
+		2C9E58BE2F275B560000264A /* Beillen */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				2C9E58E92F275B570000264A /* Exceptions for "ttttttt" folder in "ttttttt" target */,
+				2C9E58E92F275B570000264A /* Exceptions for "Beillen" folder in "Beillen" target */,
 			);
-			path = ttttttt;
-			sourceTree = "<group>";
-		};
-		2C9E58DA2F275B570000264A /* tttttttTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = tttttttTests;
-			sourceTree = "<group>";
-		};
-		2C9E58E42F275B570000264A /* tttttttUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = tttttttUITests;
+			path = Beillen;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -106,21 +97,20 @@
 		2C9E58B32F275B560000264A = {
 			isa = PBXGroup;
 			children = (
-				2C9E58BE2F275B560000264A /* ttttttt */,
-				2C9E58DA2F275B570000264A /* tttttttTests */,
-				2C9E58E42F275B570000264A /* tttttttUITests */,
+				2C9E58BE2F275B560000264A /* Beillen */,
 				2C9E58BD2F275B560000264A /* Products */,
 				42CA547496946D2CDD4A2696 /* Pods */,
 				C5054F1487562068C346AAB3 /* Frameworks */,
+				2C8DE84D302C658B00A2B630 /* Beillen-Bridging-Header.h */,
 			);
 			sourceTree = "<group>";
 		};
 		2C9E58BD2F275B560000264A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				2C9E58BC2F275B560000264A /* ttttttt.app */,
-				2C9E58D72F275B570000264A /* tttttttTests.xctest */,
-				2C9E58E12F275B570000264A /* tttttttUITests.xctest */,
+				2C9E58BC2F275B560000264A /* Beillen.app */,
+				2C9E58D72F275B570000264A /* BeillenTests.xctest */,
+				2C9E58E12F275B570000264A /* BeillenUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -151,9 +141,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		2C9E58BB2F275B560000264A /* ttttttt */ = {
+		2C9E58BB2F275B560000264A /* Beillen */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2C9E58EA2F275B570000264A /* Build configuration list for PBXNativeTarget "ttttttt" */;
+			buildConfigurationList = 2C9E58EA2F275B570000264A /* Build configuration list for PBXNativeTarget "Beillen" */;
 			buildPhases = (
 				B75AA0FE738D754DBA8A3921 /* [CP] Check Pods Manifest.lock */,
 				2C9E58B82F275B560000264A /* Sources */,
@@ -166,16 +156,16 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				2C9E58BE2F275B560000264A /* ttttttt */,
+				2C9E58BE2F275B560000264A /* Beillen */,
 			);
-			name = ttttttt;
+			name = Beillen;
 			productName = ttttttt;
-			productReference = 2C9E58BC2F275B560000264A /* ttttttt.app */;
+			productReference = 2C9E58BC2F275B560000264A /* Beillen.app */;
 			productType = "com.apple.product-type.application";
 		};
-		2C9E58D62F275B570000264A /* tttttttTests */ = {
+		2C9E58D62F275B570000264A /* BeillenTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2C9E58EF2F275B570000264A /* Build configuration list for PBXNativeTarget "tttttttTests" */;
+			buildConfigurationList = 2C9E58EF2F275B570000264A /* Build configuration list for PBXNativeTarget "BeillenTests" */;
 			buildPhases = (
 				794046B14982C7F559A8C668 /* [CP] Check Pods Manifest.lock */,
 				2C9E58D32F275B570000264A /* Sources */,
@@ -187,17 +177,14 @@
 			dependencies = (
 				2C9E58D92F275B570000264A /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				2C9E58DA2F275B570000264A /* tttttttTests */,
-			);
-			name = tttttttTests;
+			name = BeillenTests;
 			productName = tttttttTests;
-			productReference = 2C9E58D72F275B570000264A /* tttttttTests.xctest */;
+			productReference = 2C9E58D72F275B570000264A /* BeillenTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		2C9E58E02F275B570000264A /* tttttttUITests */ = {
+		2C9E58E02F275B570000264A /* BeillenUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2C9E58F22F275B570000264A /* Build configuration list for PBXNativeTarget "tttttttUITests" */;
+			buildConfigurationList = 2C9E58F22F275B570000264A /* Build configuration list for PBXNativeTarget "BeillenUITests" */;
 			buildPhases = (
 				EA3DC3190C9292756992767B /* [CP] Check Pods Manifest.lock */,
 				2C9E58DD2F275B570000264A /* Sources */,
@@ -210,12 +197,9 @@
 			dependencies = (
 				2C9E58E32F275B570000264A /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				2C9E58E42F275B570000264A /* tttttttUITests */,
-			);
-			name = tttttttUITests;
+			name = BeillenUITests;
 			productName = tttttttUITests;
-			productReference = 2C9E58E12F275B570000264A /* tttttttUITests.xctest */;
+			productReference = 2C9E58E12F275B570000264A /* BeillenUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -229,6 +213,7 @@
 				TargetAttributes = {
 					2C9E58BB2F275B560000264A = {
 						CreatedOnToolsVersion = 16.2;
+						LastSwiftMigration = 1620;
 					};
 					2C9E58D62F275B570000264A = {
 						CreatedOnToolsVersion = 16.2;
@@ -240,7 +225,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 2C9E58B72F275B560000264A /* Build configuration list for PBXProject "ttttttt" */;
+			buildConfigurationList = 2C9E58B72F275B560000264A /* Build configuration list for PBXProject "Beillen" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -255,9 +240,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				2C9E58BB2F275B560000264A /* ttttttt */,
-				2C9E58D62F275B570000264A /* tttttttTests */,
-				2C9E58E02F275B570000264A /* tttttttUITests */,
+				2C9E58BB2F275B560000264A /* Beillen */,
+				2C9E58D62F275B570000264A /* BeillenTests */,
+				2C9E58E02F275B570000264A /* BeillenUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -416,12 +401,12 @@
 /* Begin PBXTargetDependency section */
 		2C9E58D92F275B570000264A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 2C9E58BB2F275B560000264A /* ttttttt */;
+			target = 2C9E58BB2F275B560000264A /* Beillen */;
 			targetProxy = 2C9E58D82F275B570000264A /* PBXContainerItemProxy */;
 		};
 		2C9E58E32F275B570000264A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 2C9E58BB2F275B560000264A /* ttttttt */;
+			target = 2C9E58BB2F275B560000264A /* Beillen */;
 			targetProxy = 2C9E58E22F275B570000264A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -433,13 +418,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 9L8GL8QRXX;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
-				GCC_PREFIX_HEADER = ttttttt/Global/PrefixHeader.pch;
+				GCC_PREFIX_HEADER = Beillen/Global/PrefixHeader.pch;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = ttttttt/Info.plist;
+				INFOPLIST_FILE = Beillen/Info.plist;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "\"请点击“好”以允许访问，如果不允许，您将无法添加和使用蓝牙设备;";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -451,9 +437,12 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = GYE.ttttttt;
+				PRODUCT_BUNDLE_IDENTIFIER = GYE.Beillen;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Beillen-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -464,13 +453,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 9L8GL8QRXX;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
-				GCC_PREFIX_HEADER = ttttttt/Global/PrefixHeader.pch;
+				GCC_PREFIX_HEADER = Beillen/Global/PrefixHeader.pch;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = ttttttt/Info.plist;
+				INFOPLIST_FILE = Beillen/Info.plist;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "\"请点击“好”以允许访问，如果不允许，您将无法添加和使用蓝牙设备;";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -482,9 +472,11 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = GYE.ttttttt;
+				PRODUCT_BUNDLE_IDENTIFIER = GYE.Beillen;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Beillen-Bridging-Header.h";
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -617,11 +609,11 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = GYE.tttttttTests;
+				PRODUCT_BUNDLE_IDENTIFIER = GYE.BeillenTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ttttttt.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ttttttt";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Beillen.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Beillen";
 			};
 			name = Debug;
 		};
@@ -635,11 +627,11 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = GYE.tttttttTests;
+				PRODUCT_BUNDLE_IDENTIFIER = GYE.BeillenTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ttttttt.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ttttttt";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Beillen.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Beillen";
 			};
 			name = Release;
 		};
@@ -651,11 +643,11 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = GYE.tttttttUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = GYE.BeillenUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = ttttttt;
+				TEST_TARGET_NAME = Beillen;
 			};
 			name = Debug;
 		};
@@ -667,18 +659,18 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = GYE.tttttttUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = GYE.BeillenUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = ttttttt;
+				TEST_TARGET_NAME = Beillen;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		2C9E58B72F275B560000264A /* Build configuration list for PBXProject "ttttttt" */ = {
+		2C9E58B72F275B560000264A /* Build configuration list for PBXProject "Beillen" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2C9E58ED2F275B570000264A /* Debug */,
@@ -687,7 +679,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2C9E58EA2F275B570000264A /* Build configuration list for PBXNativeTarget "ttttttt" */ = {
+		2C9E58EA2F275B570000264A /* Build configuration list for PBXNativeTarget "Beillen" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2C9E58EB2F275B570000264A /* Debug */,
@@ -696,7 +688,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2C9E58EF2F275B570000264A /* Build configuration list for PBXNativeTarget "tttttttTests" */ = {
+		2C9E58EF2F275B570000264A /* Build configuration list for PBXNativeTarget "BeillenTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2C9E58F02F275B570000264A /* Debug */,
@@ -705,7 +697,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2C9E58F22F275B570000264A /* Build configuration list for PBXNativeTarget "tttttttUITests" */ = {
+		2C9E58F22F275B570000264A /* Build configuration list for PBXNativeTarget "BeillenUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2C9E58F32F275B570000264A /* Debug */,

@@ -1,17 +1,17 @@
 //
-//  tttttttUITestsLaunchTests.m
-//  tttttttUITests
+//  BeillenUITestsLaunchTests.m
+//  BeillenUITests
 //
 //  Created by chenyi on 2026/1/26.
 //
 
 #import <XCTest/XCTest.h>
 
-@interface tttttttUITestsLaunchTests : XCTestCase
+@interface BeillenUITestsLaunchTests : XCTestCase
 
 @end
 
-@implementation tttttttUITestsLaunchTests
+@implementation BeillenUITestsLaunchTests
 
 + (BOOL)runsForEachTargetApplicationUIConfiguration {
     return YES;
