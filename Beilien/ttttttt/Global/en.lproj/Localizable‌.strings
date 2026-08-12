@@ -1,0 +1,18 @@
+/* 
+  Localizable‌.strings
+  ttttttt
+
+  Created by chenyi on 2026/7/30.
+  
+*/
+"device_share" = "Device sharing";
+"add_share" = "Add device";
+"about_app" = "About APP";
+"my_setting" = "Settings";
+"str_privacy_policy" = "Privacy Policy";
+"str_user_agreement" = "User Agreement";
+"str_app_registration_number" = "APP Record number";
+"str_app_registration_number_value" = "粤ICP备888888需要更新";
+"customerChat" = "联系我们（需要翻译）";
+"setting_multi_language" = "Language";
+"setting_multi_association" = "官方社群（需要翻译）";
