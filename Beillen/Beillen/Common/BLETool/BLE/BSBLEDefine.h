@@ -9,11 +9,15 @@
 #define BSBLEDefine_h
 
 //Baseus 产品统一标识 UUID
-#define kBSProductScanUUID                      @"53527AA4-29F7-AE11-4E74-997334782568"
-#define kBSProductServiceUUID                   @"53527AA4-29F7-AE11-4E74-997334782568"
-#define kBSProductWriteCharacteristicUUID       @"EE684B1A-1E9B-ED3E-EE55-F894667E92AC"
-#define kBSProductNotifyCharacteristicUUID      @"654B749C-E37F-AE1F-EBAB-40CA133E3690"
+//#define kBSProductScanUUID                      @"53527AA4-29F7-AE11-4E74-997334782568"
+//#define kBSProductServiceUUID                   @"53527AA4-29F7-AE11-4E74-997334782568"
+//#define kBSProductWriteCharacteristicUUID       @"EE684B1A-1E9B-ED3E-EE55-F894667E92AC"
+//#define kBSProductNotifyCharacteristicUUID      @"654B749C-E37F-AE1F-EBAB-40CA133E3690"
 
+#define kBSProductScanUUID                      @"6E400001-B5A3-F393-E0A9-E50E24DCCA9E"
+#define kBSProductServiceUUID                   @"6E400001-B5A3-F393-E0A9-E50E24DCCA9E"
+#define kBSProductWriteCharacteristicUUID       @"6E400002-B5A3-F393-E0A9-E50E24DCCA9E"
+#define kBSProductNotifyCharacteristicUUID      @"6E400003-B5A3-F393-E0A9-E50E24DCCA9E"
 /********************设备型号********************/
 static NSString *const kBSDeviceModelTag     = @"Baseus T1";
 /********************备型号********************/
