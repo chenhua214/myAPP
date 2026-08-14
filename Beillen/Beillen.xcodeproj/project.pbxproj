@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2C0E7785302F0BEF004788D8 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2C0E7783302F0BEF004788D8 /* Localizable.strings */; };
+		2C0E7788302F0C11004788D8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2C0E7786302F0C11004788D8 /* InfoPlist.strings */; };
 		6A92E513AFC6E41714730D98 /* Pods_ttttttt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BCA1BE406F4051C4458A07B /* Pods_ttttttt.framework */; };
 		9BA11B2B0D03886CA2217943 /* Pods_ttttttt_tttttttUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7219AF0DAEBA3D0C239BC0C /* Pods_ttttttt_tttttttUITests.framework */; };
 		F69CEABF03E87916E27C28EE /* Pods_tttttttTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6AD1293C60D8411B3FAA1780 /* Pods_tttttttTests.framework */; };
@@ -32,6 +34,10 @@
 /* Begin PBXFileReference section */
 		0A53E533E851C04DC7144A8B /* Pods-ttttttt.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ttttttt.release.xcconfig"; path = "Target Support Files/Pods-ttttttt/Pods-ttttttt.release.xcconfig"; sourceTree = "<group>"; };
 		2BCA1BE406F4051C4458A07B /* Pods_ttttttt.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ttttttt.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2C0E7784302F0BEF004788D8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		2C0E7787302F0C11004788D8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		2C0E7789302F0C17004788D8 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		2C0E778A302F0C1B004788D8 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		2C8DE84D302C658B00A2B630 /* Beillen-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Beillen-Bridging-Header.h"; sourceTree = "<group>"; };
 		2C9E58BC2F275B560000264A /* Beillen.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Beillen.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C9E58D72F275B570000264A /* BeillenTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BeillenTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -97,6 +103,8 @@
 		2C9E58B32F275B560000264A = {
 			isa = PBXGroup;
 			children = (
+				2C0E7786302F0C11004788D8 /* InfoPlist.strings */,
+				2C0E7783302F0BEF004788D8 /* Localizable.strings */,
 				2C9E58BE2F275B560000264A /* Beillen */,
 				2C9E58BD2F275B560000264A /* Products */,
 				42CA547496946D2CDD4A2696 /* Pods */,
@@ -252,6 +260,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2C0E7788302F0C11004788D8 /* InfoPlist.strings in Resources */,
+				2C0E7785302F0BEF004788D8 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -410,6 +420,27 @@
 			targetProxy = 2C9E58E22F275B570000264A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		2C0E7783302F0BEF004788D8 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2C0E7784302F0BEF004788D8 /* en */,
+				2C0E7789302F0C17004788D8 /* zh-Hans */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		2C0E7786302F0C11004788D8 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2C0E7787302F0C11004788D8 /* en */,
+				2C0E778A302F0C1B004788D8 /* zh-Hans */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		2C9E58EB2F275B570000264A /* Debug */ = {

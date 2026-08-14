@@ -487,8 +487,8 @@ typedef void(^scanBlock)(BOOL finished,NSDictionary<NSString *,NSMutableSet<NSSt
         return;
     }
     //在前台可以传nil扫描周围所有设备，后台时必须传Service UUIDs
-    [_centralManager scanForPeripheralsWithServices:serviceUUIDs options:@{ CBCentralManagerScanOptionAllowDuplicatesKey : @NO }];
-    // [_centralManager scanForPeripheralsWithServices:nil options:@{ CBCentralManagerScanOptionAllowDuplicatesKey : @NO }];
+//    [_centralManager scanForPeripheralsWithServices:serviceUUIDs options:@{ CBCentralManagerScanOptionAllowDuplicatesKey : @NO }];
+     [_centralManager scanForPeripheralsWithServices:nil options:@{ CBCentralManagerScanOptionAllowDuplicatesKey : @NO }];
 }
 
 - (nullable NSArray<CBUUID *> *)serviceUUIDsWithUUIDs:(NSArray<NSString *> *)uuids{
