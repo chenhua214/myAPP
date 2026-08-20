@@ -1,6 +1,6 @@
 //
 //  BSMineListCell.h
-//  BaseusAPP
+//  Beillen
 //
 //  Created by  wang on 2021/1/19.
 //

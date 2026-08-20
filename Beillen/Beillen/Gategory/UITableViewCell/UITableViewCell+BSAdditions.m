@@ -1,6 +1,6 @@
 //
 //  UITableViewCell+BSAdditions.m
-//  BaseusAPP
+//  Beillen
 //
 //  Created by skychi on 2021/6/4.
 //

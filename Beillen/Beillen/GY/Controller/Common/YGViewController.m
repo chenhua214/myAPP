@@ -132,6 +132,11 @@
 //    self.backBtn.hidden = hidden;
 }
 
+-(CGFloat)topPadding{
+    CGFloat topPaddingNum = self.view.safeAreaInsets.top;
+    return topPaddingNum;
+}
+
 /// 更新返回按钮图片以及字体颜色为粗体
 - (void)updateBackImgAndTitleFonts {
     [self updateBackBtnImage:@"nav_back24x24" imageEdgeInsets:UIEdgeInsetsMake(0, -10, 0, 0)];

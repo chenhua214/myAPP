@@ -86,7 +86,7 @@
     [self setViewController:homeVC title:@"首页" image:@"tab_home_nor" selectImage:@"tab_home_sld" tag:1000];
             //   我的
     YGMineViewController *storeVC = [[YGMineViewController alloc]init];
-    [self setViewController:storeVC title:@"我的" image:@"tab_store_nor" selectImage:@"tab_store_sld" tag:1001];
+    [self setViewController:storeVC title:@"我的" image:@"tab_mine_nor" selectImage:@"tab_mine_sld" tag:1001];
         
     [self setupTabBar];
     self.delegate = self;

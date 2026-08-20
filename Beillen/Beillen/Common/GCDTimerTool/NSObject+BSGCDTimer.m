@@ -20,11 +20,11 @@
 // ⚠️ 当 repeats = YES 时需要自己主动 cancel
 - (void)gcdTimerWithName:(NSString *)name timeInterval:(double)interval repeats:(BOOL)repeats action:(dispatch_block_t)action
 {
-    @weakify(self);
+    __weak typeof(self) weakSelf = self;
+   
     dispatch_queue_t queue = dispatch_queue_create("BSGCDTimerTaskQueue", DISPATCH_QUEUE_CONCURRENT);
     [[BSGCDTimer shareInstance] scheduledDispatchTimerWithName:name timeInterval:interval queue:queue repeats:repeats actionOption:AbandonPreviousAction action:^{
-        @strongify(self);
-        if (!repeats) [self gcdTimerCancelWithName:name];
+        if (!repeats) [weakSelf gcdTimerCancelWithName:name];
         dispatch_async(dispatch_get_main_queue(), ^{
             if (action) action();
         });

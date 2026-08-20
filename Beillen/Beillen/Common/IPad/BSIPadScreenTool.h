@@ -1,9 +1,9 @@
 //
 //  BSIPadScreenTool.h
-//  BaseusAPP
+//  Beillen
 //
 //  Created by jy w on 2024/3/19.
-//  Copyright © 2024 Baseus. All rights reserved.
+//  Copyright © 2024 Beillen.All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

@@ -1,6 +1,6 @@
 //
 //  ZLJDeviceUtil.m
-//  BaseusAPP
+//  Beillen
 //
 //
 

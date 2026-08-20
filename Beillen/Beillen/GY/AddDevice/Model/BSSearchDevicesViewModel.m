@@ -62,10 +62,9 @@
     //重置数据源
     [self resetDataSource];
     [BSBLEManager realTimeCallbackEnabled:YES];
-    @weakify(self);
+    __weak typeof(self) weakSelf = self;
     [[BSBLEManager shareInstance] scanBLEDevicesWithModel:nil delayInSeconds:10 callback:^(BOOL finished, NSArray<BSDeviceBLE *> * _Nullable devices) {
-        @strongify(self);
-        [self scanBLEDevicesFinished:finished devices:devices];
+        [weakSelf scanBLEDevicesFinished:finished devices:devices];
     }];
 }
 
@@ -94,17 +93,16 @@
 //        callback(BSOperationStateNeedLogin,nil,nil);
 //        return;
 //    }
-    @weakify(self);
+    __weak typeof(self) weakSelf = self;
     [self.viewModel bindDevice:self.selectedDevice.bleDevice
                           type:typeModel
                       callback:^(BOOL result, DeviceTypeModel * _Nullable typeModel, BSCommonDevice * _Nullable device) {
-        @strongify(self);
         if(!result){//发生错误
             callback(BSOperationStateError,typeModel,device);
             return;
         }
         //绑定成功或连接成功
-//        if([self need2ConfigNetworkWithModel:typeModel.model]){
+//        if([weakSelf need2ConfigNetworkWithModel:typeModel.model]){
 //            //连接成功,需要跳转至配网界面
 //            callback(BSOperationStateConfigNetwork,typeModel,device);
 //            return;

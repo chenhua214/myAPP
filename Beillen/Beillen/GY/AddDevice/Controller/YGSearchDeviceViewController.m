@@ -21,7 +21,7 @@
 @implementation YGSearchDeviceViewController
 
 - (void)viewDidLoad {
-   
+    [self updateBackImgAndTitleFonts];
     self.notLoadTableView = YES;
     [super viewDidLoad];
     self.title = @"添加设备";
@@ -32,6 +32,7 @@
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    [self bs_showNavigationBarWithAnimated:animated];
     [self resumeAnimationIfNeeded];
 }
 
@@ -114,20 +115,20 @@
 //        return;
 //    }
     [self setup];
-//    @weakify(self);
+//    __weak typeof(self) weakSelf = self;
     //添加设备时不进行筛选,服务中心跳转需要进行过滤
 //    BOOL filtered = NO;
 //    [BSHomeNetWorkTool deviceCategoryInfo:filtered callback:^(BOOL result, id responseData) {
-//        @strongify(self);
-//        [self hideHud];
+//
+//        [weakSelf hideHud];
 //        if ([responseData[@"code"] integerValue] == 0) {
-//            [self refreshViewWithData:responseData];
+//            [weakSelf refreshViewWithData:responseData];
 //        }else{
 //            NSString *message = responseData[@"message"];
 //            if (!message.isEnable) {
 //                return;
 //            }
-//            [self showHint:message];
+//            [weakSelf showHint:message];
 //        }
 //    }];
 }
@@ -149,13 +150,12 @@
 
 - (void)showNoDeviceView:(BOOL)show{
 //    if(show){
-//        @weakify(self);
+//        __weak typeof(self) weakSelf = self;
 //        [BSAutoSearchNoDeviceView showInView:self.view offsetY: NAVIGATION_HEIGHT + bsValue(162) isInternalMargin: NO retryBlock:^{
-//            @strongify(self);
-//            [self searchDevices:YES];
+//            [weakSelf searchDevices:YES];
 //        } addByManualBlock:^{
-//            @strongify(self);
-//            [self toAddDevices];
+
+//            [weakSelf toAddDevices];
 //        }];
 //        return;
 //    }
@@ -218,13 +218,10 @@
 }
 
 - (void)addDeviceButtonPressed:(UIButton *)sender{
-    @weakify(self);
+    __weak typeof(self) weakSelf = self;
     [self.viewModel addDeviceWithCallback:^(BSOperationState state, DeviceTypeModel * _Nullable typeModel, BSCommonDevice * _Nullable device) {
-        @strongify(self);
-        
-        
      
-        [self handleResultWithState:state device:device typeModel:typeModel];
+        [weakSelf handleResultWithState:state device:device typeModel:typeModel];
     }];
 }
 
@@ -287,10 +284,9 @@
 
 
 - (void)getDeviceGuideModel:(DeviceTypeModel*)typeModel  Device:(BSCommonDevice *)device {
-//    @weakify(self);
+//    __weak typeof(self) weakSelf = self;
 //    [BSHomeNetWorkTool requestDeviceGuideWithModel:typeModel.model Callback:^(BOOL result, BSAddDeviceGuideArrModel * _Nullable model) {
 //        
-//        @strongify(self);
 //        BOOL isEnglish = [BSDeviceUtil isEnglishLanguage];
 //        BOOL ishowGuideView = NO ;
 //        if (isEnglish && model.operate_guidepage_us.count>0){
@@ -301,9 +297,9 @@
 //            model.selelct_operate_guidepage = model.operate_guidepage_cn ;
 //        }
 //        if (ishowGuideView) {
-//            [self toVCAddDeviceGuideeModel:typeModel addDeviceGuideData:model];
+//            [weakSelf toVCAddDeviceGuideeModel:typeModel addDeviceGuideData:model];
 //        } else {
-//            [self showDeviceBindSuccessAlertViewWithDevice: device];
+//            [weakSelf showDeviceBindSuccessAlertViewWithDevice: device];
 //        }
 //    }];
 }
@@ -365,11 +361,10 @@
 
 - (BSSearchDevicesViewModel *)viewModel{
     if (!_viewModel) {
-        @weakify(self);
+        __weak typeof(self) weakSelf = self;
         _viewModel = [BSSearchDevicesViewModel initWithTypeDeviceDict:self.deviceTypeDict
                                                           reloadBlock:^(BOOL finished) {
-            @strongify(self);
-            [self reloadDataFinished:finished];
+            [weakSelf reloadDataFinished:finished];
         }];
     }
     return _viewModel;

@@ -1,6 +1,6 @@
 //
 //  BSBaseModel.m
-//  BaseusAPP
+//  Beillen
 //
 //  Created by  wang on 2021/1/14.
 //

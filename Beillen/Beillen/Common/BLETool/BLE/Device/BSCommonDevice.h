@@ -67,6 +67,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,  copy) NSString *name;
 ///产品名称
 @property(nonatomic,  copy) NSString *prodName;
+///付文信息
+@property(nonatomic,  copy) NSString *detailName;
 @property (nonatomic, assign) BOOL online;// 是否在线
 @property (nonatomic, assign,readonly) BOOL lastOnline;// 上一次的在/离线状态
 

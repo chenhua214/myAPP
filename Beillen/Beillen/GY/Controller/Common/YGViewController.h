@@ -12,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface YGViewController : UIViewController
 
 @property(nonatomic, assign)BOOL  isGesturesBackDenied;
+@property(nonatomic, assign)CGFloat topPadding;
 - (void)onBackAction;
 - (void)popToMineDeviceViewControllerIfNeeded;
 - (void)pop2ViewControllerWithName:(NSString *)controllerName;
@@ -26,6 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// 更新返回按钮图片以及字体颜色为粗体
 - (void)updateBackImgAndTitleFonts;
+//CGFloat topPadding = self.view.safeAreaInsets.top;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -1,9 +1,9 @@
 //
 //  BSSearchDeviceListView.h
-//  BaseusAPP
+//  Beillen
 //
 //  Created by skychi on 2022/10/19.
-//  Copyright © 2022 Baseus. All rights reserved.
+//  Copyright © 2022 Beillen.All rights reserved.
 //
 
 #import "BSBaseView.h"

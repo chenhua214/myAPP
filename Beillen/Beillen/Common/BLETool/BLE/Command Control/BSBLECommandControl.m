@@ -165,12 +165,11 @@
 }
 
 - (void)registerCommandResponseCallback{
-    @weakify(self);
+    __weak typeof(self) weakSelf = self;
     _bleDevice.didResponseCommandCallback = ^{
-        @strongify(self);
-        self.isBLECallback = YES;
-        self.isExecuting = NO;
-        [self executeCommandIfNeeded];
+        weakSelf.isBLECallback = YES;
+        weakSelf.isExecuting = NO;
+        [weakSelf executeCommandIfNeeded];
     };
 }
 

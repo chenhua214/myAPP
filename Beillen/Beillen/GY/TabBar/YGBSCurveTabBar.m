@@ -94,18 +94,16 @@ static CGFloat kBSTabBarItemSpacing = 4.0;
 //    BSTabBarBackgroundView *tabBarBackgroundView = [BSTabBarBackgroundView new];
 //    [self insertSubview:tabBarBackgroundView atIndex:0];
 //    self.tabBarBackgroundView = tabBarBackgroundView;
-//    @weakify(self);
+//    __weak typeof(self) weakSelf = self;
 //    BSTabBarButton *button = [BSTabBarButton tabBarButtonWithType:0 Callback:^(BSTabBarButton *sender){
-//        @strongify(self);
-//        [self didMallButtonPressed:sender];
+//        [weakSelf didMallButtonPressed:sender];
 //    }];
 //    [self addSubview:button];
 //    self.mallButtonCenter = button;
     
 //    BSTabBarButton *buttonNew = [BSTabBarButton tabBarButtonWithType:1 Callback:^(BSTabBarButton *sender){
-//        @strongify(self);
 ////        [self didMallButtonPressed:sender];
-//        [self didMallWithButton:sender];
+//        [weakSelf didMallWithButton:sender];
 //    }];
 //    [self addSubview:buttonNew];
 //    self.mallButtonNew = buttonNew;

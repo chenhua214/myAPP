@@ -119,32 +119,31 @@ typedef void(^checkBindBlock)(BOOL result, NSInteger code, NSString *message);
 //    NSMutableDictionary *dicParam = @{@"model":self.typeModel.model,@"name" :self.typeModel.prodName,@"sn":device.identifier}.mutableCopy;
 //    if (device.serial) [dicParam setValue:device.serial forKey:@"serial"];
 //    
-//    @weakify(self);
+//    __weak typeof(self) weakSelf = self;
 //    [BSHomeNetWorkTool devicebindWithParam:dicParam success:^(id data) {
-//        @strongify(self);
 //        BSBaseModel *model = [BSBaseModel yy_modelWithDictionary:data];
 //        if (!model || model.code != 0) {
-//            [self showAlertWithCode:model.code message:model.message sn:device.identifier];
-//            [self addDevice:device success:NO];
+//            [weakSelf showAlertWithCode:model.code message:model.message sn:device.identifier];
+//            [weakSelf addDevice:device success:NO];
 //            return;
 //        }
-//        [self readVersionWithDevice:device];
+//        [weakSelf readVersionWithDevice:device];
 //    } fail:^(id data) {
-//        [self addDevice:device success:NO];
+//        [weakSelf addDevice:device success:NO];
 //    }];
 }
 
 
 - (void)readVersionWithDevice:(BSCommonDevice *)device{
     [self addReadVersionTimeoutHandlerWithDevice:device];
-    @weakify(self);
+    __weak typeof(self) weakSelf = self;
     double time = 0.8;
 //    if ([device isChargerStationDevices]) time = 1.2;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(time * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [device readDeviceVersionWithResponseBlock:^(BOOL result, id responseDic) {
-            @strongify(self);
+          
             [[BSGCDTimer shareInstance] cancelTimerWithName:kBReadVersionTimeout];
-//            [self uploadVersionWithDevice:device version:responseDic];
+//            [weakSelf uploadVersionWithDevice:device version:responseDic];
         }];
     });
 }
@@ -224,19 +223,18 @@ typedef void(^checkBindBlock)(BOOL result, NSInteger code, NSString *message);
 }
 
 - (void)checkDevice:(BSCommonDevice *)device isBind:(BOOL)relieveBind should2NextBlock:(nullable checkBindBlock)should2NextBlock{
-    @weakify(self);
+    __weak typeof(self) weakSelf = self;
     [self deviceIsBind:relieveBind callback:^(BOOL result,NSInteger code,NSString *message) {
-        @strongify(self);
         if(should2NextBlock){
             should2NextBlock(result,code,message);
             return;
         }
         if(!result){
-            [self hideHud];
+            [weakSelf hideHud];
             if (message.length > 0) {
-                [self showHint:message];
+                [weakSelf showHint:message];
             }
-            [self callbackWithResult:NO];
+            [weakSelf callbackWithResult:NO];
             return;
         }
         [self bindDeviceWithDevice:device];
@@ -341,16 +339,15 @@ typedef void(^checkBindBlock)(BOOL result, NSInteger code, NSString *message);
 - (void)connectTimeoutHandlerWithTimInterval:(NSTimeInterval)timeInterval{
     //连接超时定时器
     dispatch_queue_t queue = dispatch_queue_create("timeQueue", DISPATCH_QUEUE_CONCURRENT);
-    @weakify(self);
+    __weak typeof(self) weakSelf = self;
     [[BSGCDTimer shareInstance] scheduledDispatchTimerWithName:kBSConnectedTimeout timeInterval:timeInterval queue:queue repeats:NO actionOption:AbandonPreviousAction action:^{
         [[BSGCDTimer shareInstance] cancelTimerWithName:kBSConnectedTimeout];
         dispatch_async(dispatch_get_main_queue(), ^{
-            @strongify(self);
             //连接超时
-            [self hideHud];
-            [self.device disconnect];
-            [self showAddFailedAlert];
-            [self callbackWithResult:NO];
+            [weakSelf hideHud];
+            [weakSelf.device disconnect];
+            [weakSelf showAddFailedAlert];
+            [weakSelf callbackWithResult:NO];
         });
     }];
 }
@@ -358,13 +355,12 @@ typedef void(^checkBindBlock)(BOOL result, NSInteger code, NSString *message);
 - (void)checkDeviceDidResetedTimeoutHandlerWithDevice:(BSCommonDevice *)device{
     // 查询重置
     dispatch_queue_t queue = dispatch_queue_create("timeQueue", DISPATCH_QUEUE_CONCURRENT);
-    @weakify(self);
+    __weak typeof(self) weakSelf = self;
     [[BSGCDTimer shareInstance] scheduledDispatchTimerWithName:kBSWriteBindTimeout timeInterval:10 queue:queue repeats:NO actionOption:AbandonPreviousAction action:^{
         [[BSGCDTimer shareInstance] cancelTimerWithName:kBSWriteBindTimeout];
         dispatch_async(dispatch_get_main_queue(), ^{
-            @strongify(self);
-            [self hideHud];
-            [self checkDevice:device isBind:1];
+            [weakSelf hideHud];
+            [weakSelf checkDevice:device isBind:1];
         });
     }];
 }
@@ -372,13 +368,12 @@ typedef void(^checkBindBlock)(BOOL result, NSInteger code, NSString *message);
 
 - (void)energyDeviceReadValueTimeoutHandlerWithDevice:(BSCommonDevice *)device{
     dispatch_queue_t queue = dispatch_queue_create("timeQueue", DISPATCH_QUEUE_CONCURRENT);
-    @weakify(self);
+    __weak typeof(self) weakSelf = self;
     [[BSGCDTimer shareInstance] scheduledDispatchTimerWithName:kBSWriteBindTimeout timeInterval:3 queue:queue repeats:NO actionOption:AbandonPreviousAction action:^{
         [[BSGCDTimer shareInstance] cancelTimerWithName:kBSWriteBindTimeout];
         dispatch_async(dispatch_get_main_queue(), ^{
-            @strongify(self);
-            [self hideHud];
-            [self bindDeviceWithDevice:device];
+            [weakSelf hideHud];
+            [weakSelf bindDeviceWithDevice:device];
         });
     }];
 }
@@ -386,12 +381,11 @@ typedef void(^checkBindBlock)(BOOL result, NSInteger code, NSString *message);
 - (void)addReadVersionTimeoutHandlerWithDevice:(BSCommonDevice *)device{
     // 查询版本
     dispatch_queue_t queue = dispatch_queue_create("timeQueue", DISPATCH_QUEUE_CONCURRENT);
-    @weakify(self);
+    __weak typeof(self) weakSelf = self;
     [[BSGCDTimer shareInstance] scheduledDispatchTimerWithName:kBReadVersionTimeout timeInterval:3 queue:queue repeats:NO actionOption:AbandonPreviousAction action:^{
         [[BSGCDTimer shareInstance] cancelTimerWithName:kBReadVersionTimeout];
         dispatch_async(dispatch_get_main_queue(), ^{
-            @strongify(self);
-            [self addDevice:device success:YES];
+            [weakSelf addDevice:device success:YES];
         });
     }];
 }
@@ -402,15 +396,14 @@ typedef void(^checkBindBlock)(BOOL result, NSInteger code, NSString *message);
 
 - (void)writeInitCommandTimeoutHandlerWithInterval:(double)interval {
     dispatch_queue_t queue = dispatch_queue_create("wifitimeQueue", DISPATCH_QUEUE_CONCURRENT);
-    @weakify(self);
+    __weak typeof(self) weakSelf = self;
     [[BSGCDTimer shareInstance] scheduledDispatchTimerWithName:kBSWriteInitTimeout timeInterval:interval queue:queue repeats:NO actionOption:AbandonPreviousAction action:^{
         [[BSGCDTimer shareInstance] cancelTimerWithName:kBSWriteInitTimeout];
         dispatch_async(dispatch_get_main_queue(), ^{
-            @strongify(self);
-            [self hideHud];
-            [self.device disconnect];
-            [self showAddFailedAlert];
-            [self callbackWithResult:NO];
+            [weakSelf hideHud];
+            [weakSelf.device disconnect];
+            [weakSelf showAddFailedAlert];
+            [weakSelf callbackWithResult:NO];
         });
     }];
 }

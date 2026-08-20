@@ -12,6 +12,7 @@
 #import "NSString+BSCommon.h"
 #import <YYCategories/YYCategories.h>
 #import <YYModel/YYModel.h>
+#import <ReactiveObjC/ReactiveObjC.h>
 #import "BSBLEDefine.h"
 #import "BSUserDefaults.h"
 #import "UIColor+BSExpanded.h"
@@ -26,6 +27,9 @@
 #import "BSAlertMessageTool+Events.h"
 #import "NSObject+BSIpad.h"
 #import "UIApplication+BSAddition.h"
+#import "BSPhoneJudgeManager.h"
+#import "UICollectionViewCell+BSAdditions.h"
+#import "UICollectionReusableView+BSAdditions.h"
 
 #import "AppColorHeader.h"
 #import "BSEnumDefine.h"

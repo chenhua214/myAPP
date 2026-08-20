@@ -1,9 +1,9 @@
 //
 //  BSAlertMessageTool.h
-//  BaseusAPP
+//  Beillen
 //
 //  Created by wushuang on 2023/11/29.
-//  Copyright © 2023 Baseus. All rights reserved.
+//  Copyright © 2023 Beillen.All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

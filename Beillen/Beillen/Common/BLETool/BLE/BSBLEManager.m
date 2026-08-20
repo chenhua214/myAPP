@@ -138,11 +138,10 @@ typedef void(^scanBlock)(BOOL finished,NSDictionary<NSString *,NSMutableSet<NSSt
     NSArray *deviceTypes = types.mutableCopy;
     [self startScanWithTypes:deviceTypes];
     dispatch_queue_t queue = dispatch_queue_create("com.baseus.scanBLEDevices", DISPATCH_QUEUE_CONCURRENT);
-    @weakify(self);
+    __weak typeof(self) weakSelf = self;
     //每3秒扫描一次
     [[BSGCDTimer shareInstance] scheduledDispatchTimerWithName:kBSBLEScanDeviceTimer timeInterval:3.86 queue:queue repeats:YES actionOption:AbandonPreviousAction action:^{
-        @strongify(self);
-        [self startScanWithTypes:deviceTypes];
+        [weakSelf startScanWithTypes:deviceTypes];
     }];
     if(callback){
         // seconds 秒后回调结果
@@ -487,8 +486,8 @@ typedef void(^scanBlock)(BOOL finished,NSDictionary<NSString *,NSMutableSet<NSSt
         return;
     }
     //在前台可以传nil扫描周围所有设备，后台时必须传Service UUIDs
-//    [_centralManager scanForPeripheralsWithServices:serviceUUIDs options:@{ CBCentralManagerScanOptionAllowDuplicatesKey : @NO }];
-     [_centralManager scanForPeripheralsWithServices:nil options:@{ CBCentralManagerScanOptionAllowDuplicatesKey : @NO }];
+    [_centralManager scanForPeripheralsWithServices:serviceUUIDs options:@{ CBCentralManagerScanOptionAllowDuplicatesKey : @NO }];
+//     [_centralManager scanForPeripheralsWithServices:nil options:@{ CBCentralManagerScanOptionAllowDuplicatesKey : @NO }];
 }
 
 - (nullable NSArray<CBUUID *> *)serviceUUIDsWithUUIDs:(NSArray<NSString *> *)uuids{

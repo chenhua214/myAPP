@@ -1,9 +1,9 @@
 //
 //  BSLanguageTool.h
-//  BaseusAPP
+//  Beillen
 //
 //  Created by wushuang on 2024/7/23.
-//  Copyright © 2024 Baseus. All rights reserved.
+//  Copyright © 2024 Beillen.All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

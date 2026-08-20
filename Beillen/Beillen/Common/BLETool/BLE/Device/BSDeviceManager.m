@@ -258,9 +258,9 @@ NSString *const kBSDeviceNotification = @"BSDeviceNotification";
 //    [self downloadProductResourceWithDevices:devices callback:^{
 //        [[BSDeviceResourceDownloader instance] syncData2Devices:devices];
 ////        [self congfigDevicesWithDevices:devices]; // 1
-//        if(callback){
-//            callback();
-//        }
+        if(callback){
+            callback();
+        }
 //    }];
 }
 

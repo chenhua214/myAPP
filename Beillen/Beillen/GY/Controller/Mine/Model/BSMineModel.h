@@ -1,6 +1,6 @@
 //
 //  BSMineModel.h
-//  BaseusAPP
+//  Beillen
 //
 //  Created by skychi on 2021/5/14.
 //
