@@ -16,6 +16,9 @@
 #import "BSDeviceManager.h"
 #import "BSHomeProfilesModel.h"
 
+/// to View
+#import "PowerBankHomeViewController.h"
+
 @interface YGHomeViewController ()
 @property (nonatomic, strong) BSHomeContentView *contentView;
 /// Device 数据
@@ -85,6 +88,13 @@
     [self bs_hideNavigationBarWithAnimated:animated];
 }
 
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    if (!self.presentedViewController) [self bs_showNavigationBarWithAnimated:animated]; //如果是present时,不显示导航栏
+    [[self class] cancelPreviousPerformRequestsWithTarget:self];
+  
+}
 /// 配置导航栏高度参数
 - (void)executePhoneJudgeManager {
     [[BSPhoneJudgeManager shareManager] executeNavigationBarWithNavigationController:self.navigationController];
@@ -359,9 +369,9 @@
 // MARK: 移动电源
 -(void)cell_toPowerBankVCWithModel:(BSHomeDeviceModel *)model {
 
-//    BSPowerBankTabBarController *vc = [[BSPowerBankTabBarController alloc] init];
-//    vc.model = model;
-//    [self.navigationController pushViewController:vc animated:YES];
+    PowerBankHomeViewController *vc = [[PowerBankHomeViewController alloc] init];
+    vc.model = model;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (BSHomeContentView *)contentView {
