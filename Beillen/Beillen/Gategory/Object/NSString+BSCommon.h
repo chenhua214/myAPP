@@ -67,7 +67,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString *)getBinaryByHex:(NSString *)hex;
 // 将十进制转十六进制、不足4位补足4位
 + (NSString *)stringTo4Lenght16Hex:(long long int)hex;
-
+// 将十进制数字转十六进制、不足2位补足2位
++ (NSString *)stringTo2Lenght16Hex:(long long int)hex;
 /// 将字符串转换成带删除线的富文本
 - (NSAttributedString *)setDeleteModelWithTextColor:(UIColor *)color font:(UIFont *)font;
 

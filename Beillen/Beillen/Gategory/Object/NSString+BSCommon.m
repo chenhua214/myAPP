@@ -543,6 +543,19 @@
     return str;
 }
 
+// 将十进制数字转十六进制、不足2位补足2位
++ (NSString *)stringTo2Lenght16Hex:(long long int)hex{
+
+    NSString *hexStr = @"";
+    hexStr = [hexStr ToHex:hex];
+    //不够一个字节凑0
+    if(hexStr.length == 1){
+        return [NSString stringWithFormat:@"0%@",hexStr];
+    }
+    return hexStr;
+}
+
+
 - (void)call{
     if ([BSCommonDevice isSimulator]) {
         NSLog(@"模拟器无法拨打电话");
