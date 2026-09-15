@@ -35,13 +35,13 @@
 #pragma mark- setup
 
 - (void)setup{
-    self.backgroundColor = self.contentView.backgroundColor = [UIColor bs_colorFromARGB:@"#F8F8F8"];
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     [self createUI];
     [self setupConstraints];
 }
 
 - (void)createUI{
+    self.backgroundColor = [UIColor clearColor];
     [self.contentView addSubview:self.bgView];
     [self.bgView addSubview:self.iconView];
     [self.bgView addSubview:self.stackView];
@@ -50,7 +50,7 @@
 
 - (void)setupConstraints{
     [self.bgView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(self.contentView).insets(UIEdgeInsetsMake(0, 10, 10, 10));
+        make.edges.equalTo(self.contentView).insets(UIEdgeInsetsMake(10, 24, 6, 24));
     }];
 
     [self.iconView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -90,19 +90,32 @@
         make.centerY.equalTo(self.iconView.mas_centerY).offset(macEnabled ? -12 : 0);
     }];
     self.stateBtn.selected = checked;
-    if(backgroundColorHexString){
-        self.backgroundColor = self.contentView.backgroundColor = self.bgView.backgroundColor = [UIColor bs_colorFromARGB:backgroundColorHexString];
-    }else{
-        self.backgroundColor = self.contentView.backgroundColor = self.bgView.backgroundColor = [UIColor bs_colorFromARGB:@"#F8F8F8"];
-    }
+//    if(backgroundColorHexString){
+//        self.backgroundColor = self.contentView.backgroundColor = self.bgView.backgroundColor = [UIColor bs_colorFromARGB:backgroundColorHexString];
+//    }else{
+//        self.backgroundColor = self.contentView.backgroundColor = self.bgView.backgroundColor = [UIColor bs_colorFromARGB:@"#F8F8F8"];
+//    }
 }
 
 #pragma mark- Setters && Getters
 
 - (UIView *)bgView{
     if (!_bgView) {
-        _bgView = [UIView new];
-        _bgView.backgroundColor = [UIColor bs_colorFromARGB:@"#F2F4F8"];
+        UIView* view = [UIView new];
+        view.backgroundColor = bsColorString(@"#FFFFFF");
+        view.layer.shadowColor = bsColorAlphaString(@"#000000", 0.15).CGColor;
+        view.layer.shadowOffset = CGSizeMake(0,1);
+        view.layer.shadowOpacity = 0.7;
+        view.layer.shadowRadius = 2;
+        CALayer *layer1 = [CALayer new];
+        layer1.backgroundColor = bsColorAlphaString(@"#010101", 0.05).CGColor;
+        layer1.bounds = view.bounds;
+        layer1.position = view.center;
+        [view.layer addSublayer:layer1];
+        view.layer.cornerRadius = 30;
+        view.layer.borderWidth = 1;
+        view.layer.borderColor = [UIColor colorWithRed:0.953 green:0.957 blue:0.965 alpha:0.3].CGColor;
+        _bgView = view;
     }
     return _bgView;
 }

@@ -12,7 +12,6 @@
 #import "YGAddDeviceModel.h"
 
 @interface BSSearchDeviceListView()<UITableViewDataSource,UITableViewDelegate>
-@property(nonatomic,strong) UILabel *titleLabel;
 @property(nonatomic,strong) UITableView *tableView;
 @property(nonatomic,assign) CGFloat viewTop ;
 @end
@@ -24,7 +23,6 @@
 - (instancetype)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if(self){
-        //        [self setup];
         self.viewTop = 0 ;
     }
     return self;
@@ -38,25 +36,17 @@
 #pragma mark- setup
 
 - (void)setup{
-    self.backgroundColor = self.tableView.backgroundColor = [UIColor bs_colorFromARGB:@"#F2F4F8"];
     [self createUI];
     [self setupConstraints];
 }
 
 - (void)createUI{
-    [self addSubview:self.titleLabel];
     [self addSubview:self.tableView];
 }
 
 - (void)setupConstraints{
-    [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(24);
-        make.right.mas_equalTo(-24);
-        make.top.mas_equalTo(self.viewTop);
-    }];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.titleLabel.mas_bottom).offset(12);
-        make.left.bottom.right.equalTo(self);
+        make.edges.mas_equalTo(0);
     }];
 }
 
@@ -125,8 +115,8 @@
 #pragma mark- Setters && Getters
 
 - (void)setBackgroundColor:(UIColor *)backgroundColor{
-    [super setBackgroundColor:backgroundColor];
-    self.tableView.backgroundColor = backgroundColor;
+//    [super setBackgroundColor:backgroundColor];
+//    self.tableView.backgroundColor = backgroundColor;
 }
 
 - (void)setDelegate:(id<BSSearchDeviceListViewDelegate>)delegate{
@@ -134,24 +124,10 @@
     [self reloadData];
 }
 
-- (UILabel *)titleLabel{
-    if(!_titleLabel){
-        _titleLabel = ({
-            UILabel *titleLabel  = [UILabel bs_labelWithFont:[UIFont bs_PingFangBoldFontWithFontSize:20.0]
-                                               textAlignment:NSTextAlignmentLeft
-                                                   textColor:[UIColor bs_colorFromARGB:@"#333333"]];
-            titleLabel.text = NSLocalizedStringkey(@"finded_device");
-            titleLabel.numberOfLines = 0;
-            titleLabel;
-        });
-    }
-    return _titleLabel;
-}
-
 - (UITableView *)tableView {
     if (!_tableView) {
         _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
-        _tableView.backgroundColor = [UIColor whiteColor];
+        _tableView.backgroundColor = [UIColor clearColor];
         _tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, CGFLOAT_MIN)];
         _tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreenWidth, CGFLOAT_MIN)];
         _tableView.separatorInset = UIEdgeInsetsZero;

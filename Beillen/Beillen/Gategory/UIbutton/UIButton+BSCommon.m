@@ -155,17 +155,24 @@ static const char *UIControl_acceptEventTime = "UIControl_acceptEventTime";
 }
 
 + (UIButton *)bs_defaultBackBtn{
+
     UIButton *backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    UIImage *image = [UIImage imageNamed:@"nav_back_black"];
+    UIImage *image = [UIImage imageNamed:@"nav_back24x24"];
     CGSize btnSize = CGSizeMake(40, 40);
     CGSize size = image.size;
     CGFloat top = (btnSize.width - size.height)/2;
-    CGFloat left = 1;
+    CGFloat left = 12;
     CGFloat right = btnSize.width - size.width - left;
     [backBtn setImage:image forState:UIControlStateNormal];
     backBtn.frame = CGRectMake(0,0,btnSize.width,btnSize.height);
-    [backBtn setImageEdgeInsets:UIEdgeInsetsMake(top,left,top,right)];
     backBtn.bs_touchInset = UIEdgeInsetsMake(-10,-10,-10,-10);
+    UIButtonConfiguration *config = backBtn.configuration;
+   // 如果配置为空（例如按钮是用传统方式创建的），需要初始化一个
+   if (!config) {
+       config = [UIButtonConfiguration plainButtonConfiguration];
+   }
+    config.contentInsets =NSDirectionalEdgeInsetsMake(top,left,top,right);
+    backBtn.configuration = config;
     return backBtn;
 }
 

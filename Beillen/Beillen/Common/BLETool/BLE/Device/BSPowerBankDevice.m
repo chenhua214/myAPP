@@ -563,6 +563,20 @@
     [self writeCommand:commandStr end:@"55" responseBlockDataRange:k_Range2_2 block:block];
 }
 
+- (void)readSingleValueWithCommand:(BSPowerBankCommand)command  block:(BSResponseBlock)block
+{
+    /// 功能码
+    NSString *commandStr = [NSString stringWithFormat:@"%02lx",command];
+    /// 连续长度
+//    NSString *LngthStr = [NSString stringWithFormat:@"%02lx",length];
+    /// 是否  连续操作：
+    /// 指令类型：0x00：读请求   0x01：写请求   0x02：响应   0x03：事件
+    /// Bit4  连续操作： 0x00：否  0x01：是
+    commandStr = [NSString stringWithFormat:@"%@%@01",@"10",commandStr];
+    
+    [self writeCommand:commandStr end:@"55" responseBlockDataRange:k_Range2_2 block:block];
+}
+
 #pragma mark  读取数据  开头和结尾，连续指令
 - (void)readValueWithStartCommand:(BSPowerBankCommand)startCommand endCommand:(BSPowerBankCommand)endCommand  block:(BSResponseBlock)block{
     
@@ -579,6 +593,41 @@
     /// 指令类型：0x00：读请求   0x01：写请求   0x02：响应   0x03：事件
     /// Bit4  连续操作： 0x00：否  0x01：是
     commandStr = [NSString stringWithFormat:@"%@%@%@",@"10",commandStr,LngthStr];
+    [self writeCommand:commandStr end:@"55" responseBlockDataRange:k_Range2_2 block:block];
+}
+
+#pragma mark  事件读取信息  开头和结尾，连续指令
+/// 事件读取信息 BSEnergyCommand 信息
+/// startCommand ：开始的功能码（功能码）
+/// ：是连续
+/// endCommand ：结束的功能码（功能码）
+- (void)eventValueWithStartCommand:(BSPowerBankCommand)startCommand endCommand:(BSPowerBankCommand)endCommand  block:(BSResponseBlock)block{
+//    if (endCommand<startCommand) {
+//        NSLog(@"开始数据和 结束数据有误，请检查数据！！！");
+//        return;
+//    }
+//    /// 开始功能码
+//    NSString *commandStr = [NSString stringWithFormat:@"%02lx",startCommand];
+//    /// 连续长度
+//    NSString *LngthStr = [NSString stringWithFormat:@"%02lx",endCommand-startCommand+1];
+//    /// 连续读操作：指令 10
+//    /// 指令类型：0x00：读请求   0x01：写请求   0x02：响应   0x03：事件
+//    /// Bit4  连续操作： 0x00：否  0x01：是
+//    commandStr = [NSString stringWithFormat:@"%@%@%@",@"12",commandStr,LngthStr];
+//    [self writeCommand:commandStr end:@"55" responseBlockDataRange:k_Range2_2 block:block];
+    
+//    if (endCommand<startCommand) {
+//        NSLog(@"开始数据和 结束数据有误，请检查数据！！！");
+//        return;
+//    }
+    /// 开始功能码
+    NSString *commandStr = [NSString stringWithFormat:@"%02lx",startCommand];
+    /// 连续长度
+//    NSString *LngthStr = [NSString stringWithFormat:@"%02lx",endCommand-startCommand+1];
+    /// 连续读操作：指令 10
+    /// 指令类型：0x00：读请求   0x01：写请求   0x02：响应   0x03：事件
+    /// Bit4  连续操作： 0x00：否  0x01：是
+    commandStr = [NSString stringWithFormat:@"%@%@",@"02",commandStr];
     [self writeCommand:commandStr end:@"55" responseBlockDataRange:k_Range2_2 block:block];
 }
 
@@ -636,6 +685,59 @@
 }
 
 
+
+#pragma mark -    设置事件写入高低两个字节 信息
+/// command ：开始的功能码（功能码）
+/// cmdValue：设置值
+- (void)eventWithTwoByteCommand:(BSPowerBankCommand)command  cmdValue:(NSInteger)cmdValue block:(BSResponseBlock)block
+{
+    /// 功能码
+    NSString *commandStr = [NSString stringWithFormat:@"%02lx",command];
+    /// 数据
+    NSString *cmdValueStr = [NSString stringWithFormat:@"%04lx",cmdValue];
+    NSInteger length = cmdValueStr.length;
+    if (length!=4) {
+        NSLog(@"写入数据不是两个字节，不符合数据结构要求");
+        return;
+    }
+    NSString *firstTwo = [cmdValueStr substringToIndex:2];
+    NSString *lastTwo = [cmdValueStr substringFromIndex:length-2];
+    
+    /// 是否  连续操作：
+    /// 指令类型：0x00：读请求   0x01：写请求   0x02：响应   0x03：事件
+    /// Bit4  连续操作： 0x00：否  0x01：是
+    /// 连续写入：11     长度01
+    commandStr = [NSString stringWithFormat:@"%@%@%@%@%@",@"13",commandStr,@"02",lastTwo,firstTwo];
+    [self writeCommand:commandStr end:@"55" responseBlockDataRange:k_Range2_2 block:block];
+}
+
+
+/// command ：开始的功能码（功能码）
+/// cmdValue：设置值
+- (void)readBlockWithTwoByteCommand:(BSPowerBankCommand)command  cmdValue:(NSInteger)cmdValue block:(BSResponseBlock)block
+{
+    /// 功能码
+    NSString *commandStr = [NSString stringWithFormat:@"%02lx",command];
+    /// 数据
+    NSString *cmdValueStr = [NSString stringWithFormat:@"%02lx",cmdValue];
+//    NSInteger length = cmdValueStr.length;
+//    if (length!=4) {
+//        NSLog(@"写入数据不是两个字节，不符合数据结构要求");
+//        return;
+//    }
+//    NSString *firstTwo = [cmdValueStr substringToIndex:2];
+//    NSString *lastTwo = [cmdValueStr substringFromIndex:length-2];
+    
+    /// 是否  连续操作：
+    /// 指令类型：0x00：读请求   0x01：写请求   0x02：响应   0x03：事件
+    /// Bit4  连续操作： 0x00：否  0x01：是
+    /// 连续写入：11     长度01
+    commandStr = [NSString stringWithFormat:@"%@%@%@",@"20",commandStr,cmdValueStr];
+    [self writeCommand:commandStr end:@"55" responseBlockDataRange:k_Range2_2 block:block];
+}
+
+
+
 #pragma mark -   写入数据   Array  信息
 /// command ：开始的功能码（功能码）
 /// isContinuity：是否连续
@@ -670,6 +772,34 @@
 {
 
 
+}
+
+
+
+#pragma mark -    设置事件写入高低两个字节 信息
+/// command ：开始的功能码（功能码）
+/// cmdValue：设置值
+- (void)eventWithImageStartIndex:(NSInteger)Index  cmdValue:(NSInteger)cmdValue block:(BSResponseBlock)block
+{
+    /// 功能码
+    NSString *indexStr = [NSString stringWithFormat:@"%02lx",Index];
+    NSString *commandStr = @"90";
+    /// 数据
+    NSString *cmdValueStr = [NSString stringWithFormat:@"%04lx",cmdValue];
+    NSInteger length = cmdValueStr.length;
+    if (length!=4) {
+        NSLog(@"写入数据不是两个字节，不符合数据结构要求");
+        return;
+    }
+    NSString *firstTwo = [cmdValueStr substringToIndex:2];
+    NSString *lastTwo = [cmdValueStr substringFromIndex:length-2];
+    
+    /// 是否  连续操作：
+    /// 指令类型：0x00：读请求   0x01：写请求   0x02：响应   0x03：事件
+    /// Bit4  连续操作： 0x00：否  0x01：是
+    /// 连续写入：11     长度01
+    commandStr = [NSString stringWithFormat:@"%@%@%@%@%@",@"03",commandStr,@"03",lastTwo,firstTwo];
+    [self writeCommand:commandStr end:@"55" responseBlockDataRange:k_Range2_2 block:block];
 }
 
 #pragma mark - TOOLS

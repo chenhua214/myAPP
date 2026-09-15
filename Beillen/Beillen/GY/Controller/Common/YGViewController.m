@@ -37,12 +37,12 @@
 
 
 - (void)addBackButtonIfNeeded{
-//    if (self.navigationController.viewControllers.count > 1) {
-//        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.backBtn];
-//    }else{
-//        self.navigationItem.leftBarButtonItem = nil;
-//        self.navigationItem.hidesBackButton = YES;
-//    }
+    if (self.navigationController.viewControllers.count > 1) {
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.backBtn];
+    }else{
+        self.navigationItem.leftBarButtonItem = nil;
+        self.navigationItem.hidesBackButton = YES;
+    }
 }
 
 #pragma mark- Public methods
@@ -98,7 +98,8 @@
     if (image.isEnable) {
         [self.backBtn setImage:[UIImage imageNamed:image] forState:UIControlStateNormal];
     }
-    [self.backBtn setImageEdgeInsets:edgeInsets];
+//    self.backBtn.contentEdgeInsets = edgeInsets;
+//    [self.backBtn setImageEdgeInsets:edgeInsets];
 }
 
 - (void)push2ProductManuaVCWithURL:(NSString *)urlString{

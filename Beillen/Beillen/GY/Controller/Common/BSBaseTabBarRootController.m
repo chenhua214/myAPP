@@ -15,14 +15,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self.view addSubview:self.contentTextView];
-    [self.contentTextView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.top.right.mas_equalTo(0);
-        make.bottom.mas_equalTo(self.isTabBarRootVC?0:0);
-    }];
-    if (self.notLoadTableView == NO) {
-        [self.contentTextView addSubview:self.tableView];
-    }
+//    [self.view addSubview:self.contentTextView];
+//    [self.contentTextView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.top.right.mas_equalTo(0);
+//        make.bottom.mas_equalTo(self.isTabBarRootVC?0:0);
+//    }];
+//    if (self.notLoadTableView == NO) {
+//        [self.contentTextView addSubview:self.tableView];
+//    }
     
     
 //    // 关键代码

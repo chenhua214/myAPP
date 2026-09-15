@@ -78,7 +78,68 @@ typedef NS_ENUM(NSInteger, BSPowerBankCommand) {
     BSPowerBankCmdBattery_RW_T_L           =  56,     ///<  0x0038  *   低温保护阈值设置（°C）
     BSPowerBankCmdBattery_R_state1         =  57,     ///<  0x0039  *   电池状态1   根据AFE分类
     BSPowerBankCmdBattery_R_state2         =  58,     ///<  0x003A  *   电池状态2   根据AFE分类
+    BSPowerBankCmdInputType_RW_state_C1    =  59,     ///<  0x003B  * C1充电模式   0：智能模式；1 idle模式； 2 自定义模式（32H生效）
+    BSPowerBankCmdInputType_RW_state_C2    =  60,     ///<  0x003C  * C2充电模式   0：智能模式；1 idle模式； 2 自定义模式（32H生效）
+
+    BSPowerBankCmdSttingDevice_W_state     =  61,     ///<  0x003D  *  0xFF恢复出厂设置
+    ///<  Bit0 显示时间 1 on/ 0 off    Bit1 成就互动开关1 on/ 0 off  Bit2-3 文字颜色设置 2 浅色/1 深色，0 默认
+    BSPowerBankCmdLcdSetting_RW_state      =  62,     ///<  0x003E  *   Lcd 设置
+    ///<
+    ///<
+    BSPowerBankCmdBattery_R_Time_L         =  64,     ///<  0x0040  *   累计放电时长低字节,低8位数据，单位分钟
+    BSPowerBankCmdBattery_R_Time_H         =  65,     ///<  0x0041  *   累计放电时长低字节,高8位数据，单位分钟
+    BSPowerBankCmdBattery_R_Sum_L          =  66,     ///<  0x0042  *   累计放电量低字节,低8位数据，单位分钟
+    BSPowerBankCmdBattery_R_Sum_H          =  67,     ///<  0x0043  *   累计放电量低字节,高8位数据，单位分钟
+    ///<
+    ///<
+    ///<  Bit7 电池充电电压异常
+    ///<  Bit6 电池温读异常
+    ///<  Bit5 电池异常禁用
+    ///<  Bit4 电池欠压异常
+    ///<  Bit3 电池过压
+    ///<  Bit2-0   没有定义
+    BSPowerBankCmdDevice_R_LOG             =  68,     ///<  0x0044  *   设备异常LOG状态
+    ///<
+    BSPowerBankCmdBlock_Return_state       =  150,     ///<  0x0096  *   从机事件ACK 1个byte数据，0：ok/ 1：err（每条主机的事件和写指令都需要从机回复）
+    ///<
+    ///<   事件 2个bytes数据，低位在前，高位在后，bit15是使能位，bit0~bit14 定时时间（分钟）
+    BSPowerBankCmdClose_E_Time             =  192,     ///<  0x00C0  *   定时关机
+    ///<   事件 2个bytes数据，低位在前，高位在后，bit15是使能位，bit0~bit14 定时时间（分钟）
+    BSPowerBankCmdClock_E_Time             =  193,     ///<  0x00C1  *   定时提醒
+    BSPowerBankCmdSetting_E_Text           =  194,     ///<  0x00C2  *   自定义文字   32bytes 字符串
     
+    
+    ///< 12bytes 数据一组， 共6组，没有异常以0补。每读一次D0H，读取异常log标号会顺序往下偏移。读取D1H后或者关机重启会清除偏移
+    ///< 1 异常数据类型，一个byte；
+    ///< 2 电池的编号，一个byte；（异常类型是0x1的时候有效）
+    ///< 3 参数(电压，电流，温度等)；2个bytes
+    ///< 4 时间戳  8个bytes
+    BSPowerBankCmdDevice_R_Log_Data        =  208,     ///<  0x00D0  *   异常日志读取
+    ///<  3个byte是数据，读取该寄存器，会清除D0H 异常日志读取地址偏移。
+    ///<  异常禁用标志，一个byte；（1代表异常禁用）
+    ///<  异常日志存储数量，2个bytes；
+    BSPowerBankCmdDevice_R_Log_State       =  209,     ///<  0x00D1  *   异常日志存储状态
+    ///<  Block类型 数据长度2bytes
+    ///<  1 线材支持的最大电流；
+    ///<  2 线材支持的最大功率 （c1 带线，不需要读取）
+    BSPowerBankCmdWireRod_R_C1             =  210,     ///<  0x00D2  *   C1 线材信息
+    BSPowerBankCmdMessage_R_C1             =  211,     ///<  0x00D3  *   C1 口设备信息  Block类型 数据长度32bytes，字符串类型
+    ///<  Block类型 数据长度2bytes
+    ///<  1 线材支持的最大电流；
+    ///<  2 线材支持的最大功率 （c1 带线，不需要读取）
+    BSPowerBankCmdWireRod_R_C2             =  212,     ///<  0x00D4  *   C2 线材信息
+    BSPowerBankCmdMessage_R_C2             =  213,     ///<  0x00D5  *   C2 口设备信息  Block类型 数据长度32bytes，字符串类型
+    ///< 设备信息  事件    最大32bytes字符串
+    BSPowerBankCmdDeviceMessage_E_Model      =  240,     ///<  0x00F0  *   设备型号
+    BSPowerBankCmdDeviceMessage_E_Number     =  241,     ///<  0x00F1  *   序列号
+    BSPowerBankCmdDeviceMessage_E_Code       =  242,     ///<  0x00F2  *   生产批次
+    BSPowerBankCmdDeviceMessage_E_Time       =  243,     ///<  0x00F3  *   生产日期
+    BSPowerBankCmdDeviceMessage_E_Capacity   =  244,     ///<  0x00F4  *   额定容量
+    BSPowerBankCmdDeviceMessage_E_Voltage    =  245,     ///<  0x00F5  *   标称电压
+    BSPowerBankCmdDeviceMessage_E_Maker      =  246,     ///<  0x00F6  *   电池制造商信息
+    BSPowerBankCmdDeviceMessage_E_Version    =  247,     ///<  0x00F7  *   版本号
+    
+    ///<
     ///<  0x0060  *  设置模式状态：0x00标准模式；0x01时间模式；0x02：天气模式；0x03歌词模式；0x04微信模式；0x05 图片投影模式； 0x06 心情模式
     BSPowerBankCmdSetting_RW_Model             =  96,
     ///<  0x0061  *   模式状态：0x00标准模式；0x01时间模式；0x02：天气模式；0x03歌词模式；0x04微信模式；0x05 图片投影模式； 0x06 心情模式
@@ -134,6 +195,8 @@ typedef NS_ENUM(NSInteger, BSPowerBankTypeCWork) {
 
 
 @interface BSCommonDeviceTypeModel: NSObject
+///  接口名称
+@property (nonatomic, copy)   NSString* typeName;
 ///  、电流 （毫安）
 @property(nonatomic, strong) BSCommonTypeByteModel *typeModelA;
 ///  、电压 （毫伏）
@@ -151,6 +214,7 @@ typedef NS_ENUM(NSInteger, BSPowerBankTypeCWork) {
 @property (nonatomic, assign) NSInteger typeAlert;
 ///  输出功率设置 W
 @property (nonatomic, assign) NSInteger outputSetW;
+
 @end
 
 
@@ -236,6 +300,8 @@ typedef NS_ENUM(NSInteger, BSPowerBankTypeCWork) {
 /// length：连续的长度
 - (void)readValueWithCommand:(BSPowerBankCommand)command length:(NSInteger)length block:(BSResponseBlock)block;
 
+- (void)readSingleValueWithCommand:(BSPowerBankCommand)command  block:(BSResponseBlock)block;
+
 
 /// 读取 BSEnergyCommand 信息
 /// startCommand ：开始的功能码（功能码）
@@ -244,6 +310,11 @@ typedef NS_ENUM(NSInteger, BSPowerBankTypeCWork) {
 - (void)readValueWithStartCommand:(BSPowerBankCommand)startCommand endCommand:(BSPowerBankCommand)endCommand  block:(BSResponseBlock)block;
 
 
+/// 事件读取信息 BSEnergyCommand 信息
+/// startCommand ：开始的功能码（功能码）
+/// ：是连续
+/// endCommand ：结束的功能码（功能码）
+- (void)eventValueWithStartCommand:(BSPowerBankCommand)startCommand endCommand:(BSPowerBankCommand)endCommand  block:(BSResponseBlock)block;
 
 - (void)writeThemeTextData:(NSString *)textStr block:(BSResponseBlock)block ;
 
@@ -259,6 +330,15 @@ typedef NS_ENUM(NSInteger, BSPowerBankTypeCWork) {
 /// command ：开始的功能码（功能码）
 /// cmdValue：设置值
 - (void)writeWithTwoByteCommand:(BSPowerBankCommand)command  cmdValue:(NSInteger)cmdValue block:(BSResponseBlock)block;
+
+/// command ：开始的功能码（功能码）
+/// cmdValue：设置值
+- (void)eventWithTwoByteCommand:(BSPowerBankCommand)command  cmdValue:(NSInteger)cmdValue block:(BSResponseBlock)block;
+
+
+/// command ：读取 Block 事件 （功能码）
+/// cmdValue：读取的长度值
+- (void)readBlockWithTwoByteCommand:(BSPowerBankCommand)command  cmdValue:(NSInteger)cmdValue block:(BSResponseBlock)block;
 
 /// 写入数据   Array 信息
 /// command ：开始的功能码（功能码）

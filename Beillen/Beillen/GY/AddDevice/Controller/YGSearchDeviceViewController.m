@@ -11,9 +11,13 @@
 #import "BSDeviceUtil.h"
 #import "BSBLEManager.h"
 #import "CommonMacro.h"
+#import "SearchDeviceHeadView.h"
+
 @interface YGSearchDeviceViewController ()<BSSearchDeviceListViewDelegate>
 @property(nonatomic,strong) UIButton *addBtn;
 @property(nonatomic,strong) UIButton *scanButton;
+
+@property(nonatomic,strong) SearchDeviceHeadView *headView;
 @property(nonatomic,strong) BSSearchDeviceListView *deviceListView;
 @property(nonatomic,strong) BSSearchDevicesViewModel *viewModel;
 @end
@@ -24,6 +28,7 @@
     [self updateBackImgAndTitleFonts];
     self.notLoadTableView = YES;
     [super viewDidLoad];
+    self.edgesForExtendedLayout =  UIRectEdgeNone;
     self.title = @"添加设备";
     [self initView ];
     [self loadData ];
@@ -50,8 +55,38 @@
 }
 
 - (void)initView {
-    self.view.backgroundColor = self.bs_backgroundColor = [UIColor bs_colorFromARGB:@"F2F4F8"];
-    self.navigationItem.title = NSLocalizedStringkey(@"add_devices_tit");
+//    self.view.backgroundColor = self.bs_backgroundColor = [UIColor bs_colorFromARGB:@"F2F4F8"];
+    self.view.backgroundColor = self.bs_backgroundColor = [UIColor bs_colorFromARGB:@"#F7F9FB"];
+    [self configRightItem];
+    
+    [self.view addSubview:self.headView];
+    
+    [self.headView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(0);
+        make.left.mas_equalTo(0);
+        make.right.mas_equalTo(0);
+    }];
+    
+    
+    [self.view addSubview:self.deviceListView];
+    
+    [self.deviceListView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.headView.mas_bottom).offset(0);
+        make.bottom.mas_equalTo(0);
+        make.left.mas_equalTo(0);
+        make.right.mas_equalTo(0);
+    }];
+    
+//    [self.deviceListView mas_makeConstraints:^(MASConstraintMaker *make) {
+////        make.top.equalTo(self.autoSearchPromptView.mas_bottom);
+//        make.top.mas_equalTo(160);
+//        make.left.right.equalTo(self.view);
+//        make.bottom.equalTo(self.addBtn.mas_top).offset(-20);
+//    }];
+    
+//#F7F9FB
+//    self.navigationItem.title = NSLocalizedStringkey(@"add_devices_tit");
+
 //    [self updateBackImgAndTitleFonts];
 //    UIImage *image = [[UIImage imageNamed:@"auto_search_help"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
 //    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -74,18 +109,32 @@
 //    }];
 }
 
+-(void)configRightItem {
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    btn.frame = CGRectMake(0, 0, 20, 20);
+    [btn setImage:[UIImage imageNamed:@"add_search_help"] forState: UIControlStateNormal];
+    btn.bs_touchInset = UIEdgeInsetsMake(-20, -25, -20, -20);
+    [btn addTarget:self action:@selector(onCancleAction:) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:btn];
+}
+
+- (void)onCancleAction:(id)sender {
+
+    NSLog(@"搜索界面版面，帮助按钮");
+}
+
 - (void)createUI{
 //    [self.view addSubview:self.loadingView];
 //    [self.view addSubview:self.retryView];
-    [self.view addSubview:self.deviceListView];
-    self.deviceListView.backgroundColor = [UIColor redColor];
+//    [self.view addSubview:self.deviceListView];
+//    self.deviceListView.backgroundColor = [UIColor redColor];
     
     [self.view addSubview:self.addBtn];
-    self.addBtn.backgroundColor = [UIColor greenColor];
+//    self.addBtn.backgroundColor = [UIColor greenColor];
 }
 
 - (void)setupConstraints{
-    CGFloat width = isIpad ? [self screenMaxWidth:0 max:360 margin:0] : kScreenWidth;
+//    CGFloat width = isIpad ? [self screenMaxWidth:0 max:360 margin:0] : kScreenWidth;
 //    [self.loadingView mas_makeConstraints:^(MASConstraintMaker *make) {
 //        make.center.equalTo(self.view);
 //        make.size.mas_equalTo(CGSizeMake(width, width));
@@ -101,12 +150,12 @@
         make.right.mas_equalTo(-45);
         make.height.equalTo(@(60));
     }];
-    [self.deviceListView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.top.equalTo(self.autoSearchPromptView.mas_bottom);
-        make.top.mas_equalTo(160);
-        make.left.right.equalTo(self.view);
-        make.bottom.equalTo(self.addBtn.mas_top).offset(-20);
-    }];
+//    [self.deviceListView mas_makeConstraints:^(MASConstraintMaker *make) {
+////        make.top.equalTo(self.autoSearchPromptView.mas_bottom);
+//        make.top.mas_equalTo(160);
+//        make.left.right.equalTo(self.view);
+//        make.bottom.equalTo(self.addBtn.mas_top).offset(-20);
+//    }];
 }
 
 - (void)loadData{
@@ -251,7 +300,7 @@
 
 - (void)reloadDataFinished:(BOOL)finished{
     BOOL noData = ![self.viewModel hasData];
-    self.deviceListView.hidden = self.addBtn.hidden = noData;
+//    self.deviceListView.hidden = self.addBtn.hidden = noData;
     if(noData){
 //        self.retryView.hidden = YES;
         if(finished){
@@ -326,6 +375,7 @@
 //    if ([device isChargerStationDevices]) {
 //        [self chargerStationAddressVCWithDevice:device];
 //    } else {
+//    kBSHomeRefreshNotification
         [self.navigationController popToRootViewControllerAnimated:YES];
 //    }
 }
@@ -370,13 +420,22 @@
     return _viewModel;
 }
 
+
+-(SearchDeviceHeadView*)headView{
+    if (!_headView) {
+        _headView = [SearchDeviceHeadView new];
+        [_headView initWithType:1];
+    }
+    return _headView;
+}
+
 - (BSSearchDeviceListView *)deviceListView{
     if (!_deviceListView) {
         _deviceListView = [[BSSearchDeviceListView alloc] init];
         [_deviceListView initTypezWithTop:40];
-        _deviceListView.cellBGColorHexString = @"#F2F4F8";
+        _deviceListView.cellBGColorHexString = @"#F7F9FB";
         _deviceListView.delegate = self;
-        _deviceListView.hidden = YES;
+//        _deviceListView.hidden = YES;
     }
     return _deviceListView;
 }
@@ -399,7 +458,7 @@
                                 masksToBounds:YES
                                       enabled:NO];
             [button addTarget:self action:@selector(addDeviceButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-            button.hidden = YES;
+//            button.hidden = YES;
             button;
         });
     }
@@ -422,7 +481,7 @@
 
 #pragma mark - ipad
 -(void)refreshIpadScreenSizeAction:(CGSize)size{
-    CGFloat width = [self screenMaxWidth:0 max:360 margin:0];
+//    CGFloat width = [self screenMaxWidth:0 max:360 margin:0];
 //    [self.loadingView mas_updateConstraints:^(MASConstraintMaker *make) {
 //        make.size.mas_equalTo(CGSizeMake(width, width));
 //    }];

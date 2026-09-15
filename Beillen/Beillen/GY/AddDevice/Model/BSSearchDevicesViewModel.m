@@ -63,7 +63,7 @@
     [self resetDataSource];
     [BSBLEManager realTimeCallbackEnabled:YES];
     __weak typeof(self) weakSelf = self;
-    [[BSBLEManager shareInstance] scanBLEDevicesWithModel:nil delayInSeconds:10 callback:^(BOOL finished, NSArray<BSDeviceBLE *> * _Nullable devices) {
+    [[BSBLEManager shareInstance] scanBLEDevicesWithModel:nil delayInSeconds:30 callback:^(BOOL finished, NSArray<BSDeviceBLE *> * _Nullable devices) {
         [weakSelf scanBLEDevicesFinished:finished devices:devices];
     }];
 }
@@ -134,7 +134,7 @@
 }
 
 - (CGFloat)heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 72;
+    return 76;
 }
 
 - (nullable YGSearchDeviceModel *)modelAtIndexPath:(NSIndexPath *)indexPath{
