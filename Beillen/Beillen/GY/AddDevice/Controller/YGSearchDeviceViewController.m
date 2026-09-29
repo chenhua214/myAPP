@@ -129,7 +129,7 @@
 //    [self.view addSubview:self.deviceListView];
 //    self.deviceListView.backgroundColor = [UIColor redColor];
     
-    [self.view addSubview:self.addBtn];
+//    [self.view addSubview:self.addBtn];
 //    self.addBtn.backgroundColor = [UIColor greenColor];
 }
 
@@ -144,12 +144,12 @@
 //        make.left.right.equalTo(self.view);
 //        make.height.mas_equalTo(Height812(322));
 //    }];
-    [self.addBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.mas_equalTo(-26);
-        make.left.mas_equalTo(45);
-        make.right.mas_equalTo(-45);
-        make.height.equalTo(@(60));
-    }];
+//    [self.addBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.bottom.mas_equalTo(-26);
+//        make.left.mas_equalTo(45);
+//        make.right.mas_equalTo(-45);
+//        make.height.equalTo(@(60));
+//    }];
 //    [self.deviceListView mas_makeConstraints:^(MASConstraintMaker *make) {
 ////        make.top.equalTo(self.autoSearchPromptView.mas_bottom);
 //        make.top.mas_equalTo(160);
@@ -267,6 +267,14 @@
 }
 
 - (void)addDeviceButtonPressed:(UIButton *)sender{
+//    __weak typeof(self) weakSelf = self;
+//    [self.viewModel addDeviceWithCallback:^(BSOperationState state, DeviceTypeModel * _Nullable typeModel, BSCommonDevice * _Nullable device) {
+//     
+//        [weakSelf handleResultWithState:state device:device typeModel:typeModel];
+//    }];
+}
+
+- (void)addDeviceButtonForDevice{
     __weak typeof(self) weakSelf = self;
     [self.viewModel addDeviceWithCallback:^(BSOperationState state, DeviceTypeModel * _Nullable typeModel, BSCommonDevice * _Nullable device) {
      
@@ -318,8 +326,8 @@
         self.scanButton.hidden = NO ;
     }
     [self.deviceListView reloadData];
-    [self.addBtn configUIWithGradientColors:@[[UIColor bs_colorFromARGB:@"#353741"], [UIColor bs_colorFromARGB:@"#181A20"]]
-                                    enabled:[self.viewModel checked]];
+//    [self.addBtn configUIWithGradientColors:@[[UIColor bs_colorFromARGB:@"#353741"], [UIColor bs_colorFromARGB:@"#181A20"]]
+//                                    enabled:[self.viewModel checked]];
 }
 
 
@@ -364,7 +372,7 @@
 - (void)showDeviceBindSuccessAlertViewWithDevice:(BSCommonDevice *)device {
     //添加成功
     weakSelf(self);
-    [BSAlertMessageTool alertMessage:NSLocalizedStringkey(@"device_add_success") subMessage:nil actionTxt:NSLocalizedStringkey(@"str_confirm") handle:^(BSAlertMessageAction action, id object) {
+    [YGAlertMessageTool alertMessage:NSLocalizedStringkey(@"device_add_success") subMessage:nil actionTxt:NSLocalizedStringkey(@"str_confirm") handle:^(BSAlertMessageAction action, id object) {
         //回到首页
         [weakSelf addDeviceSuccessWithDevice:device];
     }];
@@ -405,6 +413,8 @@
 
 - (void)didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     [self.viewModel didSelectItemAtIndexPath:indexPath];
+    
+    [self addDeviceButtonForDevice];
 }
 
 #pragma mark- Setters && Getters
@@ -490,9 +500,9 @@
 -(void)viewDidLayoutSubviews{
     [super viewDidLayoutSubviews];
     if (isIpad) {
-        BOOL checked = self.deviceTypeDict == nil ? false : [self.viewModel checked];
-        [self.addBtn configUIWithGradientColors:@[[UIColor bs_colorFromARGB:@"#353741"], [UIColor bs_colorFromARGB:@"#181A20"]]
-                                        enabled:checked];
+//        BOOL checked = self.deviceTypeDict == nil ? false : [self.viewModel checked];
+//        [self.addBtn configUIWithGradientColors:@[[UIColor bs_colorFromARGB:@"#353741"], [UIColor bs_colorFromARGB:@"#181A20"]]
+//                                        enabled:checked];
     }
 }
 

@@ -1,40 +1,23 @@
 //
-//  BSAlertMessageTool.h
+//  YGAlertMessageTool.h
 //  Beillen
 //
-//  Created by wushuang on 2023/11/29.
-//  Copyright © 2023 Beillen.All rights reserved.
+//  Created by chenyi on 2026/9/30.
 //
 
 #import <Foundation/Foundation.h>
+#import "BSAlertMessageTool.h"
+NS_ASSUME_NONNULL_BEGIN
 
-typedef NS_ENUM(NSUInteger, BSAlertMessageAction) {
-    BSAlertMessageActionCancel, ///< 取消
-    BSAlertMessageActionEvents, ///< 操作事件
-};
-
-typedef NS_ENUM(NSUInteger, BSAlertMessageType) {
-    BSAlertMessageTypeDefault,   ///< 默认
-    BSAlertMessageTypeActionForRedBg, ///< 确认按钮红色背景
-    BSAlertMessageTypeAlert,     ///< 单个按钮提示框
-    BSAlertMessageTypeTextFeild, ///< 输入框
-    BSAlertMessageTypeTextFeildToNull, ///< 自定义名称空格与判空处理
-    BSAlertMessageTypeTextFeildToIsEmail, ///< 输入的框内容为Email 判断
-    BSAlertMessageTypeTopImgAndBottonCancel, ///< 顶部图片和底部取消图标
-    BSAlertMessageTypeTextFeildAlertShowError, ///< 自定义名称空格与判空处理与错误显示，错误显示时，点击确定弹框不消失
-};
 
 /// 操作事件回调
 typedef void(^BSAlertMessageHandle)(BSAlertMessageAction action,id object);
 
-/// 提示弹窗
-@interface BSAlertMessageTool : NSObject
+@interface YGAlertMessageTool : NSObject
 /// 背景dismiss手势 enable
 @property (nonatomic, assign) BOOL bgGestureEnabel;
 
-
 + (instancetype)shareInstance;
-
 #pragma mark Set Method
 
 /// 更新背景dismiss手势 enable
@@ -57,6 +40,13 @@ typedef void(^BSAlertMessageHandle)(BSAlertMessageAction action,id object);
           subMessage:(id)subMsg
            cancelTxt:(NSString *)cancel
            actionTxt:(NSString *)action
+              handle:(BSAlertMessageHandle)handle;
+
+/// 红色确认按钮
++ (void)alertMessage:(id)msg
+          subMessage:(id)subMsg
+           cancelTxt:(NSString *)cancel
+        actionTxtRed:(NSString *)action
               handle:(BSAlertMessageHandle)handle;
 
 /*     * BSAlertMessageTypeTextFeild *
@@ -129,3 +119,5 @@ typedef void(^BSAlertMessageHandle)(BSAlertMessageAction action,id object);
 
 
 @end
+
+NS_ASSUME_NONNULL_END

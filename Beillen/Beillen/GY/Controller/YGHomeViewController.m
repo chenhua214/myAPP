@@ -32,13 +32,14 @@
 
     [self updateBackImgAndTitleFonts];
     [self executePhoneJudgeManager];
+    [self goLoginIfNeeded];
     [self enterIntoGeustMode];
     [self initRACSubjects];
     [self initSubview];
     [self addNotifications];
     [self requestHomeData];
     [[BSBLEManager shareInstance] scanBLEDevices];
-    [self goLoginIfNeeded];
+ 
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -51,11 +52,9 @@
 - (void)goLoginIfNeeded
 {
     BSUsageMode userMode = [BSGuestModeHelper usageMode] ;
-    userMode = BSUsageModeDefault;
     if (userMode == BSUsageModeLogout || userMode == BSUsageModeDefault) {
-//        [FirstLoginViewController loginAnimatedForNOWithVC:self];
+        [FirstLoginViewController loginAnimatedForNOWithVC:self];
     }
-    [FirstLoginViewController loginAnimatedForNOWithVC:self];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {

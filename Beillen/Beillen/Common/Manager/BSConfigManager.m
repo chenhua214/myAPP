@@ -5,7 +5,7 @@
 #import "NSString+BSCommon.h"
 //#import "BSCommonQueryParam.h"
 
-#define kBSGuestNickNameKey @"guest_nick_name"
+#define kBSGuestNickNameKey @"Beillen"
 
 @interface BSConfigManager()
 
@@ -238,6 +238,15 @@
     }
     return self.userNickName ? : NSLocalizedStringkey(@"baseus_home");
     NSLocalizedString(@"444", @"");
+}
+
+-(void)setNickname:(NSString *)nickname{
+    if (nickname.isEnable) {
+        self.guestInfo.nickname = nickname;
+        NSMutableDictionary *dict = [[NSMutableDictionary alloc]initWithDictionary:self.guestInfoDict];
+        [dict setObject:nickname forKey:@"nickname"];
+        self.guestInfoDict = dict.copy;
+    }
 }
 
 - (BSAccountInfoModel *)guestInfo{

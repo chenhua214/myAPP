@@ -6,7 +6,7 @@
 //
 
 #import "AppDelegate.h"
-
+#import <IQKeyboardManager/IQKeyboardManager.h>
 @interface AppDelegate ()
 
 @end
@@ -16,13 +16,16 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    // 1. 获取单例实例
+    IQKeyboardManager *keyboardManager = [IQKeyboardManager sharedManager];
+    // 4. (可选) 启用自动工具栏 (包含上一项/下一项/完成按钮)
+    keyboardManager.enableAutoToolbar = YES;
+    keyboardManager.enable = YES;                          // 全局启用
+    keyboardManager.shouldResignOnTouchOutside = YES;      // 点击背景收起键盘
+    keyboardManager.keyboardDistanceFromTextField = 10.0;  // 输入框距离键盘顶部的间距
+        
     return YES;
-    //////9999999999
-    ///
-    ///ooooo
-    ///////0000
-    ///
-    ///ooooo111111
+  
 }
 
 

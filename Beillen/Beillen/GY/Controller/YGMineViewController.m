@@ -137,7 +137,7 @@
     }];
     self.userIconView.image = [UIImage imageNamed:@"home_banner3"];
     
-    self.userNameLab.text =@"Beillen";
+    self.userNameLab.text = [BSConfigManager sharedInstance].nickname;
     self.appLogLab.text = @"© 2026 Beillen 嘉德科技 ";
 }
 
@@ -174,11 +174,18 @@
     }
     self.languageCellView.messageLab.text = objectStr;
 }
+#pragma mark 修改name通知
+
+- (void)chengeNikeName:(NSNotification *)notice
+{
+    self.userNameLab.text = [BSConfigManager sharedInstance].nickname;
+}
 
 - (void)addNotifications {
     
     /// 根据需求添加通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(chengeLanguage:) name:kBChangeLanguageSuccessNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(chengeNikeName:) name:kBChangeNicknameSuccessNotification object:nil];
 }
 
 

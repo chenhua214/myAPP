@@ -24,6 +24,7 @@
 #import "BSDeviceUtil.h"
 #import "BSLanguageTool.h"
 #import "BSAlertMessageTool.h"
+#import "YGAlertMessageTool.h"
 #import "BSAlertMessageTool+Events.h"
 #import "NSObject+BSIpad.h"
 #import "UIApplication+BSAddition.h"

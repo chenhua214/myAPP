@@ -115,7 +115,7 @@
     [addLab  setTitle:@"删除设备" forState:UIControlStateNormal];
     addLab.titleLabel.font = [UIFont bs_regularFontWithFontSize:16];
     [addLab setTitleColor:[UIColor bs_colorFromARGB:@"#BA1A1A"] forState:UIControlStateNormal];
-    [addLab addTarget:self action:@selector(addDevice_pushVC) forControlEvents:UIControlEventTouchUpInside];
+    [addLab addTarget:self action:@selector(showBSAlertMessage) forControlEvents:UIControlEventTouchUpInside];
     addLab.layer.cornerRadius = 27;
     addLab.layer.borderWidth = 1;
     addLab.layer.borderColor = [UIColor bs_colorFromARGB:@"#BA1A1A" alpha:0.1].CGColor;
@@ -127,7 +127,17 @@
     [self bs_showNavigationBarWithAnimated:animated];
 }
 
--(void)addDevice_pushVC{
+-(void)showBSAlertMessage {
+    __weak typeof(self) weakSelf = self;
+    [YGAlertMessageTool alertMessage:@"删除设备" subMessage:@"确认将设备从手机中删除" cancelTxt:@"取消" actionTxtRed:@"确定" handle:^(BSAlertMessageAction action, id object) {
+        if (action == BSAlertMessageActionEvents ) {
+            [weakSelf delectDevice_pushVC];
+        }
+    }];
+}
+
+-(void)delectDevice_pushVC{
+    
     NSLog(@"删除设备");
     //解绑设备
     if (self.model.sn) {

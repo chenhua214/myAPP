@@ -10,7 +10,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface FirstLoginViewController : YGViewController
-@property (nonatomic, strong) UIButton *loginBth;
+//@property (nonatomic, strong) UIButton *loginBth;
 @property (nonatomic,   weak) YGViewController *superVC;
 + (void)loginAnimatedForNOWithVC:(YGViewController *)vc;
 @end

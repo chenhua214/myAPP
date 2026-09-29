@@ -251,5 +251,6 @@ static NSString * const SubmitLogisticsSuccessNotice = @"SubmitLogisticsSuccessN
 
 /// 切换语言成功通知
 #define kBChangeLanguageSuccessNotification @"kBChangeLanguageSuccessNotification"
-
+/// 修改名称成功
+#define kBChangeNicknameSuccessNotification @"kBChangeNicknameSuccessNotification"
 #endif /* CommonMacro_h */
