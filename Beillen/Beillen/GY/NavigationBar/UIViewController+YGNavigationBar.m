@@ -155,37 +155,37 @@ static NSString * const BSEnablePopGesture = @"BSNavigationBarKeys_enablePopGest
 /// 整体更新
 - (void)bs_setNeedsNavigationBarUpdate
 {
-    YGNavigationController *naviController = (YGNavigationController *)self.navigationController;
-    if (naviController) {
-        [naviController bs_updateNavigationBarForController:self];
-    }
+//    YGNavigationController *naviController = (YGNavigationController *)self.navigationController;
+//    if (naviController) {
+//        [naviController bs_updateNavigationBarForController:self];
+//    }
 }
 
 /// 更新文字、Title颜色
 - (void)bs_setNeedsNavigationBarTintUpdate
 {
-    YGNavigationController *naviController = (YGNavigationController *)self.navigationController;
-    if (naviController) {
-        [naviController bs_updateNavigationBarTintForController:self ignoreTintColor:NO];
-    }
+//    YGNavigationController *naviController = (YGNavigationController *)self.navigationController;
+//    if (naviController) {
+//        [naviController bs_updateNavigationBarTintForController:self ignoreTintColor:NO];
+//    }
 }
 
 /// 更新背景
 - (void)bs_setNeedsNavigationBarBackgroundUpdate
 {
-    YGNavigationController *naviController = (YGNavigationController *)self.navigationController;
-    if (naviController) {
-        [naviController bs_updateNavigationBarBackgroundColorForController:self];
-    }
+//    YGNavigationController *naviController = (YGNavigationController *)self.navigationController;
+//    if (naviController) {
+//        [naviController bs_updateNavigationBarBackgroundColorForController:self];
+//    }
 }
 
 /// 更新Shadow
 - (void)bs_setNeedsNavigationBarShadowUpdate
 {
-    YGNavigationController *naviController = (YGNavigationController *)self.navigationController;
-    if (naviController) {
-        [naviController bs_updateNavigationBarShadowForController:self];
-    }
+//    YGNavigationController *naviController = (YGNavigationController *)self.navigationController;
+//    if (naviController) {
+//        [naviController bs_updateNavigationBarShadowForController:self];
+//    }
 }
 
 

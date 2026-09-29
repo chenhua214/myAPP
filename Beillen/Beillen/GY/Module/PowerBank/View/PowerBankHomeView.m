@@ -83,12 +83,10 @@
     }];
 
     self.batteryLab.attributedText = [self attributeWithNormalValue:@"83%" singleFont:@"%"];
-    self.timeLab.text = @"剩余可输出时间：10 H 30 M";
+    self.timeLab.text = @"剩余可输出时间：-- H -- M";
     self.tempTextLab.text = @"设备温度";
-    self.tempNumLab.text = @"32.4°C";
     [self addLayerView];
 }
-
 
 -(void)addLayerView {
     CALayer *layer1 = [CALayer new];
@@ -101,7 +99,27 @@
     self.deviceTempView.layer.borderColor = bsColorAlphaString(@"#C5C4DB", 0.10).CGColor;;
 }
 
-
+-(void)setDeviceModel:(BSPowerBankDevice *)deviceModel{
+    _deviceModel = deviceModel;
+    NSString *battryStr = @"--%";
+    NSString *timeStr = @"剩余可输出时间：-- H -- M";
+    NSString *tempNumStr = @"--°C";
+    if (_deviceModel.isConnected) {
+        battryStr = [[NSString alloc]initWithFormat:@"%ld%@",deviceModel.batterySOC,@"%" ];
+        // 分钟
+        tempNumStr = [[NSString alloc]initWithFormat:@"%ld°C",deviceModel.deviceTemp];
+        if (_deviceModel.typeConnectState) {
+            NSInteger time = deviceModel.outputTimeModel.typeValue;
+            NSInteger time_H = time/60 ;
+            NSInteger time_M = time%60 ;
+            timeStr = [[NSString alloc]initWithFormat:@"剩余可输出时间：%ld H %ld M",time_H,time_M];
+        }
+    }
+    self.batteryLab.attributedText = [self attributeWithNormalValue:battryStr singleFont:@"%"];
+    self.timeLab.text = timeStr;
+    self.tempTextLab.text = @"设备温度";
+    self.tempNumLab.text = tempNumStr;
+}
 
 -(UIImageView*)logImageView {
     if (!_logImageView) {
@@ -183,7 +201,5 @@
     }
     return attrString;
 }
-
-
 
 @end

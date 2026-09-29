@@ -15,10 +15,10 @@
 #import "BSBLEManager.h"
 #import "BSDeviceManager.h"
 #import "BSHomeProfilesModel.h"
-
+#import "BSPowerBankDevice.h"
 /// to View
 #import "PowerBankHomeViewController.h"
-
+#import "FirstLoginViewController.h"
 @interface YGHomeViewController ()
 @property (nonatomic, strong) BSHomeContentView *contentView;
 /// Device 数据
@@ -29,30 +29,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor whiteColor];
-   
 
-//    self.title =@"11111";
-    
-//    self.tabBarItem.title = @"22222";;
-//    UIButton *addLab = [UIButton buttonWithType:UIButtonTypeCustom];
-//    [self.view addSubview:addLab];
-//    [addLab mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.bottom.mas_equalTo(-120);
-//        make.left.mas_equalTo(60);
-//        make.height.mas_equalTo(50);
-//        make.width.mas_equalTo(120);
-//    }];
-////    addLab set = @"添加设备";
-//    [addLab  setTitle:@"添加设备" forState:UIControlStateNormal];
-//    
-//    addLab.titleLabel.font = [UIFont bs_regularFontWithFontSize:16];
-//    [addLab setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-//    [addLab addTarget:self action:@selector(addDevice_pushVC) forControlEvents:UIControlEventTouchUpInside];
-//  
-    
-    
-    // Do any additional setup after loading the view.
     [self updateBackImgAndTitleFonts];
     [self executePhoneJudgeManager];
     [self enterIntoGeustMode];
@@ -60,34 +37,26 @@
     [self initSubview];
     [self addNotifications];
     [self requestHomeData];
-//    [BSBindDeviceManager manager];
-//    if (self.dataModel.devices.count == 0) return;
     [[BSBLEManager shareInstance] scanBLEDevices];
-    
-    UIButton *addLab = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.view addSubview:addLab];
-    [addLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.mas_equalTo(-120);
-        make.left.mas_equalTo(60);
-        make.height.mas_equalTo(50);
-        make.width.mas_equalTo(120);
-    }];
-//    addLab set = @"添加设备";
-    [addLab  setTitle:@"添加设备" forState:UIControlStateNormal];
-    
-    addLab.titleLabel.font = [UIFont bs_regularFontWithFontSize:16];
-    [addLab setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-    [addLab addTarget:self action:@selector(addDevice_pushVC) forControlEvents:UIControlEventTouchUpInside];
-  
- 
-//    self
+    [self goLoginIfNeeded];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self bs_hideNavigationBarWithAnimated:animated];
+    [self reloadCollectionViewData];
+
 }
 
+- (void)goLoginIfNeeded
+{
+    BSUsageMode userMode = [BSGuestModeHelper usageMode] ;
+    userMode = BSUsageModeDefault;
+    if (userMode == BSUsageModeLogout || userMode == BSUsageModeDefault) {
+//        [FirstLoginViewController loginAnimatedForNOWithVC:self];
+    }
+    [FirstLoginViewController loginAnimatedForNOWithVC:self];
+}
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
@@ -105,18 +74,19 @@
     if (IS_GUEST_MODE) {
         __weak typeof(self) weakSelf = self;
         [BSDeviceDBHelper allDevicesWithCallback:^(BOOL result, id responseData) {
+            
+            BSHomeDataModel* homeDataModel = [BSHomeDataModel new];
+            [homeDataModel initBannersData];
             if (result && responseData) {
-                BSHomeDataModel* homeDataModel = [BSHomeDataModel new];
                 homeDataModel.devices = [(NSArray *)responseData copy];
                 if (homeDataModel && [homeDataModel isKindOfClass:[BSHomeDataModel class]]) {
-                    weakSelf.dataModel = homeDataModel;
+                    
                   }
-                [weakSelf loadedHomeData:weakSelf.dataModel];
             }
-            //            if (self.allInfoSubject) [self.allInfoSubject sendNext:homeDataModel];
+            weakSelf.dataModel = homeDataModel;
+            [weakSelf loadedHomeData:weakSelf.dataModel];
         }];
     }
-//        return;
 }
 
 -(void)addDevice_pushVC{
@@ -151,22 +121,11 @@
 }
 
 
-
-
 /// 先从本地获取缓存数据后
 - (void)loadHomeDataFromCache
 {
-    /////88888
-//    BSHomeDataModel *dataModel = [BSCacheHelper valueForKey:kDefaultDataModelKey];
-//    if (dataModel && [dataModel isKindOfClass:[BSHomeDataModel class]]) {
-//        self.dataModel = dataModel;
-//    }
-//    BSHomeWeatherModel *weatherModel = [BSCacheHelper valueForKey:kDefaultWeatherDataKey];
-//    if (weatherModel && [weatherModel isKindOfClass:[BSHomeWeatherModel class]]) {
-//        self.weatherModel = weatherModel;
-//    }
+
     [self reloadCollectionViewData];
-//    [self loadedHomeData:self.dataModel];
 }
 
 #pragma mark - UI
@@ -197,6 +156,7 @@
     [self addNotificationWithName:kBSDeviceNotification sel:@selector(notice_deviceNotification:)];
   
     [self addNotificationWithName:kBChangeLanguageSuccessNotification sel:@selector(chengeLanguage:)];
+    [self addNotificationWithName:kBSHomeRefreshNotification sel:@selector(notice_refreshIfNeeded)];
 }
 
 /// 切换App语言通知
@@ -210,6 +170,8 @@
 {
     // 更新设备、个人信息、
 //    [self updateUserMainInfomations];
+    
+    [self requestHomeData];
 }
 
 - (void)notice_updateHomeDataNotice:(NSNotification *)notice
@@ -250,8 +212,29 @@
 
 /// 设备连接成功
 - (void)didConnectWithDevice:(BSCommonDevice *)device {
-//    [self.updateUISubject sendNext:nil]; // 更新UI
     [self reloadCollectionViewData];
+    [self readCmnWithDevice:device];
+}
+
+#pragma mark - 读取设备数据
+
+-(void)readCmnWithDeviceArr:(NSArray<BSHomeDeviceModel *> *)deviceArr {
+    for (BSHomeDeviceModel*deviceModel in deviceArr) {
+        BSPowerBankDevice *device = (BSPowerBankDevice *)[[BSDeviceManager shareInstance] findDeviceWithIdentifier:deviceModel.sn];
+        if (device.isConnected) {
+            [self readCmnWithDevice:device];
+        }
+    }
+}
+
+-(void)readCmnWithDevice:(BSCommonDevice*)device {
+    if (device.deviceType == BSDeviceTypeOutdoorPower) {
+        __weak typeof(self) weakSelf = self;
+        BSPowerBankDevice *deviceModel = (BSPowerBankDevice*)device;
+        [deviceModel readSingleValueWithCommand:BSPowerBankCmdBatteryNumber_Read block:^(BOOL result, id  _Nullable responseDic) {
+            [weakSelf reloadCollectionViewData];
+        }];
+    }
 }
 
 /// 设备断开连接
@@ -266,6 +249,7 @@
     NSArray *devices = data.devices.copy;
     if (devices.count > 0) {
         [[BSBLEManager shareInstance] stopScanBLEDevices];
+        [self readCmnWithDeviceArr:devices];
     }
     [[BSDeviceManager shareInstance] configDevicesWithDevices:devices callback:^{
 //        [[BSWMCommandManager manager] startService];
@@ -380,14 +364,13 @@
         if (isIpad) {
 //            [self setupIpadScreenViewParameter];
         }else {
-            CGFloat bannerWidth = kScreenWidth-20*2;
+            CGFloat bannerWidth = kScreenWidth-24*2;
             CGFloat cellWidth   = isIpad ? 156 : (kScreenWidth-30*2-20)/2.0;
-            _contentView.bannerSize = CGSizeMake(bannerWidth, bannerWidth * 190/390.0 + 10*2);
-            _contentView.collectionSize = CGSizeMake(cellWidth, cellWidth * 176 / 156.0);
-            _contentView.addDeviceSize = CGSizeMake(kScreenWidth*220/390.0, kScreenWidth*220/390.0);
+            _contentView.bannerSize = CGSizeMake(bannerWidth, bannerWidth * 200/342.0);
+            _contentView.collectionSize = CGSizeMake(bannerWidth, 163.0);
+//            _contentView.collectionSize = CGSizeMake(cellWidth, cellWidth * 176 / 156.0);
+            _contentView.addDeviceSize = CGSizeMake(kScreenWidth, 135/372.0*kScreenWidth);
         }
-//        if (@available(iOS 11.0, *)) {}
-//        else self.automaticallyAdjustsScrollViewInsets = NO;
     }
     return _contentView;
 }

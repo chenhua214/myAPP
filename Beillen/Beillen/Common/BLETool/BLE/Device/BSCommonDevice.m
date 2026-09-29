@@ -79,9 +79,23 @@
         self.deviceType = type;
         self.identifier = identifier ? identifier.copy : nil;
         self.model = model ? model.copy : nil;
+        self.detailName = [self getdetailNameWithType:type];
         [self addNotificationObserver];
     }
     return self;
+}
+
+-(NSString*)getdetailNameWithType:(BSDeviceType)type {
+    NSString *nameStr = @"";
+    switch (type) {
+        case BSDeviceTypeOutdoorPower:
+            nameStr = @"高性能移动电源";
+            break;
+            
+        default:
+            break;
+    }
+    return nameStr;
 }
 
 - (instancetype)init{

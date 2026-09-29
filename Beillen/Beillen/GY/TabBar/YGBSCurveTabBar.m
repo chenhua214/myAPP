@@ -295,14 +295,12 @@ static CGFloat kBSTabBarItemSpacing = 4.0;
 //}
 
 - (void)upMallButtonIsSelect {
-    if(self.hasController4MallButton){
+
         NSInteger index = self.indexOfMallButton;
         NSLog(@"index : %ld",index);
         if (index < 0 || index == NSNotFound || index > self.numberOfControllers - 1) {
             return;
         }
-//        self.mallButtonCenter.selected = NO ;
-    }
 }
 
 #pragma mark- Setters && Getters

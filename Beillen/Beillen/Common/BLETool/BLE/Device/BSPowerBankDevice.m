@@ -16,6 +16,11 @@
     return validDataNumber;
 }
 
+-(void)setTypeByte_H:(Byte)typeByte_H
+{
+    _typeByte_H = typeByte_H;
+    NSLog(@"当前数值=====  %ld",self.typeValue);
+}
 @end
 
 @implementation BSCommonDeviceTypeModel
@@ -98,7 +103,14 @@
         return;
     }
 
+    short cmdType = command[1];  // 数据的类型
     short cmd = command[2];
+    if (cmdType == 2 && cmd == 150 ) {
+        //  写入请求返回的响应事件类型
+        [self writeBlockValueCommand:value];
+        return;
+    }
+    
     short cmdLength = command[3];
     if ( cmdLength + 4 > dataLength ) {
         return;
@@ -126,11 +138,48 @@
 }
 
 
+#pragma mark  设置写入，返回数据的处理
+- (void)writeBlockValueCommand:(NSData *)value  {
+    UInt8 *command = (UInt8 *)[value bytes];
+    
+//    short cmdLong = command[3];  // 数据的类型
+//    short cmd = command[4];
+    short cmdNumber = command[5];
+    BOOL settingNumber = NO;
+    if (cmdNumber == 0) {
+        settingNumber = YES;
+    }
+//        // 设置成功
+//        NSData *dataD = [value subdataWithRange:NSRangeFromString(@"4,1")];
+//        
+//        NSMutableData *dataMut = [[NSMutableData alloc]initWithData:dataD];
+//        [dataMut appendData:dataD];
+//    }
+    
+    NSData *dataD = [value subdataWithRange:NSRangeFromString(@"4,1")];
+    
+    NSMutableData *blockData = [[NSMutableData alloc]initWithData:dataD];
+    [blockData appendData:dataD];
+    
+//    NSUInteger sum = 0;
+//    NSData *dataD = [value subdataWithRange:NSRangeFromString(k_Range2_2)];
+    BSBLEResponse *response = [self responseWithCommandByte:blockData];
+
+    id number = @((BOOL)settingNumber);
+    if (response && response.commandBlock) {
+        response.commandBlock(settingNumber,number);
+    }
+    
+//    0xaa0296023400ce55
+}
+
+
 #pragma mark  返回数据的处理之后的单个数据处理
 - (void)readValueReturnCommand:(NSInteger)cmd value:(Byte)value {
     
-    NSLog(@"cmd==== %ld  cmdStr16=== %@H,value==== %hhu",cmd,[[NSString new] ToHex:cmd],value);
+//    NSLog(@"cmd==== %ld  cmdStr16=== %@H,value==== %hhu",cmd,[[NSString new] ToHex:cmd],value);
     NSUInteger cmdValue = value;
+    NSString *numberForType = @"";
     switch (cmd) {
             ///C1
         case BSPowerBankCmdTypeC1_R_OutputA_L:
@@ -142,6 +191,7 @@
         case BSPowerBankCmdTypeC1_R_OutputA_H:
         {
             ///<  0x0001  *   TypeC1电流 高字节 （毫安）
+            numberForType = @"TypeC1电流";
             self.typeC1.typeModelA.typeByte_H = value;
         }
             break;
@@ -154,6 +204,7 @@
         case BSPowerBankCmdTypeC1_R_OutputV_H:
         {
             ///<  0x0003  *   TypeC1电压 高字节 （毫伏）
+            numberForType = @"TypeC1电压";
             self.typeC1.typeModelV.typeByte_H = value;
         }
             break;
@@ -165,6 +216,7 @@
             break;
         case BSPowerBankCmdTypeC1_R_OutputW_H:
         {
+            numberForType = @"TypeC1功率";
             ///<  0x0005  *   TypeC1功率 高字节（W）
             self.typeC1.typeModelW.typeByte_H = value;
         }
@@ -178,6 +230,7 @@
             break;
         case BSPowerBankCmdTypeC2_R_OutputA_H:
         {
+            numberForType = @"TypeC2电流";
             ///<  0x0007  *   TypeC2电流 高字节（毫安）
             self.typeC2.typeModelA.typeByte_H = value;
         }
@@ -190,6 +243,7 @@
             break;
         case BSPowerBankCmdTypeC2_R_OutputV_H:
         {
+            numberForType = @"TypeC2电压";
             ///<  0x0009  *   TypeC2电压 高字节 （毫伏）
             self.typeC2.typeModelV.typeByte_H = value;
         }
@@ -202,19 +256,22 @@
             break;
         case BSPowerBankCmdTypeC2_R_OutputW_H:
         {
+            numberForType = @"TypeC2功率";
             ///<  0x000B  *   TypeC2功率 高字节（W）
             self.typeC2.typeModelW.typeByte_H = value;
         }
            
             break;
-        case BSPowerBankCmdCharge_C1_TCP:
+        case BSPowerBankCmdCharge_C1_TCP_Read:
         {
+            numberForType = @"设备C1口协议";
             ///<  0x000C  *   设备C1口协议
             self.typeC1.typeCType = cmdValue;
         }
             break;
-        case BSPowerBankCmdCharge_C2_TCP:
+        case BSPowerBankCmdCharge_C2_TCP_Read:
         {
+            numberForType = @"设备C2口协议";
             ///<  0x000D  *   设备C2口协议
            
             self.typeC2.typeCType = cmdValue;
@@ -229,6 +286,7 @@
             break;
         case BSPowerBankCmdTypeUSBA_R_OutputA_H:
         {
+            numberForType = @"USBA 电流 ";
             ///<  0x000F  *   USBA 电流 高字节 （毫安）
             self.USBA1.typeModelA.typeByte_H = value;
         }
@@ -241,206 +299,233 @@
             break;
         case BSPowerBankCmdTypeUSBA_R_OutputV_H:
         {
+            numberForType = @"USBA 电压 ";
             ///<  0x0011  *   USBA 电压 高字节 （毫伏）
             self.USBA1.typeModelV.typeByte_H = value;
         }
             break;
         case BSPowerBankCmdTypeUSBA_R_OutputW:
         {
+            numberForType = @"USBA 电功率 ";
             ///<  0x0012  *   USBA功率 （W）（不分高低字节）
             self.USBA1.typeModelW.typeByte_L = value;
         }
             break;
-        case BSPowerBankCmdCharge_USBA_TCP:
+        case BSPowerBankCmdCharge_USBA_TCP_Read:
         {
+            numberForType = @"USBA协议  ";
             ///<  0x0013  *   USBA协议   类别
             self.USBA1.typeCType = cmdValue;
         }
             break;
-        case BSPowerBankCmdDevice_state:
+        case BSPowerBankCmdDevice_state_Read:
         {
+            numberForType = @"设备状态寄存器 ";
             /// 0x0015  *   设备状态寄存器
             ///  另外处理数据
             [self CmdDevice_state:cmdValue];
+            if (self.typeConnectState != cmdValue) {
+                self.typeConnectState = cmdValue;
+            }
         }
             break;
-        case BSPowerBankCmdBatteryNumber:
+        case BSPowerBankCmdBatteryNumber_Read:
         {
+            numberForType = @"电池电量";
             ///<  0x0016  *   电池电量   （0-100%）
             self.batterySOC = cmdValue;
         }
             break;
-        case BSPowerBankCmdBatteryT:
+        case BSPowerBankCmdBatteryT_Read:
         {
+            numberForType = @"电池温度    单位：°C";
             ///<  0x0017  *   电池温度    单位：°C
             self.deviceTemp = cmdValue;
         }
             break;
-        case BSPowerBankCmdBattery_V_L:
+        case BSPowerBankCmdBattery_V_L_Read:
         {
             ///<  0x0018  *   电池电压低节（毫伏）
             self.batteryModelV.typeByte_L = value;
         }
             break;
-        case BSPowerBankCmdBattery_V_H:
+        case BSPowerBankCmdBattery_V_H_Read:
         {
+            numberForType = @"电池电压高节（毫伏）";
             ///<  0x0019  *   电池电压高节（毫伏）
             self.batteryModelV.typeByte_H = value;
         }
             break;
-        case BSPowerBankCmdBattery_A_L:
+        case BSPowerBankCmdBattery_A_L_Read:
         {
             ///<  0x001A  *   电池电流低节（毫伏）
             self.batteryModelA.typeByte_L = value;
         }
             break;
-        case BSPowerBankCmdBattery_A_H:
+        case BSPowerBankCmdBattery_A_H_Read:
         {
+            numberForType = @"电池电流高节（毫伏）";
             ///<  0x001B  *   电池电流高节（毫伏）
             self.batteryModelA.typeByte_H = value;
         }
             break;
-        case BSPowerBankCmdBattery_LoopNum_L:
+        case BSPowerBankCmdBattery_LoopNum_L_Read:
         {
             ///<  0x001C  *   电池循环次数低字节（次）
-            self.batteryCyclesModel.typeByte_L = value;
+//            self.batteryCyclesModel.typeByte_L = value;
+            self.batteryCyclesModel.typeByte_L = 12;
         }
             break;
-        case BSPowerBankCmdBattery_LoopNum_H:
+        case BSPowerBankCmdBattery_LoopNum_H_Read:
         {
+            numberForType = @"电池循环次数";
             ///<  0x001D  *   电池循环次数高字节（次）
             self.batteryCyclesModel.typeByte_H = value;
         }
             break;
-        case BSPowerBankCmdBattery_State:
+        case BSPowerBankCmdBattery_State_Read:
         {
+            numberForType = @"电池健康度 ";
             ///<  0x001E  *   电池健康度   0-100%
             self.batteryState = cmdValue;
         }
             break;
-        case BSPowerBankCmd_Input_Time_L:
+        case BSPowerBankCmd_Input_Time_L_Read:
         {
             ///<  0x001F  *   充电剩余时间低字节（分钟）
             self.inputTimeModel.typeByte_L = value;
         }
             break;
-        case BSPowerBankCmd_Input_Time_H:
+        case BSPowerBankCmd_Input_Time_H_Read:
         {
+            numberForType = @"充电剩余时间（分钟）";
             ///<  0x0020  *   充电剩余时间高字节（分钟）
             self.inputTimeModel.typeByte_H = value;
         }
             break;
-        case BSPowerBankCmd_Output_Time_L:
+        case BSPowerBankCmd_Output_Time_L_Read:
         {
             ///<  0x0021  *   放电剩余时间低字节（分钟）
             self.outputTimeModel.typeByte_L = value;
         }
             break;
-        case BSPowerBankCmd_Output_Time_H:
+        case BSPowerBankCmd_Output_Time_H_Read:
         {
+            numberForType = @"放电剩余时间（分钟）";
             ///<  0x0022  *   放电剩余时间高字节（分钟）
             self.outputTimeModel.typeByte_H = value;
         }
             break;
         /// 电芯
-        case BSPowerBankCmdCELL1V_L:
+        case BSPowerBankCmdCELL1V_L_Read:
         {
             ///<  0x0023  *   电芯1电压
             self.batteryCell_1.typeByte_L = value;
         }
             break;
-        case BSPowerBankCmdCELL1V_H:
+        case BSPowerBankCmdCELL1V_H_Read:
         {
+            numberForType = @" 电芯1电压";
             ///<  0x0024  *   电芯1电压
             self.batteryCell_1.typeByte_H = value;
         }
             break;
-        case BSPowerBankCmdCELL2V_L:
+        case BSPowerBankCmdCELL2V_L_Read:
         {
             ///<  0x0025  *   电芯2电压
             self.batteryCell_2.typeByte_L = value;
         }
             break;
-        case BSPowerBankCmdCELL2V_H:
+        case BSPowerBankCmdCELL2V_H_Read:
         {
+            numberForType = @" 电芯2电压";
             ///<  0x0026  *   电芯2电压
             self.batteryCell_2.typeByte_H = value;
         }
             break;
-        case BSPowerBankCmdCELL3V_L:
+        case BSPowerBankCmdCELL3V_L_Read:
         {
             ///<  0x0027  *   电芯3电压
             self.batteryCell_3.typeByte_L = value;
         }
             break;
-        case BSPowerBankCmdCELL3V_H:
+        case BSPowerBankCmdCELL3V_H_Read:
         {
+            numberForType = @" 电芯3电压";
             ///<  0x0028  *   电芯3电压
             self.batteryCell_3.typeByte_H = value;
         }
             break;
-        case BSPowerBankCmdCELL4V_L:
+        case BSPowerBankCmdCELL4V_L_Read:
         {
             ///<  0x0029  *   电芯4电压
             self.batteryCell_4.typeByte_L = value;
         }
             break;
-        case BSPowerBankCmdCELL4V_H:
+        case BSPowerBankCmdCELL4V_H_Read:
         {
+            numberForType = @" 电芯4电压";
             ///<  0x002A  *   电芯4电压
             self.batteryCell_4.typeByte_H = value;
         }
             break;
-        case BSPowerBankCmdCELL5V_L:
+        case BSPowerBankCmdCELL5V_L_Read:
         {
+            
             ///<  0x002B *   电芯5电压
             self.batteryCell_5.typeByte_L = value;
         }
             break;
-        case BSPowerBankCmdCELL5V_H:
+        case BSPowerBankCmdCELL5V_H_Read:
         {
+            numberForType = @" 电芯5电压";
             ///<  0x002EC *   电芯5电压
             self.batteryCell_5.typeByte_H = value;
         }
             break;
-        case BSPowerBankCmdCELL6V_L:
+        case BSPowerBankCmdCELL6V_L_Read:
         {
             ///<  0x002D  *   电芯6电压
             self.batteryCell_6.typeByte_L = value;
         }
             break;
-        case BSPowerBankCmdCELL6V_H:
+        case BSPowerBankCmdCELL6V_H_Read:
         {
+            numberForType = @" 电芯6电压";
             ///<  0x002E  *   电芯6电压
             self.batteryCell_6.typeByte_H = value;
         }
             break;
-        case BSPowerBankCmdCELL7V_L:
+        case BSPowerBankCmdCELL7V_L_Read:
         {
             ///<  0x0030  *   电芯7电压
             self.batteryCell_7.typeByte_L = value;
         }
             break;
-        case BSPowerBankCmdCELL7V_H:
+        case BSPowerBankCmdCELL7V_H_Read:
         {
+            numberForType = @" 电芯7电压";
             ///<  0x0031  *   电芯7电压
             self.batteryCell_7.typeByte_H = value;
         }
             break;
         case BSPowerBankCmdTypeC1_RW_OutputW:
         {
+            numberForType = @" C1 输出功率（w）";
             ///< 0x0032  *  C1 输出功率设置（w）
             self.typeC1.outputSetW = cmdValue;
         }
             break;
         case BSPowerBankCmdTypeC2_RW_OutputW:
         {
+            numberForType = @" C2 输出功率（w）";
             ///< 0x0033  *  C2 输出功率设置（w）
             self.typeC2.outputSetW = cmdValue;
         }
             break;
         case BSPowerBankCmdClock_RW_open:
         {
+            numberForType = @" 小电流模式";
             ///<  0x0034  *  小电流模式设置 0 关  1 开
             self.smallAMPType = cmdValue;
         }
@@ -453,18 +538,21 @@
             break;
         case BSPowerBankCmdClock_RW_Time_H:
         {
+            numberForType = @" 小电流时间限制  分钟";
             ///<  0x0036  *   小电流时间限制高字节（分钟）
             self.smallAMPTimeModel.typeByte_H = value;
         }
             break;
         case BSPowerBankCmdBattery_RW_T_H:
         {
+            numberForType = @" 高温保护阈值";
             ///<  0x0037  *  高温保护阈值设置（°C）
             self.deviceTempSet_H = cmdValue;
         }
             break;
         case BSPowerBankCmdBattery_RW_T_L:
         {
+            numberForType = @" 低温保护阈值";
             ///<  0x0038  *   低温保护阈值设置（°C）
             self.deviceTempSet_L = cmdValue;
         }
@@ -481,6 +569,52 @@
             self.batterySOC_state2 = cmdValue;
         }
             break;
+            
+//            BSPowerBankCmdBattery_R_Time_L
+        case BSPowerBankCmdBattery_R_Time_L:
+        {
+            ///<  0x0040  *   累计放电时长低字节,低8位数据，单位分钟
+            self.outpuSumTimeModel.typeByte_L = cmdValue;
+        }
+            break;
+        case BSPowerBankCmdBattery_R_Time_H:
+        {
+            numberForType = @"  累计放电时长 分钟";
+            ///<  0x0041  *   累计放电时长高字节,高8位数据，单位分钟
+            self.outpuSumTimeModel.typeByte_H = cmdValue;
+        }
+            break;
+            
+        case BSPowerBankCmdBattery_R_Sum_L:
+        {
+            ///<  0x0042  *   累计放电量低字节,低8位数据，单位mAH
+            self.outpuSumMAHModel.typeByte_L = cmdValue;
+        }
+            break;
+        case BSPowerBankCmdBattery_R_Sum_H:
+        {
+            numberForType = @"  累计放电放电量 单位mAH";
+            ///< 0x0043  *   累计放电量,高8位数据，单位mAH
+       
+            self.outpuSumMAHModel.typeByte_H = cmdValue;
+        }
+            break;
+            
+        case BSPowerBankCmdBattery_R_Number_L:
+        {
+            ///<  0x0045  *   剩余电量低字节（mAH）
+            self.batterySOCModel.typeByte_L = cmdValue;
+        }
+            break;
+            
+        case BSPowerBankCmdBattery_R_Number_H:
+        {
+            ///<  0x0046  *   剩余电量高字节（mAH）
+            numberForType = @"  剩余电量（mAH）";
+            self.batterySOCModel.typeByte_H = cmdValue;
+        }
+            break;
+            
         case BSPowerBankCmdSetting_RW_Model:
         {
             ///<  0x0060  *  设置模式状态：
@@ -490,6 +624,13 @@
         default:
             break;
     }
+    
+//    NSLog(@"%@",numberForType);
+    NSLog(@"%@===cmd==== %ld  cmdStr16=== %@H,value==== %hhu",numberForType,cmd,[[NSString new] ToHex:cmd],value);
+   
+  
+    
+    
 }
 
 /// 0x0015  *   设备状态寄存器 数据处理
@@ -656,7 +797,8 @@
     /// Bit4  连续操作： 0x00：否  0x01：是
     /// 连续写入：11     长度01
     commandStr = [NSString stringWithFormat:@"%@%@%@%@",@"11",commandStr,@"01",cmdValueStr];
-    [self writeCommand:commandStr end:@"55" responseBlockDataRange:k_Range2_2 block:block];
+//    [self writeCommand:commandStr end:@"55" responseBlockDataRange:k_Range2_2 block:block];
+    [self settingWriteCommand:commandStr end:@"55" block:block];
 }
 
 #pragma mark -    设置写入高低两个字节 信息
@@ -681,7 +823,8 @@
     /// Bit4  连续操作： 0x00：否  0x01：是
     /// 连续写入：11     长度01
     commandStr = [NSString stringWithFormat:@"%@%@%@%@%@",@"11",commandStr,@"02",lastTwo,firstTwo];
-    [self writeCommand:commandStr end:@"55" responseBlockDataRange:k_Range2_2 block:block];
+//    [self writeCommand:commandStr end:@"55" responseBlockDataRange:k_Range2_2 block:block];
+    [self settingWriteCommand:commandStr end:@"55" block:block];
 }
 
 
@@ -765,6 +908,9 @@
     /// Bit4  连续操作： 0x00：否  0x01：是
     commandStr = [NSString stringWithFormat:@"%@%@%@%@",@"11",commandStr,LngthStr,mutableStr];
     [self writeCommand:commandStr end:@"55" responseBlockDataRange:k_Range2_2 block:block];
+    
+    
+   
 }
 
 //// 设置屏保文字
@@ -828,6 +974,33 @@
     [self writeData:headData responseBlockData:dataD block:block];
 }
 
+
+- (void)settingWriteCommand:(NSString *)str end:(NSString *)end block:(BSResponseBlock)block
+{
+    
+    NSMutableData *headData = [str convertHexStrToData:@"AA"];
+   
+    NSMutableData *data = [str convertHexStrToData:str];
+    ///  校验码 = SUM (指令码 - 数据域)
+    NSString* sumStr = [self sumWithData:data];
+    data = [str convertHexStrToData:str];
+    NSData *dataSum = [sumStr convertHexStrToData:sumStr];
+    [data appendData:dataSum];
+//    uint16_t crc = [self crcWithData:data];
+//    Byte byte[] = {((uint8_t)(crc >> 8)&0xFF),((uint8_t)(crc)&0xFF)};
+//    Byte byte[] = {((uint8_t)(crc)&0xFF)};
+//    [data appendData:[NSData dataWithBytes:byte length:1]];
+    if (end) {
+        NSData *endData = [end convertHexStrToData:end];
+        [data appendData:endData];
+    }
+    [headData appendData:data];
+    NSData *dataD = [headData subdataWithRange:NSRangeFromString(@"2,1")];
+    NSMutableData *blockData = [[NSMutableData alloc]initWithData:dataD];
+    [blockData appendData:dataD];
+    
+    [self writeData:headData responseBlockData:blockData block:block];
+}
 
 #pragma mark -+++++++ 队列写入指令 Start +++++++
 
@@ -984,6 +1157,11 @@
 -(BSCommonDeviceTypeModel*)typeC1{
     if (!_typeC1) {
         _typeC1 = [BSCommonDeviceTypeModel new];
+        _typeC1.typeName = @"C1";
+        _typeC1.typeCMessageMaxA = 3;
+        _typeC1.typeCMessageMaxW = 30;
+        _typeC1.typeCTypeMessageDeviceName = @"iPhone 15 Pro";
+        _typeC1.typeCType = 0;
     }
     return _typeC1;
 }
@@ -991,6 +1169,11 @@
 -(BSCommonDeviceTypeModel*)typeC2{
     if (!_typeC2) {
         _typeC2 = [BSCommonDeviceTypeModel new];
+        _typeC2.typeName = @"C2";
+        _typeC2.typeCMessageMaxA = 4;
+        _typeC2.typeCMessageMaxW = 40;
+        _typeC2.typeCTypeMessageDeviceName = @"iPhone 16";
+        _typeC2.typeCType = 1;
     }
     return _typeC2;
 }
@@ -998,6 +1181,11 @@
 -(BSCommonDeviceTypeModel*)USBA1{
     if (!_USBA1) {
         _USBA1 = [BSCommonDeviceTypeModel new];
+        _USBA1.typeName = @"A";
+        _USBA1.typeCMessageMaxA = 5;
+        _USBA1.typeCMessageMaxW = 60;
+        _USBA1.typeCTypeMessageDeviceName = @"iPhone 17 Mac Pro";
+        _USBA1.typeCType = 2;
     }
     return _USBA1;
 }
@@ -1026,6 +1214,13 @@
     return _batteryCyclesModel;
 }
 
+/// 剩余电量   mAH
+-(BSCommonTypeByteModel*)batterySOCModel{
+    if (!_batterySOCModel) {
+        _batterySOCModel = [self addTypeByteModel];
+    }
+    return _batterySOCModel;
+}
 
 -(BSCommonTypeByteModel*)inputTimeModel{
     if (!_inputTimeModel) {
@@ -1039,6 +1234,20 @@
         _outputTimeModel = [self addTypeByteModel];
     }
     return _outputTimeModel;
+}
+
+-(BSCommonTypeByteModel*)outpuSumTimeModel{
+    if (!_outpuSumTimeModel) {
+        _outpuSumTimeModel = [self addTypeByteModel];
+    }
+    return _outpuSumTimeModel;
+}
+
+-(BSCommonTypeByteModel*)outpuSumMAHModel{
+    if (!_outpuSumMAHModel) {
+        _outpuSumMAHModel = [self addTypeByteModel];
+    }
+    return _outpuSumMAHModel;
 }
 
 -(BSCommonTypeByteModel*)smallAMPTimeModel{

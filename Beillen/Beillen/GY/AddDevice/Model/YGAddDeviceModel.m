@@ -15,9 +15,8 @@
 @implementation DeviceTypeModel
 -(void)initModelwithString:(NSString*)name;
 {
-//    self.prodName = name;
+    self.prodName = name;
     self.model = name;
-    self.prodName = [NSString stringWithFormat:@"1_%@",name];
     self.type = BSDeviceTypeOutdoorPower;
 }
 

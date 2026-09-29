@@ -17,3 +17,5 @@
 "setting_multi_language" = "语言";
 "setting_multi_association" = "官方社群";
 "add_devices_tit" = "添加设备";
+"device_add_success" = "设备添加成功";
+"str_confirm" = "确定";

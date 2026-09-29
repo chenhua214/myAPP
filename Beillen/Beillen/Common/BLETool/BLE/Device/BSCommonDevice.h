@@ -62,7 +62,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// 蓝牙信号码
 @property(nonatomic,strong) NSNumber *RSSI;
 /// 设备电量
-@property(nonatomic,assign) NSInteger power;
+@property(nonatomic,assign) NSInteger batterySOC;
 /// 设备别名
 @property(nonatomic,  copy) NSString *name;
 ///产品名称

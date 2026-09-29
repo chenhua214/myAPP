@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic,strong) BSCommonDeviceTypeModel *typeModel ;
 -(void)initAddView;
+-(void)upTypeModel:(BSCommonDeviceTypeModel *)typeModel isConnet:(BOOL)isConnet;
 @end
 
 NS_ASSUME_NONNULL_END

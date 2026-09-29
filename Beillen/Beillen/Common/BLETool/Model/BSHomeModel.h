@@ -32,11 +32,20 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
+
+@interface BSHomeBannerModel : NSObject
+@property (nonatomic, copy) NSString *imgUrl;
+@property (nonatomic, copy) NSString *bgColorStart;
+@property (nonatomic, copy) NSString *bgColorEnd;
+//@property (nonatomic, strong) BSStoreHomeItemDataModel *urlData;// banner跳转
+@end
+
 @interface BSHomeDataModel : BSBaseModel
 //@property (nonatomic, strong) NSArray<BSHomeTitlesModel *> *homes;
 @property (nonatomic, strong) NSArray<BSHomeDeviceModel *> *devices;
-//@property (nonatomic, strong) NSArray<BSHomeBannerModel *> *banners;
+@property (nonatomic, strong) NSArray<BSHomeBannerModel *> *banners;
 @property (nonatomic,   copy) NSString *greetings; //欢迎语
+-(void)initBannersData;
 @end
 
 @interface BSHomeDeviceModelList : NSObject

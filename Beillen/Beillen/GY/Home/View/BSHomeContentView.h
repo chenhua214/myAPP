@@ -6,7 +6,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "BSHomePageHeader.h"
 NS_ASSUME_NONNULL_BEGIN
 @class BSHomeDataModel;
 @class BSHomeAddDeviceView;
@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 #define homeCenterYScale 1.26
 @interface BSHomeContentView : UIView
 /// 头部
-@property (nonatomic, strong) UIView *headerView;
+@property (nonatomic, strong) BSHomePageHeader *headerView;
 /// Collection View
 @property (nonatomic, strong) UICollectionView *dataCollectionView;
 /// 添加新设备

@@ -29,6 +29,7 @@
 
 /// 蓝牙背景视图
 @property (nonatomic, strong) UIView *bleBgView;
+@property (nonatomic, strong) UIView *bleLineView;
 /// 蓝牙 icon
 @property (nonatomic, strong) UIImageView *deviceBleImg;
 @property (nonatomic, strong) UILabel *deviceBleLabel;
@@ -59,23 +60,12 @@
     [self.deviceBgView addSubview:self.deviceDetailLabel];
     [self.deviceBgView addSubview:self.deviceElect];
     [self.deviceBgView addSubview:self.deviceElectLabel];
-
-//    [self.contentBgView addSubview:self.bleBgView];
-//    [self.bleBgView addSubview:self.deviceBleImg];
-//    [self.bleBgView addSubview:self.deviceBleLabel];
-//    [self.bleBgView addSubview:self.deviceBleLeft];
     [self.deviceBgView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(17);
         make.left.mas_equalTo(17);
         make.right.mas_equalTo(-17);
         make.height.mas_equalTo(80);
     }];
-//    [self.bleBgView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.top.mas_equalTo(16);
-//        make.left.mas_equalTo(17);
-//        make.right.mas_equalTo(-17);
-//        make.bottom.mas_equalTo(-17);
-//    }];
     
     [self.deviceImage mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(8);
@@ -108,21 +98,21 @@
     [self.bleBgView addSubview:self.deviceBleImg];
     [self.bleBgView addSubview:self.deviceBleLabel];
     [self.bleBgView addSubview:self.deviceBleLeft];
-//    [self.deviceBgView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.top.mas_equalTo(17);
-//        make.left.mas_equalTo(17);
-//        make.right.mas_equalTo(-17);
-//        make.height.mas_equalTo(80);
-//    }];
+    [self.bleBgView addSubview:self.bleLineView];
     [self.bleBgView mas_makeConstraints:^(MASConstraintMaker *make) {
-    
         make.top.equalTo(self.deviceBgView.mas_bottom).offset(16);
         make.left.mas_equalTo(17);
         make.right.mas_equalTo(-17);
         make.bottom.mas_equalTo(-17);
     }];
+    
+    [self.bleLineView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(0);
+        make.left.mas_equalTo(0);
+        make.right.mas_equalTo(0);
+        make.height.mas_equalTo(1);
+    }];
     [self.deviceBleImg mas_makeConstraints:^(MASConstraintMaker *make) {
- 
         make.left.mas_equalTo(0);
         make.height.mas_equalTo(15);
         make.width.mas_equalTo(13);
@@ -141,7 +131,6 @@
         make.right.mas_equalTo(-1);
         make.centerY.equalTo(self.deviceBleImg.mas_centerY).offset(0);
     }];
-    
 }
 
 /// 更新数据
@@ -156,30 +145,25 @@
     BSCommonDevice *device = [[BSDeviceManager shareInstance] findDeviceWithIdentifier:deviceModel.sn];
     BOOL bleConnected = device.isConnected; // 蓝牙连接
     // ---> 设备名称
-    self.deviceNameLabel.text =  deviceModel.name;
-    self.deviceDetailLabel.text =  deviceModel.detailName;
+    self.deviceNameLabel.text =  device.name;
+    self.deviceDetailLabel.text =  device.detailName;
     
-  
-//    self.deviceElect.hidden = self.deviceElectLabel.hidden = !bleConnected;
-    
-    self.deviceElectLabel.text  = [NSString stringWithFormat:@"%@W",@(deviceModel.power)];
+    self.deviceElectLabel.text  = [NSString stringWithFormat:@"%@%@",@(device.batterySOC),@"%"];
     if (bleConnected) {
         self.deviceBleLabel.text = NSLocalizedStringkey(@"蓝牙已连接");
+        self.deviceElectLabel.text  = [NSString stringWithFormat:@"%@%@",@(device.batterySOC),@"%"];
+        self.deviceElect.hidden = NO;
     } else {
         self.deviceBleLabel.text = NSLocalizedStringkey(@"蓝牙已断开");
+        self.deviceElectLabel.text  = @"--";
+        self.deviceElect.hidden = YES;
     }
-    
 }
-
 
 - (UIView *)contentBgView {
     if (!_contentBgView) {
         UIView* view = [UIView new];
-        
-       
         view.backgroundColor = bsColorString(@"#FFFFFF");
-        
-    
         view.layer.shadowColor = bsColorAlphaString(@"#000000", 0.05).CGColor;
         view.layer.shadowOffset = CGSizeMake(0,1);
         view.layer.shadowOpacity = 0.5;
@@ -192,7 +176,6 @@
         view.layer.cornerRadius = 32;
         view.layer.borderWidth = 1;
         view.layer.borderColor = [UIColor colorWithRed:0.773 green:0.769 blue:0.859 alpha:0.3].CGColor;
-//        view.layer.borderColor = UIColor(red: 0.773, green: 0.769, blue: 0.859, alpha: 0.3).cgColor;
         _contentBgView = view;
     }
     return _contentBgView;
@@ -205,7 +188,6 @@
     }
     return _deviceBgView;
 }
-
 
 - (UIImageView *)deviceImage {
     if (!_deviceImage) {
@@ -221,16 +203,15 @@
         _deviceNameLabel = [UILabel new];
         _deviceNameLabel.font = bsFontBold(20);
         _deviceNameLabel.textColor = bsColorString(@"#191C1E");
-//        _deviceNameLabel.textAlignment = NSTextAlignmentCenter;
     }
     return _deviceNameLabel;
 }
+
 - (UILabel *)deviceDetailLabel {
     if (!_deviceDetailLabel) {
         _deviceDetailLabel = [UILabel new];
         _deviceDetailLabel.font = bsFontMedium(16);
-        _deviceDetailLabel.textColor = bsColorString(@"#454558");
-//        _deviceDetailLabel.textAlignment = NSTextAlignmentCenter;
+        _deviceDetailLabel.textColor = [UIColor bs_colorFromARGB:@"#454558" alpha:0.7];
         _deviceDetailLabel.numberOfLines = 1;
     }
     return _deviceDetailLabel;
@@ -250,7 +231,6 @@
         _deviceElectLabel = [UILabel new];
         _deviceElectLabel.font = bsFontBold(22);
         _deviceElectLabel.textColor = bsColorString(@"#004098");
-//        _deviceNameLabel.textAlignment = NSTextAlignmentCenter;
     }
     return _deviceElectLabel;
 }
@@ -263,6 +243,14 @@
     return _bleBgView;
 }
 
+- (UIView *)bleLineView {
+    if (!_bleLineView) {
+        UIView* view = [UIView new];
+        view.backgroundColor = [UIColor bs_colorFromARGB:@"#C5C4DB" alpha:0.1];
+        _bleLineView = view;
+    }
+    return _bleLineView;
+}
 
 - (UIImageView *)deviceBleImg {
     if (!_deviceBleImg) {

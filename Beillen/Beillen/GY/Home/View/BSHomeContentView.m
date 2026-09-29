@@ -11,14 +11,10 @@
 #import "BSHomeModel.h"
 #import "BSHomeAddDeviceView.h"
 #import "BSHomePageSectionReusableView.h"
-
+#import "BSHomePageBannerCell.h"
 @interface BSHomeContentView()
-<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,BSHomePageCellDelegate>
-
-///
+<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,BSHomePageCellDelegate,BSHomePageHeaderDelegate>
 @property (nonatomic, strong) BSHomeDataModel *dataModel;
-///
-
 @end
 
 @implementation BSHomeContentView
@@ -36,11 +32,10 @@
 #pragma mark - UI
 
 - (void)initSubview {
-    self.backgroundColor = bsColorString(@"#F2F4F8");
+    self.backgroundColor = bsColorString(@"#F7F9FB");
     [self addSubview:self.headerView];
     [self addSubview:self.dataCollectionView];
     [self.dataCollectionView addSubview:self.addDeviceView];
-    
     [self.headerView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.mas_equalTo(0);
         make.top.mas_equalTo(StatusBar_HEIGHT);
@@ -57,14 +52,11 @@
     }];
 }
 
-
 /// 更新Banner、Device 数据 UI
 - (void)updateDataModel:(BSHomeDataModel *)model
 {
     self.dataModel = model;
     self.addDeviceView.hidden = model.devices.count > 0;
-    // self.dataCollectionView.scrollEnabled = model.devices.count > 0;
-//    [self updateUserInfomationWithDevices:model.devices.count];
     [self reloadCollectionViewData];
 }
 
@@ -108,38 +100,24 @@
 //    [self.addDeviceView updateOnChangeLanguages];
 }
 
+#pragma mark - 协议 - BSHomePageHeaderDelegate
+
+/// 首页-头部视图点击事件
+- (void)homePageHeaderEventsWithType:(BSHomePageEventsType)eventsType
+{
+    [self sendEventsType:eventsType data:nil];
+}
+
+#pragma mark - BSHomePageCellDelegate
+
+/// Cell 中的 按钮开关 点击 事件
+- (void)homePageCellSwitchTouchedWithModel:(BSHomeDeviceModel *)deviceModel
+{
+//    [self sendEventsType:BSHomePageEventsTypeCellSwitch data:deviceModel];
+}
 
 #pragma mark - BSHomePageBannerCellDelegate Banner图点击事件
-//
-///// 滚动轮播图
-///// @param cell 控件
-///// @param index 当前index
-//- (void)homePageBannerCollectionViewCell:(BSHomePageBannerCell *)cell didScrollAtIndex:(NSInteger)index
-//{
-//    
-//}
-//
-///// 点击轮播图
-///// @param cell 控件
-///// @param index 当前index
-//- (void)homePageBannerCollectionViewCell:(BSHomePageBannerCell *)cell didClickedAtIndex:(NSInteger)index
-//{
-//    NSLog(@"点击轮播图 %ld",(long)index);
-//    if (index >= 0 && index < self.dataModel.banners.count) {
-//        BSHomeBannerModel *bannerModel = self.dataModel.banners[index];
-//        [self sendEventsType:BSHomePageEventsTypeBanner data:bannerModel];
-//    }
-//}
-//
-//#pragma mark - BSHomePageCellDelegate
-//
-///// Cell 中的 按钮开关 点击 事件
-//- (void)homePageCellSwitchTouchedWithModel:(BSHomeDeviceModel *)deviceModel
-//{
-//    [self sendEventsType:BSHomePageEventsTypeCellSwitch data:deviceModel];
-//}
-//
-//
+
 
 #pragma mark - UICollectionViewDelegate
 
@@ -192,27 +170,16 @@
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath{
     if ([kind isEqualToString:UICollectionElementKindSectionHeader] && indexPath.section == 1) {
         BSHomePageSectionReusableView *reusableView = [BSHomePageSectionReusableView supplementaryViewForCollectionView:collectionView supplementaryViewOfKind:kind forIndexPath:indexPath];
-        
-//       
-//        BSHomePageSectionReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:NSStringFromClass([BSHomePageSectionReusableView class]) forIndexPath:indexPath];
-//                [headerView addSubview:self.headView];
         [reusableView updateData];
         return reusableView;
-            
-        
-      
     }
     return [UICollectionReusableView new];
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0) {
-//        BSHomePageBannerCell *cell = [BSHomePageBannerCell cellForCollectionView:collectionView indexPath:indexPath];
-//        [cell updateBanners:self.dataModel.banners size:self.bannerCycleViewSize];
-//        cell.delegate = self;
-        BSHomePageCell *cell = [BSHomePageCell cellForCollectionView:collectionView indexPath:indexPath];
-        [cell updateDeviceModel:self.dataModel.devices[indexPath.item]];
-        cell.delegate = self;
+        BSHomePageBannerCell *cell = [BSHomePageBannerCell cellForCollectionView:collectionView indexPath:indexPath];
+        [cell updateBanners:self.dataModel.banners size:self.bannerCycleViewSize];
         return cell;
     } else {
         BSHomePageCell *cell = [BSHomePageCell cellForCollectionView:collectionView indexPath:indexPath];
@@ -222,13 +189,12 @@
     }
 }
 
-
 #pragma mark - Getters
 
-- (UIView *)headerView {
+- (BSHomePageHeader *)headerView {
     if (!_headerView) {
-        _headerView = [UIView new];
-//        _headerView.delegate = self;
+        _headerView = [BSHomePageHeader new];
+        _headerView.delegate = self;
     }
     return _headerView;
 }
@@ -249,27 +215,21 @@
         if (@available(iOS 11.0, *)) {
             _dataCollectionView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
         }
-       
-        
         [_dataCollectionView registerClass:[BSHomePageCell class] forCellWithReuseIdentifier:NSStringFromClass([BSHomePageCell class])];
-//        [_dataCollectionView registerClass:[BSHomePageSectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:NSStringFromClass([BSHomePageSectionReusableView class])];
+        [_dataCollectionView registerClass:[BSHomePageBannerCell class] forCellWithReuseIdentifier:NSStringFromClass([BSHomePageBannerCell class])];
         [BSHomePageSectionReusableView registerSupplementaryViewForCollectionView:_dataCollectionView
                                                           supplementaryViewOfKind:UICollectionElementKindSectionHeader];
-//            [BSHomePageBannerCell registerCellForCollectionView:_dataCollectionView];
-//            [BSHomePageSectionReusableView registerSupplementaryViewForCollectionView:_dataCollectionView
-//                                                          supplementaryViewOfKind:UICollectionElementKindSectionHeader];
     }
     return _dataCollectionView;
 }
 
-
-
-
 - (BSHomeAddDeviceView *)addDeviceView {
     if (!_addDeviceView) {
-        _addDeviceView = [BSHomeAddDeviceView new];
+        BSHomeAddDeviceView *view = [BSHomeAddDeviceView new];
         _addDeviceView.hidden = YES;
         UITapGestureRecognizer *tapGestire = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(gotoAddDevicesGesture:)];
+        view.backgroundColor = [UIColor clearColor];
+        _addDeviceView = view;
         [_addDeviceView addGestureRecognizer:tapGestire];
     }
     return _addDeviceView;

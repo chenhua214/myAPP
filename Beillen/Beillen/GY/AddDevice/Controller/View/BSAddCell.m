@@ -56,7 +56,7 @@
     [self.iconView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(14);
         make.centerY.equalTo(self.bgView.mas_centerY);
-        make.width.height.mas_equalTo(60);
+        make.width.height.mas_equalTo(64);
     }];
     [self.stackView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.iconView.mas_right).offset(16);
@@ -65,7 +65,7 @@
     }];
 
     [self.stateBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.mas_equalTo(-10);
+        make.right.mas_equalTo(-17);
         make.centerY.equalTo(self.iconView.mas_centerY);
         make.size.mas_equalTo(CGSizeMake(24, 24));
     }];
@@ -86,15 +86,6 @@
     self.nameLabel.text = (name && name.length > 0) ? name : @"";
     BOOL macEnabled = mac.isEnable;
     self.macLabel.text = macEnabled ? [NSString stringWithFormat:@"%@:%@",NSLocalizedStringkey(@"mac_address"),mac] : @"";
-    [self.nameLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(self.iconView.mas_centerY).offset(macEnabled ? -12 : 0);
-    }];
-    self.stateBtn.selected = checked;
-//    if(backgroundColorHexString){
-//        self.backgroundColor = self.contentView.backgroundColor = self.bgView.backgroundColor = [UIColor bs_colorFromARGB:backgroundColorHexString];
-//    }else{
-//        self.backgroundColor = self.contentView.backgroundColor = self.bgView.backgroundColor = [UIColor bs_colorFromARGB:@"#F8F8F8"];
-//    }
 }
 
 #pragma mark- Setters && Getters
@@ -133,7 +124,7 @@
     if (!_stackView) {
         _stackView = [UIStackView new];
         [_stackView addArrangedSubview:self.nameLabel];
-        [_stackView addArrangedSubview:self.macLabel];
+//        [_stackView addArrangedSubview:self.macLabel];
         _stackView.axis = UILayoutConstraintAxisVertical;
         _stackView.distribution = UIStackViewDistributionFill;
         _stackView.alignment = UIStackViewAlignmentFill;
@@ -166,8 +157,8 @@
     if (!_stateBtn) {
         _stateBtn = ({
             UIButton*button = [UIButton buttonWithType:UIButtonTypeCustom];
-            [button setImage:[UIImage imageNamed:@"black_uncheck"] forState:UIControlStateNormal];
-            [button setImage:[UIImage imageNamed:@"black_checked"] forState:UIControlStateSelected];
+            [button setImage:[UIImage imageNamed:@"add_cell_right_icon"] forState:UIControlStateNormal];
+            [button setImage:[UIImage imageNamed:@"add_cell_right_icon"] forState:UIControlStateSelected];
             button.userInteractionEnabled = NO;
             button;
         });

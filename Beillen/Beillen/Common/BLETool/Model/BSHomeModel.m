@@ -84,6 +84,12 @@
 
 @end
 
+
+
+@implementation BSHomeBannerModel
+
+@end
+
 @implementation BSHomeDataModel
 
 + (NSString *)getPrimaryKey{
@@ -93,10 +99,22 @@
 + (NSDictionary *)modelContainerPropertyGenericClass{
     return @{
         @"devices" : [BSHomeDeviceModel class],
-        //        @"banners" : [BSHomeBannerModel class],
+        @"banners" : [BSHomeBannerModel class],
         //        @"homes"   : [BSHomeTitlesModel class]
     };
 }
+
+-(void)initBannersData{
+    
+    BSHomeBannerModel *banner1 = [BSHomeBannerModel new];
+    banner1.imgUrl = @"home_banner1";
+    BSHomeBannerModel *banner2 = [BSHomeBannerModel new];
+    banner2.imgUrl = @"home_banner2";
+    BSHomeBannerModel *banner3 = [BSHomeBannerModel new];
+    banner3.imgUrl = @"home_banner3";
+    self.banners = [NSArray arrayWithObjects:banner1,banner2,banner3, nil];
+}
+
 @end
 
 

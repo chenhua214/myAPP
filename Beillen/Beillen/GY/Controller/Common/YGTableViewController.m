@@ -23,9 +23,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    if (self.notLoadTableView == NO) {
-        [self.view addSubview:self.tableView];
-    }
 }
 
 #pragma mark - Delegate Action

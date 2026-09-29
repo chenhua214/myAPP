@@ -25,48 +25,48 @@ typedef NS_ENUM(NSInteger, BSPowerBankCommand) {
     BSPowerBankCmdTypeC2_R_OutputV_H       =  9,     ///<  0x0009  *   TypeC2电压 高字节 （毫伏）
     BSPowerBankCmdTypeC2_R_OutputW_L       =  10,    ///<  0x000A  *   TypeC2功率 低字节（W）
     BSPowerBankCmdTypeC2_R_OutputW_H       =  11,    ///<  0x000B  *   TypeC2功率 高字节（W）
-    BSPowerBankCmdCharge_C1_TCP            =  12,    ///<  0x000C  *   设备C1口协议     BSPowerBankTypecType类别
-    BSPowerBankCmdCharge_C2_TCP            =  13,    ///<  0x000D  *   设备C2口协议    BSPowerBankTypecType类别
+    BSPowerBankCmdCharge_C1_TCP_Read       =  12,    ///<  0x000C  *   设备C1口协议     BSPowerBankTypecType类别
+    BSPowerBankCmdCharge_C2_TCP_Read       =  13,    ///<  0x000D  *   设备C2口协议    BSPowerBankTypecType类别
   
     BSPowerBankCmdTypeUSBA_R_OutputA_L     =  14,     ///<  0x000E  *   USBA 电流 低字节（毫安）
     BSPowerBankCmdTypeUSBA_R_OutputA_H     =  15,     ///<  0x000F  *   USBA 电流 高字节 （毫安）
     BSPowerBankCmdTypeUSBA_R_OutputV_L     =  16,     ///<  0x0010  *   USBA 电压 低字节 （毫伏）
     BSPowerBankCmdTypeUSBA_R_OutputV_H     =  17,     ///<  0x0011  *   USBA 电压 高字节 （毫伏）
     BSPowerBankCmdTypeUSBA_R_OutputW       =  18,     ///<  0x0012  *   USBA功率 （W）（不分高低字节）
-    BSPowerBankCmdCharge_USBA_TCP          =  19,     ///<  0x0013  *   USBA协议    BSPowerBankTypecType类别
+    BSPowerBankCmdCharge_USBA_TCP_Read     =  19,     ///<  0x0013  *   USBA协议    BSPowerBankTypecType类别
     
-    BSPowerBankCmdDevice_state             =  21,    ///<  0x0015  *   设备状态寄存器       详情见备注2
-    BSPowerBankCmdBatteryNumber            =  22,    ///<  0x0016  *   电池电量   （0-100%）
-    BSPowerBankCmdBatteryT                 =  23,    ///<  0x0017  *   电池温度    单位：°C
+    BSPowerBankCmdDevice_state_Read             =  21,    ///<  0x0015  *   设备状态寄存器       详情见备注2
+    BSPowerBankCmdBatteryNumber_Read            =  22,    ///<  0x0016  *   电池电量   （0-100%）
+    BSPowerBankCmdBatteryT_Read                 =  23,    ///<  0x0017  *   电池温度    单位：°C
     
-    BSPowerBankCmdBattery_V_L              =  24,    ///<  0x0018  *   电池电压低节（毫伏）
-    BSPowerBankCmdBattery_V_H              =  25,    ///<  0x0019  *   电池电压高节（毫伏）
-    BSPowerBankCmdBattery_A_L              =  26,    ///<  0x001A  *   电池电流低节（毫安）
-    BSPowerBankCmdBattery_A_H              =  27,    ///<  0x001B  *   电池电流高节（毫按）
+    BSPowerBankCmdBattery_V_L_Read              =  24,    ///<  0x0018  *   电池电压低节（毫伏）
+    BSPowerBankCmdBattery_V_H_Read              =  25,    ///<  0x0019  *   电池电压高节（毫伏）
+    BSPowerBankCmdBattery_A_L_Read              =  26,    ///<  0x001A  *   电池电流低节（毫安）
+    BSPowerBankCmdBattery_A_H_Read              =  27,    ///<  0x001B  *   电池电流高节（毫按）
     ///<
-    BSPowerBankCmdBattery_LoopNum_L        =  28,    ///<  0x001C  *   电池循环次数低字节（次）
-    BSPowerBankCmdBattery_LoopNum_H        =  29,    ///<  0x001D  *   电池循环次数高字节（次）
-    BSPowerBankCmdBattery_State            =  30,    ///<  0x001E  *   电池健康度   0-100%
+    BSPowerBankCmdBattery_LoopNum_L_Read        =  28,    ///<  0x001C  *   电池循环次数低字节（次）
+    BSPowerBankCmdBattery_LoopNum_H_Read        =  29,    ///<  0x001D  *   电池循环次数高字节（次）
+    BSPowerBankCmdBattery_State_Read            =  30,    ///<  0x001E  *   电池健康度   0-100%
     ///< 充电‘’
-    BSPowerBankCmd_Input_Time_L            =  31,     ///<  0x001F  *   充电剩余时间低字节（分钟）
-    BSPowerBankCmd_Input_Time_H            =  32,     ///<  0x0020  *   充电剩余时间高字节（分钟）
-    BSPowerBankCmd_Output_Time_L           =  33,     ///<  0x0021  *   放电剩余时间低字节（分钟）
-    BSPowerBankCmd_Output_Time_H           =  34,     ///<  0x0022  *   放电剩余时间高字节（分钟）
+    BSPowerBankCmd_Input_Time_L_Read            =  31,     ///<  0x001F  *   充电剩余时间低字节（分钟）
+    BSPowerBankCmd_Input_Time_H_Read            =  32,     ///<  0x0020  *   充电剩余时间高字节（分钟）
+    BSPowerBankCmd_Output_Time_L_Read           =  33,     ///<  0x0021  *   放电剩余时间低字节（分钟）
+    BSPowerBankCmd_Output_Time_H_Read           =  34,     ///<  0x0022  *   放电剩余时间高字节（分钟）
     ///< 电芯1电压
-    BSPowerBankCmdCELL1V_L                 =  35,    ///<  0x0023  *   Cell  1电压低字节（毫伏）
-    BSPowerBankCmdCELL1V_H                 =  36,    ///<  0x0024  *   电芯1电压
-    BSPowerBankCmdCELL2V_L                 =  37,    ///<  0x0025  *   电芯2电压
-    BSPowerBankCmdCELL2V_H                 =  38,    ///<  0x0026  *   电芯2电压
-    BSPowerBankCmdCELL3V_L                 =  39,    ///<  0x0027  *   电芯3电压
-    BSPowerBankCmdCELL3V_H                 =  40,    ///<  0x0028  *   电芯3电压
-    BSPowerBankCmdCELL4V_L                 =  41,    ///<  0x0029  *   电芯4电压
-    BSPowerBankCmdCELL4V_H                 =  42,    ///<  0x002A  *   电芯4电压
-    BSPowerBankCmdCELL5V_L                 =  43,    ///<  0x002B  *   电芯5电压
-    BSPowerBankCmdCELL5V_H                 =  44,    ///<  0x002C  *   电芯5电压
-    BSPowerBankCmdCELL6V_L                 =  45,    ///<  0x002D  *   电芯6电压
-    BSPowerBankCmdCELL6V_H                 =  46,    ///<  0x002E  *   电芯6电压
-    BSPowerBankCmdCELL7V_L                 =  48,    ///<  0x0030  *   电芯7电压
-    BSPowerBankCmdCELL7V_H                 =  49,    ///<  0x0031  *   电芯7电压
+    BSPowerBankCmdCELL1V_L_Read                 =  35,    ///<  0x0023  *   Cell  1电压低字节（毫伏）
+    BSPowerBankCmdCELL1V_H_Read                 =  36,    ///<  0x0024  *   电芯1电压
+    BSPowerBankCmdCELL2V_L_Read                 =  37,    ///<  0x0025  *   电芯2电压
+    BSPowerBankCmdCELL2V_H_Read                 =  38,    ///<  0x0026  *   电芯2电压
+    BSPowerBankCmdCELL3V_L_Read                 =  39,    ///<  0x0027  *   电芯3电压
+    BSPowerBankCmdCELL3V_H_Read                 =  40,    ///<  0x0028  *   电芯3电压
+    BSPowerBankCmdCELL4V_L_Read                 =  41,    ///<  0x0029  *   电芯4电压
+    BSPowerBankCmdCELL4V_H_Read                 =  42,    ///<  0x002A  *   电芯4电压
+    BSPowerBankCmdCELL5V_L_Read                 =  43,    ///<  0x002B  *   电芯5电压
+    BSPowerBankCmdCELL5V_H_Read                 =  44,    ///<  0x002C  *   电芯5电压
+    BSPowerBankCmdCELL6V_L_Read                 =  45,    ///<  0x002D  *   电芯6电压
+    BSPowerBankCmdCELL6V_H_Read                 =  46,    ///<  0x002E  *   电芯6电压
+    BSPowerBankCmdCELL7V_L_Read                 =  48,    ///<  0x0030  *   电芯7电压
+    BSPowerBankCmdCELL7V_H_Read                 =  49,    ///<  0x0031  *   电芯7电压
     ///<  Read  and Write
     BSPowerBankCmdTypeC1_RW_OutputW        =  50,     ///<  0x0032  *  C1 输出功率设置（w）
     BSPowerBankCmdTypeC2_RW_OutputW        =  51,     ///<  0x0033  *  C2 输出功率设置（w）
@@ -87,9 +87,9 @@ typedef NS_ENUM(NSInteger, BSPowerBankCommand) {
     ///<
     ///<
     BSPowerBankCmdBattery_R_Time_L         =  64,     ///<  0x0040  *   累计放电时长低字节,低8位数据，单位分钟
-    BSPowerBankCmdBattery_R_Time_H         =  65,     ///<  0x0041  *   累计放电时长低字节,高8位数据，单位分钟
-    BSPowerBankCmdBattery_R_Sum_L          =  66,     ///<  0x0042  *   累计放电量低字节,低8位数据，单位分钟
-    BSPowerBankCmdBattery_R_Sum_H          =  67,     ///<  0x0043  *   累计放电量低字节,高8位数据，单位分钟
+    BSPowerBankCmdBattery_R_Time_H         =  65,     ///<  0x0041  *   累计放电时长高字节,高8位数据，单位分钟
+    BSPowerBankCmdBattery_R_Sum_L          =  66,     ///<  0x0042  *   累计放电量低字节,低8位数据，单位mAH
+    BSPowerBankCmdBattery_R_Sum_H          =  67,     ///<  0x0043  *   累计放电量高字节,高8位数据，单位mAH
     ///<
     ///<
     ///<  Bit7 电池充电电压异常
@@ -99,6 +99,10 @@ typedef NS_ENUM(NSInteger, BSPowerBankCommand) {
     ///<  Bit3 电池过压
     ///<  Bit2-0   没有定义
     BSPowerBankCmdDevice_R_LOG             =  68,     ///<  0x0044  *   设备异常LOG状态
+    ///<
+    BSPowerBankCmdBattery_R_Number_L       =  69,     ///<  0x0045 *   剩余电量低字节（mAH）
+    BSPowerBankCmdBattery_R_Number_H       =  70,     ///<  0x0046  *   剩余电量高字节（mAH）
+    ///<
     ///<
     BSPowerBankCmdBlock_Return_state       =  150,     ///<  0x0096  *   从机事件ACK 1个byte数据，0：ok/ 1：err（每条主机的事件和写指令都需要从机回复）
     ///<
@@ -148,7 +152,7 @@ typedef NS_ENUM(NSInteger, BSPowerBankCommand) {
 
 };
 
-/// 0x0012、0x0013  设备快充协议寄存器    C1和C2口的协议类型
+/// 0x0C、0x0D  0x13 设备快充协议寄存器    C1和C2口的协议类型
 typedef NS_ENUM(NSInteger, BSPowerBankTypecType) {
     ///< 放电
     BSPowerBankTypecType_IDLE           = 0 ,
@@ -206,6 +210,15 @@ typedef NS_ENUM(NSInteger, BSPowerBankTypeCWork) {
 
 /// 接口协议类型
 @property (nonatomic, assign) BSPowerBankTypecType typeCType;
+/// 接口材料
+@property (nonatomic, copy)   NSString* typeCMessageName;
+/// 接口设备类型
+@property (nonatomic, copy)   NSString* typeCTypeMessageDeviceName;
+/// 接口材料   最大电流
+@property (nonatomic, assign) NSInteger typeCMessageMaxA;
+/// 接口材料 最大功率
+@property (nonatomic, assign) NSInteger typeCMessageMaxW;
+
 /// 充电1   /    放电 0
 @property (nonatomic, assign) NSInteger typeState;
 /// 连接1 / 未连接 0
@@ -220,14 +233,16 @@ typedef NS_ENUM(NSInteger, BSPowerBankTypeCWork) {
 
 
 @interface BSPowerBankDevice : BSCommonDevice
+/// 接口状态
+@property (nonatomic, assign) NSInteger typeConnectState;
 /// TypeC1
 @property(nonatomic, strong) BSCommonDeviceTypeModel *typeC1;
 /// TypeC2
 @property(nonatomic, strong) BSCommonDeviceTypeModel *typeC2;
 /// USBA1
 @property(nonatomic, strong) BSCommonDeviceTypeModel *USBA1;
-/// 电池  0%-100%
-@property (nonatomic, assign) NSInteger batterySOC;
+/// 电池  0%-100%  power
+//@property (nonatomic, assign) NSInteger batterySOC;
 ///设备温度  摄氏度
 @property (nonatomic, assign) NSInteger deviceTemp;
 @property (nonatomic, copy)   NSString* deviceTempStr;
@@ -237,12 +252,20 @@ typedef NS_ENUM(NSInteger, BSPowerBankTypeCWork) {
 @property(nonatomic, strong) BSCommonTypeByteModel *batteryModelA;
 /// 电池循环次数
 @property(nonatomic, strong) BSCommonTypeByteModel *batteryCyclesModel;
+///  剩余电量
+@property(nonatomic, strong) BSCommonTypeByteModel *batterySOCModel;
 /// 电池健康度  0-100%
 @property (nonatomic, assign) NSInteger batteryState;
 /// 充电剩余时间（分钟）
 @property(nonatomic, strong) BSCommonTypeByteModel *inputTimeModel;
 /// 放电剩余时间（分钟）
 @property(nonatomic, strong) BSCommonTypeByteModel *outputTimeModel;
+/// 累计放电时长 分钟
+@property(nonatomic, strong) BSCommonTypeByteModel *outpuSumTimeModel;
+/// 累计放电量 单位mAH
+@property(nonatomic, strong) BSCommonTypeByteModel *outpuSumMAHModel;
+
+
 ///  小电流模式状态   0:未处在小电流模式; 1:处在小电流模式;
 @property (nonatomic, assign) NSInteger smallAMPType;
 /// 小电流时间限制（分钟）

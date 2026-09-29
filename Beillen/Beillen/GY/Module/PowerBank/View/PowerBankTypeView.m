@@ -22,16 +22,13 @@
 @implementation PowerBankTypeView
 
 -(void)initAddView {
-    
     [self addSubview:self.bgView];
     [self.bgView addSubview:self.bgLabView];
     [self.bgLabView addSubview:self.typeLab];
     
     [self.bgView addSubview:self.typeStateLab];
     [self.bgView addSubview:self.laber_W];
-    [self.bgView addSubview:self.typeDeviceName];
     [self.bgView addSubview:self.laber_V_A];
-//    self.bgView
     
     [self.bgView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.mas_equalTo(0);
@@ -40,8 +37,8 @@
     [self.bgLabView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(20);
         make.left.mas_equalTo(20);
-        make.height.mas_equalTo(20);
-        make.width.mas_equalTo(30);
+        make.height.mas_equalTo(22);
+        make.width.mas_equalTo(40);
     }];
     
     [self.typeLab mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -50,6 +47,7 @@
     }];
     [self.typeStateLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.mas_equalTo(-20);
+        make.left.equalTo(self.bgLabView.mas_right).offset(10);
         make.centerY.equalTo(self.bgLabView.mas_centerY).offset(0);
     }];
     
@@ -57,22 +55,15 @@
         make.left.mas_equalTo(20);
         make.right.mas_equalTo(-20);
         make.top.equalTo(self.bgLabView.mas_bottom).offset(11);
-        make.height.mas_equalTo(28);
+        make.height.mas_equalTo(24);
     }];
     
-    [self.typeDeviceName mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(20);
-        make.right.mas_equalTo(-20);
-        make.top.equalTo(self.laber_W.mas_bottom).offset(4);
-        make.height.mas_equalTo(18);
-    }];
     [self.laber_V_A mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(20);
         make.right.mas_equalTo(-20);
-        make.top.equalTo(self.typeDeviceName.mas_bottom).offset(0);
+        make.top.equalTo(self.laber_W.mas_bottom).offset(4);
         make.height.mas_equalTo(15);
     }];
-    
     [self addLayerView];
 }
 
@@ -85,20 +76,30 @@
     self.bgView.layer.cornerRadius = 32;
     self.bgView.layer.borderWidth = 1;
     self.bgView.layer.borderColor = bsColorAlphaString(@"#C5C4DB", 0.05).CGColor;
-    
     self.bgLabView.layer.cornerRadius = 10;
-//    self.bgLabView.layer.borderWidth = 1;
-//    self.bgView.layer.borderColor = bsColorAlphaString(@"#C5C4DB", 0.05).CGColor;
 }
 
--(void)setTypeModel:(BSCommonDeviceTypeModel *)typeModel{
+-(void)upTypeModel:(BSCommonDeviceTypeModel *)typeModel isConnet:(BOOL)isConnet{
     _typeModel = typeModel;
-    
-    self.typeLab.text = @"C1";
-    self.typeStateLab.text = @"输出";
-    self.laber_W.attributedText = [self attributeWithNormalValue:@"28.0W" singleFont:@"W"];
-    self.typeDeviceName.text = @"MacBook Pro";
-    self.laber_V_A.text = @"12.0V / 2.3A";
+    self.typeLab.text = typeModel.typeName;
+    NSString *typeStateStr = @"--";
+    NSString *typeW = @"--W";
+    NSString *typeVA = @"--V / --A";
+    NSInteger typeConnect = typeModel.typeConnect;
+    if (isConnet) {
+        if (typeConnect) {
+            if (typeModel.typeState) {
+                typeStateStr = @"输入";
+            } else {
+                typeStateStr = @"输出";
+            }
+            typeW = [NSString stringWithFormat:@"%.1fW",(CGFloat)(typeModel.typeModelW.typeValue) ];
+            typeVA = [NSString stringWithFormat:@"%.1fV / %.2fA",(CGFloat)(typeModel.typeModelV.typeValue/1000.0),(CGFloat)(typeModel.typeModelA.typeValue/1000.0) ];
+        }
+    }
+    self.typeStateLab.text = typeStateStr;
+    self.laber_V_A.text = typeVA;
+    self.laber_W.attributedText = [self attributeWithNormalValue:typeW singleFont:@"W"];
 }
 
 - (NSAttributedString *)attributeWithNormalValue:(NSString *)text singleFont:(NSString *)valsingleFontue
@@ -144,17 +145,16 @@
     return _bgLabView;
 }
 
-
 -(UILabel*)typeLab {
     if (!_typeLab) {
-        _typeLab = [UILabel bs_labelWithFont:[UIFont bs_PingFangBoldFontWithFontSize:10] textAlignment:NSTextAlignmentCenter textColor:[UIColor bs_colorFromARGB:@"#004098"]] ;
+        _typeLab = [UILabel bs_labelWithFont:[UIFont bs_PingFangBoldFontWithFontSize:14] textAlignment:NSTextAlignmentCenter textColor:[UIColor bs_colorFromARGB:@"#004098"]] ;
     }
     return _typeLab;
 }
 
 -(UILabel*)typeStateLab {
     if (!_typeStateLab) {
-        _typeStateLab = [UILabel bs_labelWithFont:[UIFont bs_mediumFontWithFontSize:10] textAlignment:NSTextAlignmentCenter textColor:[UIColor bs_colorFromARGB:@"#004098"]] ;
+        _typeStateLab = [UILabel bs_labelWithFont:[UIFont bs_mediumFontWithFontSize:14] textAlignment:NSTextAlignmentRight textColor:[UIColor bs_colorFromARGB:@"#004098"]] ;
     }
     return _typeStateLab;
 }
@@ -175,11 +175,9 @@
 
 -(UILabel*)laber_V_A {
     if (!_laber_V_A) {
-        _laber_V_A = [UILabel bs_labelWithFont:[UIFont bs_regularFontWithFontSize:10] textAlignment:NSTextAlignmentLeft textColor:[UIColor bs_colorFromARGB:@"#9D9D9D"]] ;
+        _laber_V_A = [UILabel bs_labelWithFont:[UIFont bs_regularFontWithFontSize:14] textAlignment:NSTextAlignmentLeft textColor:[UIColor bs_colorFromARGB:@"#9D9D9D"]] ;
     }
     return _laber_V_A;
 }
-
-
 
 @end

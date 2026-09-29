@@ -8,13 +8,26 @@
 #import "YGMineViewController.h"
 #import "BSMineListCell.h"
 #import "BSMineModel.h"
+#import "SettingCellView.h"
+#import "LanguageViewController.h"
+#import "AboutAPPViewController.h"
+#define kDefaultHeaderHeight  isIpad ? 230 : 235
 
-#define kDefaultHeaderHeight  isIpad ? 279 : bsValue(269.0)
 @interface YGMineViewController ()<UIScrollViewDelegate>
 @property (nonatomic, strong) UIView *headerView;
-@property (nonatomic, strong) UIView *tableSuperView;
-@property (nonatomic, strong) UIScrollView *scrollView;
+@property (nonatomic, strong) UIImageView *userIconView;
+@property (nonatomic, strong) UILabel *userNameLab;
 @property (nonatomic, strong) UIView *contentView;
+@property (nonatomic, strong) UIScrollView *scrollView;
+@property (nonatomic, strong) UIView *bgView;
+@property (nonatomic, strong) SettingCellView *languageCellView;
+@property (nonatomic, strong) SettingCellView *aboutAPPCellView;
+@property (nonatomic, strong) UILabel *appLogLab;
+@property (nonatomic, assign) CGFloat viewTop;
+@property (nonatomic, strong) NSString *languageStr;
+@property (nonatomic, assign) NSInteger languageType;
+//© 2026 Beillen 嘉德科技
+
 @property (nonatomic, strong) NSMutableArray<BSMineSectionModel *> *datas;
 
 @end
@@ -22,6 +35,7 @@
 @implementation YGMineViewController
 
 - (void)viewDidLoad {
+    self.notLoadTableView = YES;
     [super viewDidLoad];
     [self setup];
 }
@@ -40,16 +54,16 @@
 
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    // if (!self.presentedViewController) {
-    //     //如果是present时,不显示导航栏
-    //     [self bs_showNavigationBarWithAnimated:animated];
-    // }
+     if (!self.presentedViewController) {
+         //如果是present时,不显示导航栏
+         [self bs_showNavigationBarWithAnimated:animated];
+     }
     [[self class] cancelPreviousPerformRequestsWithTarget:self];
 }
 
 - (void)setup{
-    self.view.backgroundColor = self.tableView.backgroundColor = [UIColor bs_colorFromARGB:@"#F2F4F8"];
-    [self configTableView];
+    self.view.backgroundColor = self.bs_backgroundColor = [UIColor bs_colorFromARGB:@"#F7F9FB"];
+   
     [self createUI];
     [self setupConstraints];
     [self configUserInfo];
@@ -57,208 +71,124 @@
 }
 
 - (void)createUI{
-    [self.view addSubview:self.scrollView];
-    [self.scrollView addSubview:self.contentView];
+    [self.view addSubview:self.contentView];
+    self.contentView.backgroundColor = self.view.backgroundColor;
     [self.contentView addSubview:self.headerView];
-    [self.contentView addSubview:self.tableSuperView];
-    [self.tableSuperView addSubview:self.tableView];
+    [self.headerView addSubview:self.userIconView];
+    [self.headerView addSubview:self.userNameLab];
+    
+    [self.contentView addSubview:self.scrollView];
+    [self.scrollView addSubview:self.bgView];
+    [self.scrollView addSubview:self.appLogLab];
+    
+//    [self.bgView addSubview:self.languageCellView];
+//    [self.bgView addSubview:self.aboutAPPCellView];
+    
 }
 
 - (void)setupConstraints{
-    
-    [self.scrollView mas_makeConstraints:^(MASConstraintMaker *make) {
+    CGFloat sp_left = 24;
+    [self.contentView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self.view);
     }];
-    
-    [self.contentView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(self.scrollView);
-        make.centerX.equalTo(self.scrollView.mas_centerX);
-    }];
-    
     [self.headerView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(0);
+//        make.top.mas_equalTo(0);
+        make.top.mas_equalTo(StatusBar_HEIGHT);
         make.left.right.mas_equalTo(0);
         make.height.mas_equalTo(kDefaultHeaderHeight);
     }];
     
-    [self.tableSuperView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.headerView.mas_bottom).offset(-Height812(23));
-        make.left.mas_equalTo(23);
-        make.right.mas_equalTo(-23);
-        make.height.mas_greaterThanOrEqualTo(0);
-        make.bottom.mas_equalTo(-20);
+    [self.userIconView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(20);
+        make.size.mas_equalTo(CGSizeMake(120, 120));
+        make.centerX.mas_equalTo(0);
+    }];
+    [self.userNameLab mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.userIconView.mas_bottom).offset(24);
+        make.left.mas_equalTo(sp_left);
+        make.right.mas_equalTo(-sp_left);
     }];
     
-    [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(self.tableSuperView);
-        make.height.mas_greaterThanOrEqualTo(0);
+    [self.scrollView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.headerView.mas_bottom).offset(0);
+        make.left.mas_equalTo(sp_left);
+        make.right.mas_equalTo(-sp_left);
+//        make.height.mas_greaterThanOrEqualTo(0);
+        make.bottom.mas_equalTo(-110);
     }];
+    [self.bgView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(0);
+        make.left.mas_equalTo(0);
+        make.right.mas_equalTo(0);
+//        make.top.mas_equalTo(45);
+//        make.height.mas_equalTo(2365);
+        make.width.mas_equalTo(self.scrollView).offset(0);
+    }];
+    
+    self.languageStr = @"简体中文";
+    self.languageCellView =  [self addSettingCellViewIcon:@"my_cell_language" name:@"切换语言" message:self.languageStr cellType:BSMineCellTypeRegion showLine:YES];
+    self.aboutAPPCellView = [self addSettingCellViewIcon:@"my_cell_aboutApp" name:@"关于 APP" message:@"V.2.4.0" cellType:BSMineCellTypeAboutBaseus showLine:NO];
+    
+    [self.appLogLab mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.bgView.mas_bottom).offset(38);
+        make.left.mas_equalTo(sp_left);
+        make.right.mas_equalTo(-sp_left);
+        make.bottom.mas_equalTo(-20);
+    }];
+    self.userIconView.image = [UIImage imageNamed:@"home_banner3"];
+    
+    self.userNameLab.text =@"Beillen";
+    self.appLogLab.text = @"© 2026 Beillen 嘉德科技 ";
 }
 
 - (void)configUserInfo {
-//    self.headerView.nickeName = [BSConfigManager sharedInstance].nickname;
-//    self.headerView.avter = [BSConfigManager sharedInstance].avatar;
-//    self.headerView.numberOfDevices = [BSConfigManager sharedInstance].totalDeviceCount;
-    [self.tableView reloadData];
-    CGFloat tableViewHeight = 0.0;
-    for (BSMineSectionModel * section in self.datas) {
-        for (BSMineCellModel * model in section.models) {
-            tableViewHeight += model.rowHeight;
-        }
-    }
-    [self.tableView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.height.mas_equalTo(tableViewHeight);
-    }];
+
 }
 
-- (void)configTableView {
-    self.tableView.scrollEnabled = NO;
-    self.tableView.backgroundColor = [UIColor clearColor];
-    self.tableView.showsVerticalScrollIndicator = NO;
-    self.tableView.layer.masksToBounds = TRUE;
-    self.tableView.layer.cornerRadius = 20;
-    [self.tableView registerClass:BSMineListCell.class forCellReuseIdentifier:NSStringFromClass(BSMineListCell.class)];
+
+/////  clickBtn
+-(void)clickBtnForType:(UIButton*)btn {
+ 
+    NSInteger tag = btn.tag;    if (tag == BSMineCellTypeRegion) {
+        NSLog(@"点击按钮2222 语言");
+        LanguageViewController *VC = [[LanguageViewController alloc]init];
+        VC.viewType = self.languageType;
+        [self.navigationController pushViewController:VC animated:YES];
+    } else if (tag == BSMineCellTypeAboutBaseus) {
+        NSLog(@"点击按钮2222 关于APP");
+        
+        AboutAPPViewController *VC = [[AboutAPPViewController alloc]init];
+        [self.navigationController pushViewController:VC animated:YES];
+    }
 }
+
 
 #pragma mark 切换App语言通知
 - (void)chengeLanguage:(NSNotification *)notice
 {
-    self.datas = [NSMutableArray arrayWithArray:[BSMineModel datas]];
-    [self.tableView reloadData];
-//    [self.headerView updateOnChangeLanguages];
+    NSString *objectStr = notice.object;
+    if ([objectStr isEqualToString:@"English"]) {
+        self.languageType = 2;
+    } else {
+        self.languageType = 1;
+    }
+    self.languageCellView.messageLab.text = objectStr;
 }
 
 - (void)addNotifications {
     
     /// 根据需求添加通知
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(configUserInfo) name:kBSLoginStateChangedNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(configUserInfo) name:kBSUserInfoChangedNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(configUserInfo) name:kBSUserInfoRefreshNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(chengeLanguage:) name:kBChangeLanguageSuccessNotification object:nil];
 }
 
-
-
-
-
-#pragma mark - Private methods 点击方法
-
-- (void)tableView:(UITableView *)tableView actionForModel:(BSMineCellModel *)model{
-    if([BSMineModel disabledWithType:model.type]){
-        return;
-    }
-    if([BSMineModel shouldShowLoginWithType:model.type]){
-//        [BSLoginThirdController loginWithVC:self];
-        return;
-    }
-    switch (model.type) {
-        case BSMineCellTypeShare:
-        {
-//            BSDeviceShareViewController *vc = [BSDeviceShareViewController new];
-//            vc.navigationItem.title = model.title;
-//            [self.navigationController pushViewController:vc animated:YES];
-        }
-            break;
-        case BSMineCellTypeMessages:
-        {
-//            BSMessageCentreViewController *vc = [[BSMessageCentreViewController alloc]init];
-//            [self.navigationController pushViewController:vc animated:YES];
-        }
-            break;
-        case BSMineCellTypeServiceCenter:
-        {
-//            BSServiceCenterViewController *vc = [[BSServiceCenterViewController alloc]init];
-//            vc.embeddedTabBar = NO;
-//            [self.navigationController pushViewController:vc animated:YES];
-        }
-            break;
-        case BSMineCellTypeFeedback:
-        {
-//            BSFeedbackListViewController *vc = [[BSFeedbackListViewController alloc]init];
-//            [self.navigationController pushViewController:vc animated:YES];
-        }
-            break;
-        case BSMineCellTypeSetting:
-        {
-//            BSMineSettingViewController *vc = [[BSMineSettingViewController alloc]init];
-//            vc.userAccountLogoutSuccess = ^(NSInteger Type) {
-//                [BSLoginThirdController loginAnimatedForNOWithVC:self];
-//            };
-//            [self.navigationController pushViewController:vc animated:YES];
-        }
-            break;
-        case BSMineCellTypeAboutBaseus:
-        {
-//            BSAboutViewController *vc = [[BSAboutViewController alloc]init];
-//            [self.navigationController pushViewController:vc animated:YES];
-        }
-            break;
-        case BSMineCellTypeBuyGoods:
-        {
-//            BSStoreAppToGoodsViewController *vc = [[BSStoreAppToGoodsViewController alloc]init];
-//            [self.navigationController pushViewController:vc animated:YES];
-        }
-            break;
-        default:
-            break;
-    }
-}
-
-//#pragma mark - BSMineHeaderViewDelegate
-//   暂时不需要
-//- (void)headerView:(BSMineHeaderView *)headerView actionWithType:(BSMineHeaderActionType)type{
-//    if (![BSConfigManager sharedInstance].isLogin) {
-//        [BSLoginThirdController loginWithVC:self];
-//        return;
-//    }
-//    BSUserInfoViewController *vc = [[BSUserInfoViewController alloc]init];
-//    [self.navigationController pushViewController:vc animated:YES];
-//}
-
-#pragma mark - UITableViewDataSource
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return self.datas[indexPath.section].models[indexPath.row].rowHeight;
-}
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return self.datas.count;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.datas[section].models.count;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    BSMineListCell *cell = [BSMineListCell cellForTableView:tableView indexPath:indexPath];
-    NSArray *models = self.datas[indexPath.section].models;
-    BSMineCellModel *model = models[indexPath.row];
-    [cell setIconNamed:model.iconName title:model.title corner:model.corner disabled:[BSMineModel disabledWithType:model.type] top:model.top bottom:model.bottom];
-    return cell;
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    BSMineCellModel *model = self.datas[indexPath.section].models[indexPath.row];
-    [self tableView:tableView actionForModel:model];
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    return CGFLOAT_MIN;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
-    return CGFLOAT_MIN;
-}
 
 #pragma mark - set and get
 
 - (UIScrollView *)scrollView {
     if (!_scrollView) {
         _scrollView = [UIScrollView new];
-        _scrollView.delegate = self;
         _scrollView.showsVerticalScrollIndicator = NO;
-        _scrollView.bounces = NO;
-        _scrollView.backgroundColor = [UIColor clearColor];
+        _scrollView.showsHorizontalScrollIndicator = NO;
     }
     return _scrollView;
 }
@@ -278,22 +208,67 @@
     return _headerView;
 }
 
-- (UIView *)tableSuperView {
-    if(!_tableSuperView) {
-        _tableSuperView = [[UIView alloc]init];
-        _tableSuperView.layer.shadowColor = [[UIColor blackColor] colorWithAlphaComponent:0.05].CGColor;
-        _tableSuperView.layer.shadowOffset = CGSizeMake(0, 10);
-        _tableSuperView.layer.shadowOpacity = 1;
-        _tableSuperView.layer.shadowRadius = 23;
+-(UILabel*)userNameLab {
+    if (!_userNameLab) {
+        _userNameLab = [UILabel bs_labelWithFont:[UIFont bs_semiboldFontWithFontSize:24] textAlignment:NSTextAlignmentCenter textColor:[UIColor bs_colorFromARGB:@"#004098"]];
+        
     }
-    return _tableSuperView;
+    return _userNameLab;
 }
 
-- (NSMutableArray<BSMineSectionModel *> *)datas{
-    if (!_datas) {
-        _datas = [NSMutableArray arrayWithArray:[BSMineModel datas]];
+-(UIImageView*)userIconView{
+    if (!_userIconView) {
+        _userIconView = [UIImageView new];
+        _userIconView.layer.cornerRadius = 60.0;
+        _userIconView.layer.masksToBounds = YES;
     }
-    return _datas;
+    return _userIconView;
+}
+
+-(UIView*)bgView{
+    if (!_bgView) {
+        UIView *view = [UIView new];
+        view.backgroundColor = [UIColor bs_colorFromARGB:@"#FFFFFF"];
+        view.layer.cornerRadius = 30;
+        view.layer.borderColor = [UIColor bs_colorFromARGB:@"#C5C4DB" alpha:0.3].CGColor;
+        view.layer.borderWidth = 1;
+
+        _bgView = view;
+    }
+    return _bgView;
+}
+
+-(UILabel*)appLogLab {
+    if (!_appLogLab) {
+        _appLogLab = [UILabel bs_labelWithFont:[UIFont bs_semiboldFontWithFontSize:14] textAlignment:NSTextAlignmentCenter textColor:[UIColor bs_colorFromARGB:@"#757589"]];
+        
+    }
+    return _appLogLab;
+}
+
+-(SettingCellView *)addSettingCellViewIcon:(NSString*)icon
+                         name:(NSString*)name
+                      message:(NSString*)message
+                     cellType:(BSMineCellType)cellType
+                     showLine:(BOOL)showLine {
+    
+    SettingCellView *view = [SettingCellView new];
+    [view.rightBtn addTarget:self action:@selector(clickBtnForType:) forControlEvents:UIControlEventTouchUpInside];
+    view.rightBtn.tag = cellType;
+    [view initAddViewWithType:4 type:name message:message icon:icon showLine:showLine];
+    
+    [self.bgView addSubview:view];
+    [view mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(self.viewTop);
+        make.left.mas_equalTo(0);
+        make.right.mas_equalTo(0);
+        make.height.mas_equalTo(80);
+        if (showLine==NO) {
+            make.bottom.mas_equalTo(0);
+        }
+    }];
+    self.viewTop = self.viewTop + 80;
+    return view;
 }
 
 @end

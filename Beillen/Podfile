@@ -10,6 +10,7 @@ target 'Beillen' do
   pod 'YYModel'
   pod 'MBProgressHUD'
   pod 'ReactiveObjC'
+  pod 'SDCycleScrollView'
   # Pods for Beillen
 
   target 'BeillenTests' do

@@ -21,6 +21,9 @@
     self = [super initWithFrame:frame];
     if (self) {
         
+        UIImageView *imageBgView = [UIImageView new];
+        imageBgView.image = [UIImage imageNamed:@"home_add_icon"];
+        [self addSubview:imageBgView];
         UIImageView *imageView = [UIImageView new];
         imageView.image = [UIImage imageNamed:@"home_add_devices"];
         [self addSubview:imageView];
@@ -28,27 +31,31 @@
         UILabel *label = [UILabel new];
         label.text = NSLocalizedStringkey(@"add_devices_tit");
         label.font = bsFontMedium(14);
-        label.textColor = bsColorString(@"#45455899");
+        label.textColor = [UIColor bs_colorFromARGB:@"#454558" alpha:0.6];
         [self addSubview:label];
         self.detailLab = label;
-        
-        [imageView mas_makeConstraints:^(MASConstraintMaker *make) {
+      
+        [imageBgView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.edges.mas_equalTo(0);
+           
+        }];
+        [imageView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.size.mas_equalTo(CGSizeMake(25.0, 25.0));
+            make.centerX.mas_equalTo(0);
+            make.bottom.equalTo(self.mas_centerY);
         }];
         [label mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerX.mas_equalTo(0);
-            make.top.equalTo(imageView.mas_bottom).offset(bsValue(16));
+            make.top.equalTo(imageView.mas_bottom).offset(8);
         }];
     }
     return self;
 }
-
 
 /// 切换语言、更新内容
 - (void)updateOnChangeLanguages
 {
     self.detailLab.text = NSLocalizedStringkey(@"add_devices_tit");
 }
-
 
 @end

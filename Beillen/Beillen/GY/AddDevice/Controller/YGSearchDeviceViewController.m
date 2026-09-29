@@ -72,7 +72,7 @@
     
     [self.deviceListView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.headView.mas_bottom).offset(0);
-        make.bottom.mas_equalTo(0);
+        make.bottom.mas_equalTo(-100);
         make.left.mas_equalTo(0);
         make.right.mas_equalTo(0);
     }];
@@ -145,7 +145,7 @@
 //        make.height.mas_equalTo(Height812(322));
 //    }];
     [self.addBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.mas_equalTo(-90-26);
+        make.bottom.mas_equalTo(-26);
         make.left.mas_equalTo(45);
         make.right.mas_equalTo(-45);
         make.height.equalTo(@(60));

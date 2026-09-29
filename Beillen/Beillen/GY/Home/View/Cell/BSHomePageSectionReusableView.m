@@ -20,17 +20,17 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        
         UILabel *label = [[UILabel alloc] init];
         label.textColor = [UIColor bs_colorFromARGB:@"#333333"];
         label.font = bsFontBold(20);
-        label.textAlignment = NSTextAlignmentLeft;
-        label.text = NSLocalizedStringkey(@"my_devices");
+        label.textAlignment = NSTextAlignmentCenter;
+        label.text = NSLocalizedStringkey(@"主要设备");
         [self addSubview:label];
         self.titleLab = label;
         
         [label mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(30);
+            make.right.mas_equalTo(-30);
             make.centerY.mas_equalTo(0).multipliedBy(1.4);
         }];
     }
@@ -39,7 +39,7 @@
 
 - (void)updateData 
 {
-    self.titleLab.text = NSLocalizedStringkey(@"my_devices");
+    self.titleLab.text = NSLocalizedStringkey(@"主要设备");
 }
 
 @end

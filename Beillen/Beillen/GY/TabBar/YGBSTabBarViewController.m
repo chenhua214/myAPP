@@ -11,6 +11,7 @@
 #import "YGMineViewController.h"
 #import "YGMineViewController.h"
 #import "YGBSCurveTabBar.h"
+#import "YLCustomTabBar.h"
 
 @interface YGBSTabBarViewController ()<UITabBarControllerDelegate,YGBSCurveTabBarDelegate>
 @property(nonatomic,assign) NSInteger type_controller;
@@ -21,9 +22,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
     [self setup];
     [self viewDidLayoutSubviews];
+
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -48,8 +49,6 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [self.selectedViewController endAppearanceTransition];
-//    [self monitorNetWorkStatus];
-//    [self refreshImageIfNeeded];
 }
 
 - (void)viewDidLayoutSubviews {
@@ -79,32 +78,31 @@
 //    [self addNotifications];
     self.type_controllerWithCentreBtn = NO;
    
-       
-            
             // 首页
     YGHomeViewController *homeVC = [[YGHomeViewController alloc]init];
     [self setViewController:homeVC title:@"首页" image:@"tab_home_nor" selectImage:@"tab_home_sld" tag:1000];
             //   我的
     YGMineViewController *storeVC = [[YGMineViewController alloc]init];
     [self setViewController:storeVC title:@"我的" image:@"tab_mine_nor" selectImage:@"tab_mine_sld" tag:1001];
+       
+    YGMineViewController *storeVC1 = [[YGMineViewController alloc]init];
+    [self setViewController:storeVC1 title:@"我的22" image:@"tab_mine_nor" selectImage:@"tab_mine_sld" tag:1001];
         
     [self setupTabBar];
     self.delegate = self;
     [self fixBug];
+    [self isBSCurveTabBar];
 }
 
 - (void)setupTabBar{
-//    if (self.type_controller == 0) {
-//        [self setValue:[[YGBSCurveTabBar alloc] init] forKey:@"tabBar"];
-//        [(YGBSCurveTabBar *)self.tabBar setTranslucent:NO];
-//        [(YGBSCurveTabBar *)self.tabBar setCurveDelegate:self];
-//        [(YGBSCurveTabBar *)self.tabBar reloadData];
-//    }
+    if (self.type_controller == 0) {
+        [self setValue:[[UITabBar alloc] init] forKey:@"tabBar"];
+    }
 }
 
 - (void)isBSCurveTabBar {
-    if ([self.tabBar isKindOfClass:YGBSCurveTabBar.class ]) {
-        [(YGBSCurveTabBar *)self.tabBar upMallButtonIsSelect];
+    if ([self.tabBar isKindOfClass:YLCustomTabBar.class ]) {
+//        [(YGBSCurveTabBar *)self.tabBar upMallButtonIsSelect];
     }
 }
 
