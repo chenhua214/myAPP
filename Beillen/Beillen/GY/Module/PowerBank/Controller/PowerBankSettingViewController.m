@@ -12,6 +12,8 @@
 #import "BSPowerBankDevice.h"
 
 #import "PowerBankModelViewController.h"
+#import "PowerBankCredentialViewController.h"
+
 @interface PowerBankSettingViewController ()
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UIView *bgView;
@@ -212,6 +214,9 @@
 
 -(void)clickBtnToAttest:(UIButton*)btn {
     NSLog(@"点击按钮2222 认证");
+    PowerBankCredentialViewController *VC = [[PowerBankCredentialViewController alloc]init];
+    [self.navigationController pushViewController:VC animated:YES];
+    
 }
 
 -(UIScrollView*)scrollView {

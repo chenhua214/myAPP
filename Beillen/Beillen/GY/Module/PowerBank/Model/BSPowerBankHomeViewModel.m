@@ -17,7 +17,7 @@ static NSString *const kBSBLEReadTypeCDeviceTimer  = @"BSBLEReadTypeCDeviceTimer
 /// 设备
 @property (nonatomic, strong) BSPowerBankDevice *device;
 @property (nonatomic, strong) BSHomeDeviceModel *model;
-
+@property (nonatomic, assign) BOOL isReadDeviceCmdAgain;
 @end
 
 @implementation BSPowerBankHomeViewModel
@@ -25,6 +25,7 @@ static NSString *const kBSBLEReadTypeCDeviceTimer  = @"BSBLEReadTypeCDeviceTimer
 {
     [self.device removeObserver:self forKeyPath:@"isConnected"];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    self.isReadDeviceCmdAgain = NO;
     [self stopReadCmd];
     [self stopReadTypeCCmd];
 }
@@ -90,7 +91,7 @@ static NSString *const kBSBLEReadTypeCDeviceTimer  = @"BSBLEReadTypeCDeviceTimer
     dispatch_queue_t queue = dispatch_queue_create("com.Beillen.scanBLEDevices", DISPATCH_QUEUE_CONCURRENT);
     __weak typeof(self) weakSelf = self;
     //每3秒
-    [[BSGCDTimer shareInstance] scheduledDispatchTimerWithName:kBSBLEReadDeviceTimer timeInterval:1.2 queue:queue repeats:YES actionOption:AbandonPreviousAction action:^{
+    [[BSGCDTimer shareInstance] scheduledDispatchTimerWithName:kBSBLEReadDeviceTimer timeInterval:1.2 queue:queue repeats:self.isReadDeviceCmdAgain actionOption:AbandonPreviousAction action:^{
         [weakSelf startReadCmd];
     }];
 }
@@ -128,7 +129,7 @@ static NSString *const kBSBLEReadTypeCDeviceTimer  = @"BSBLEReadTypeCDeviceTimer
     dispatch_queue_t queue = dispatch_queue_create("com.BeillenTypeC.scanBLEDevices", DISPATCH_QUEUE_CONCURRENT);
     __weak typeof(self) weakSelf = self;
     //每3秒
-    [[BSGCDTimer shareInstance] scheduledDispatchTimerWithName:kBSBLEReadTypeCDeviceTimer timeInterval:1.2 queue:queue repeats:YES actionOption:AbandonPreviousAction action:^{
+    [[BSGCDTimer shareInstance] scheduledDispatchTimerWithName:kBSBLEReadTypeCDeviceTimer timeInterval:1.2 queue:queue repeats:self.isReadDeviceCmdAgain actionOption:AbandonPreviousAction action:^{
         [weakSelf ReadCmdToOpenTypeC];
     }];
 }

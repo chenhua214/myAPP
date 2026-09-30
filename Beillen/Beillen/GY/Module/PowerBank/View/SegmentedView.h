@@ -7,6 +7,7 @@
 
 #import <UIKit/UIKit.h>
 #import "BSPowerBankDevice.h"
+#import "BSBaseTabBarRootController.h"
 NS_ASSUME_NONNULL_BEGIN
 
 
@@ -56,6 +57,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark   开关选择 cellview   ============
 @interface TypeSwitchCellView : UIView
+@property (nonatomic, strong) UIImageView *iconRightView ;
 //-(void)initAddViewWithType:(NSInteger)typeView;
 -(void)initAddViewWithType:(NSInteger)typeView type:(NSString*)type icon:(NSString*)icon;
 @end
@@ -72,6 +74,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// 电池信息
 @property (nonatomic, strong) BatteryInfoView *batteryView;
 @property (nonatomic,strong) BSPowerBankDevice *deviceModel ;
+@property (nonatomic,strong) BSBaseTabBarRootController *supVC;
 -(void)initAddView;
 @end
 

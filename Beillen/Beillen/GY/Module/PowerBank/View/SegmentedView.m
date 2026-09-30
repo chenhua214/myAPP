@@ -6,6 +6,7 @@
 //
 
 #import "SegmentedView.h"
+#import "PowerBankScreenSetViewController.h"
 
 #pragma mark   线材Type选择view   ============
 @interface selectTypeView()
@@ -345,7 +346,7 @@
 @property (nonatomic, strong) UIView *bgView ;
 @property (nonatomic, strong) UIImageView *iconView ;
 @property (nonatomic, strong) UILabel *typeLab;
-@property (nonatomic, strong) UIImageView *iconRightView ;
+//@property (nonatomic, strong) UIImageView *iconRightView ;
 @property (nonatomic, strong) UIButton *rightBtn;
 @end
 
@@ -710,7 +711,14 @@
     self.selectView.arrItems = @[@"C1",@"C2",@"A1"];
     [self.typeSwithView initAddViewWithType:1 type:@"小电流模式" icon:@"powerBank_home_TCP"];
     [self.typeBgLogView initAddViewWithType:2 type:@"屏幕设置" icon:@"powerBank_home_set_screen"];
-
+    
+    // 1. 创建手势
+     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(putToLogView)];
+     // 2. 允许其他控件响应触摸
+     tapGesture.cancelsTouchesInView = NO;
+     // 3. 添加手势
+     [self.typeBgLogView addGestureRecognizer:tapGesture];
+    
     [self addNotifications];
     [self initDataForView];
 }
@@ -721,6 +729,7 @@
         [self updateForTypeCMessage:0];
     }
 }
+
 
 - (void)addNotifications
 {
@@ -794,6 +803,13 @@
             
         }
     }];
+}
+
+-(void)putToLogView {
+    
+    PowerBankScreenSetViewController *VC = [[PowerBankScreenSetViewController alloc]init];
+    VC.model = self.supVC.model;
+    [self.supVC.navigationController pushViewController:VC animated:YES];
 }
 
 -(void)updateForSettingClock_RW_openWith:(BOOL)number{

@@ -14,6 +14,8 @@
 ///  to View
 #import "PowerBankSettingViewController.h"
 #import "PowerBankMessageViewController.h"
+#import "PowerBankScreenSetViewController.h"
+
 @interface PowerBankHomeViewController ()
 @property (nonatomic, strong) UIScrollView *scrollView ;
 @property (nonatomic, strong) BSPowerBankHomeViewModel *viewModel ;
@@ -91,6 +93,8 @@
     }];
     [self.selectTitelView initAddView];
     [self.selectTitelView.batteryView.rightBtn addTarget:self action:@selector(clickSwith:) forControlEvents:UIControlEventTouchUpInside];
+    
+    self.selectTitelView.supVC = self;
 }
 
 - (void)viewWillAppear:(BOOL)animated{
