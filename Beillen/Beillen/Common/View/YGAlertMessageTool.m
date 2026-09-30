@@ -210,7 +210,7 @@
     }
     instance.actionView.hidden = (type == BSAlertMessageTypeAlert || type == BSAlertMessageTypeTopImgAndBottonCancel);
     instance.singleActionBtn.hidden = !(type == BSAlertMessageTypeAlert || type == BSAlertMessageTypeTopImgAndBottonCancel);
-    instance.inputBackgroundView.hidden = !(type == BSAlertMessageTypeTextFeildAlertShowError || type == BSAlertMessageTypeTextFeildToIsEmail );
+    instance.inputBackgroundView.hidden = !(type == BSAlertMessageTypeTextFeildAlertShowError || type == BSAlertMessageTypeTextFeildToIsEmail || type == BSAlertMessageTypeTextFeild );
     
     if (type == BSAlertMessageTypeAlert || type == BSAlertMessageTypeTopImgAndBottonCancel) {
         CGSize size = [action.string bs_sizeWithLabelHeight:40 font:bsFontRegular(20)] ;
@@ -292,13 +292,15 @@
                 self.errorLabel.hidden  = NO;
                 return;
             }
-        } else  {
+        } else if (textFeildType == NO)  {
             textFeildType = (self.alertType == BSAlertMessageTypeTextFeildToIsEmail);
             if (textFeildType && !self.inputNone && (button == self.actionButton)) {
                 if (inputTextStr.length <= 0 ||[NSString bs_isEmailWithAccount:inputTextStr] == NO) {
                     self.errorLabel.hidden  = NO;
                     return;
                 }
+            } else {
+                textFeildType = (self.alertType == BSAlertMessageTypeTextFeild);
             }
         }
         id content = textFeildType ? inputTextStr : nil;

@@ -569,6 +569,20 @@
             self.batterySOC_state2 = cmdValue;
         }
             break;
+        case BSPowerBankCmdInputType_RW_state_C1:
+        {
+            ///<  0x003B  * C1充电模式   0：智能模式；1 idle模式； 2 自定义模式（32H生效）
+            self.typeC1.inputModelSet = cmdValue;
+        }
+            break;
+        case BSPowerBankCmdInputType_RW_state_C2:
+        {
+            ///<  0x003C  * C2充电模式   0：智能模式；1 idle模式； 2 自定义模式（32H生效）
+            self.typeC2.inputModelSet = cmdValue;
+        }
+            break;
+            
+            
             
 //            BSPowerBankCmdBattery_R_Time_L
         case BSPowerBankCmdBattery_R_Time_L:

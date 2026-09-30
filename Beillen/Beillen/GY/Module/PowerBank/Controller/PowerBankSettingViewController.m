@@ -11,6 +11,7 @@
 #import "SettingCellView.h"
 #import "BSPowerBankDevice.h"
 
+#import "PowerBankModelViewController.h"
 @interface PowerBankSettingViewController ()
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UIView *bgView;
@@ -21,6 +22,7 @@
 @property (nonatomic, strong) SettingCellView *numberCellView;
 @property (nonatomic, strong) SettingCellView *settingCellView;
 @property (nonatomic, strong) BSPowerBankDevice *device;
+@property (nonatomic, strong) NSString *deviceNameStr;
 @end
 
 @implementation PowerBankSettingViewController
@@ -65,7 +67,8 @@
     
     [self.bgView addSubview:self.settingCellView];
 
-    [self.deviceNameCellView initAddViewWithType:2 type:@"设备名称" message:@"ELAU PD888" icon:@"" showLine:YES];
+    self.deviceNameStr = @"ELAU PD888";
+    [self.deviceNameCellView initAddViewWithType:2 type:@"设备名称" message:self.deviceNameStr icon:@"" showLine:YES];
     [self.deviceModelCellView initAddViewWithType:3 type:@"设备型号" message:@"ELAU PD888" icon:@""  showLine:YES];
     [self.attestCellView initAddViewWithType:2 type:@"认证资质" message:@"六项认证" icon:@"" showLine:YES];
     [self.numberCellView initAddViewWithType:3 type:@"生产序列号" message:@"ASHUXB1E51301932" icon:@"" showLine:YES ];
@@ -166,7 +169,16 @@
 
 ///  clickBtn
 -(void)clickBtnForSetting:(UIButton*)btn {
-    NSLog(@"点击按钮2222 出厂设置");
+    __weak typeof(self) weakSelf = self;
+    [YGAlertMessageTool alertMessage:@"恢复出厂设置" subMessage:@"确定恢复出厂设置吗？" cancelTxt:@"取消" actionTxt:@"确定" handle:^(BSAlertMessageAction action, id object) {
+        if (action == BSAlertMessageActionEvents ) {
+            [weakSelf SettingDeviceMessage];
+        }
+    }];
+}
+
+
+-(void)SettingDeviceMessage{
     [self.device writeWithSingleCommand:BSPowerBankCmdSttingDevice_W_state cmdValue:255 block:^(BOOL result, id  _Nullable responseDic) {
         NSLog(@"写入回复出厂设置响应");
     }];
@@ -174,10 +186,28 @@
 
 -(void)clickBtnForInputModel:(UIButton*)btn {
     NSLog(@"点击按钮2222 充电模式");
+    PowerBankModelViewController *VC = [[PowerBankModelViewController alloc]init];
+    VC.model = self.model;
+    [self.navigationController pushViewController:VC animated:YES];
 }
 
 -(void)clickBtnForSetName:(UIButton*)btn {
     NSLog(@"点击按钮2222  设置名字");
+    __weak typeof(self) weakSelf = self;
+//    [YGAlertMessageTool alertMessage:@"恢复出厂设置" subMessage:@"确定恢复出厂设置吗？" placeholder:@"" cancelTxt:@"取消" actionTxt:@"确定" handle:^(BSAlertMessageAction action, id object) {
+//        if (action == BSAlertMessageActionEvents ) {
+//            [weakSelf SettingDeviceMessage];
+//        }
+//    }];
+    [YGAlertMessageTool alertMessage:@"修改设备名称" subMessage:@"" placeholder:@"请输入名称" txtFldTxt:weakSelf.deviceNameStr cancelTxt:@"取消" actionTxt:@"确定" handle:^(BSAlertMessageAction action, id  _Nonnull object) {
+        if (action == BSAlertMessageActionEvents) {
+            NSString *text = object;
+            if (text.isEnable) {
+                weakSelf.deviceNameStr = text;
+                weakSelf.deviceNameCellView.messageLab.text = text;
+            }
+        }
+    }];
 }
 
 -(void)clickBtnToAttest:(UIButton*)btn {
@@ -197,7 +227,7 @@
 -(SettingCellView*)inputCellView{
     if (!_inputCellView) {
         _inputCellView = [SettingCellView new];
-        [_inputCellView.rightBtn addTarget:self action:@selector(clickBtnForSetting:) forControlEvents:UIControlEventTouchUpInside];
+        [_inputCellView.rightBtn addTarget:self action:@selector(clickBtnForInputModel:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _inputCellView;
 }
@@ -215,7 +245,7 @@
 -(SettingCellView*)deviceNameCellView{
     if (!_deviceNameCellView) {
         _deviceNameCellView = [SettingCellView new];
-        [_deviceNameCellView.rightBtn addTarget:self action:@selector(clickBtnForSetting:) forControlEvents:UIControlEventTouchUpInside];
+        [_deviceNameCellView.rightBtn addTarget:self action:@selector(clickBtnForSetName:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _deviceNameCellView;
 }
@@ -230,7 +260,7 @@
 -(SettingCellView*)attestCellView{
     if (!_attestCellView) {
         _attestCellView = [SettingCellView new];
-        [_attestCellView.rightBtn addTarget:self action:@selector(clickBtnForSetting:) forControlEvents:UIControlEventTouchUpInside];
+        [_attestCellView.rightBtn addTarget:self action:@selector(clickBtnToAttest:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _attestCellView;
 }

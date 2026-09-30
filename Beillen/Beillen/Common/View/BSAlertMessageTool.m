@@ -197,7 +197,7 @@
     
     instance.actionView.hidden = (type == BSAlertMessageTypeAlert || type == BSAlertMessageTypeTopImgAndBottonCancel);
     instance.singleActionBtn.hidden = !(type == BSAlertMessageTypeAlert || type == BSAlertMessageTypeTopImgAndBottonCancel);
-    instance.inputBackgroundView.hidden = !(type == BSAlertMessageTypeTextFeildAlertShowError || type == BSAlertMessageTypeTextFeildToIsEmail );
+    instance.inputBackgroundView.hidden = !(type == BSAlertMessageTypeTextFeildAlertShowError || type == BSAlertMessageTypeTextFeildToIsEmail || type == BSAlertMessageTypeTextFeild );
     
     if (type == BSAlertMessageTypeAlert || type == BSAlertMessageTypeTopImgAndBottonCancel) {
         CGSize size = [action.string bs_sizeWithLabelHeight:40 font:bsFontMedium(20)] ;

@@ -227,7 +227,8 @@ typedef NS_ENUM(NSInteger, BSPowerBankTypeCWork) {
 @property (nonatomic, assign) NSInteger typeAlert;
 ///  输出功率设置 W
 @property (nonatomic, assign) NSInteger outputSetW;
-
+/// 设置的充电模式
+@property (nonatomic, assign) NSInteger inputModelSet;
 @end
 
 
