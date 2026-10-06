@@ -82,9 +82,12 @@ typedef NS_ENUM(NSInteger, BSPowerBankCommand) {
     BSPowerBankCmdInputType_RW_state_C2    =  60,     ///<  0x003C  * C2充电模式   0：智能模式；1 idle模式； 2 自定义模式（32H生效）
 
     BSPowerBankCmdSttingDevice_W_state     =  61,     ///<  0x003D  *  0xFF恢复出厂设置
-    ///<  Bit0 显示时间 1 on/ 0 off    Bit1 成就互动开关1 on/ 0 off  Bit2-3 文字颜色设置 2 浅色/1 深色，0 默认
-    BSPowerBankCmdLcdSetting_RW_state      =  62,     ///<  0x003E  *   Lcd 设置
     ///<
+    ///< Bit0 显示时间 1 on/ 0 off
+    ///< Bit1 成就互动开关1 on/ 0 off
+    ///< Bit2-3 文字颜色设置 2 浅色/1 深色，0 默认
+    BSPowerBankCmdLcdSetting_RW_state      =  62,     ///<  0x003E  *   Lcd 设置
+    
     ///<
     BSPowerBankCmdBattery_R_Time_L         =  64,     ///<  0x0040  *   累计放电时长低字节,低8位数据，单位分钟
     BSPowerBankCmdBattery_R_Time_H         =  65,     ///<  0x0041  *   累计放电时长高字节,高8位数据，单位分钟
@@ -290,29 +293,11 @@ typedef NS_ENUM(NSInteger, BSPowerBankTypeCWork) {
 @property(nonatomic, strong) BSCommonTypeByteModel *batteryCell_5;
 @property(nonatomic, strong) BSCommonTypeByteModel *batteryCell_6;
 @property(nonatomic, strong) BSCommonTypeByteModel *batteryCell_7;
-
-
-
-//
-///// 倒计时关机时间
-//@property (nonatomic, assign) NSInteger typeC_CloseTime;
-//@property (nonatomic, copy)   NSString* typeC_CloseTimeStr;
-///// 计时时间
-//@property (nonatomic, assign) NSInteger clock_CloseTime;
-//@property (nonatomic, copy)   NSString* clock_CloseTimeStr;
-//
-///// 格式: 二进制字符串 eg: 二进制为 1110 1010 -> 倒序后的错误对应为 01010111
-//@property (nonatomic, strong) NSArray *localErrorArrayStr;
-///// localErrorArray 有值， 说明有异常存在
-//@property (nonatomic, strong) NSMutableArray *localErrorArray;
-//@property (nonatomic, strong) NSMutableDictionary *localErrorDict;
-//@property (nonatomic, copy)   NSString *localErrorWebStr;    // 异常网页参数
-///// 格式: 二进制字符串 eg: 二进制为 1110 1010 -> 倒序后的对应为 ["0","1","0","1","0",,"1","1","1"]
-//@property (nonatomic, strong) NSString *typeCStateStr;
-///// 端口协议
-//@property (nonatomic, strong) NSString *typeCTypeStr;
-//// param 数据发生变化
-
+///  Bit0显示时间 、Bit1成就互动开关  Bit2-3 文字颜色设置
+@property (nonatomic, assign) NSInteger LcdTimeType;      // 显示时间
+@property (nonatomic, assign) NSInteger LcdInteractType;  // 成就互动开关
+@property (nonatomic, assign) NSInteger LcdTextColorType; // 文字颜色设置
+@property (nonatomic, assign) NSInteger LcdStateType; //   lcd变化值
 @property (nonatomic, copy  ) void (^dataDidChangedBlock)(BOOL success);
 // param 数据发生变化
 @property (nonatomic, copy  ) void (^dataDidChangedWithInfoBlock)(BOOL success);
@@ -369,6 +354,13 @@ typedef NS_ENUM(NSInteger, BSPowerBankTypeCWork) {
 /// length：连续的长度
 /// arrWriteData：写入的数据
 - (void)writeWithArrayCommand:(BSPowerBankCommand)command length:(NSInteger)length array:(NSArray*)arrWriteData block:(BSResponseBlock)block;
+
+
+
+///  写入 事件 高低两个字节 信息
+/// command ：开始的功能码（功能码）
+/// cmdValue：设置值
+- (void)writeWithEventTwoByteCommand:(BSPowerBankCommand)command  cmdValue:(NSInteger)cmdValue block:(BSResponseBlock)block;
 @end
 
 NS_ASSUME_NONNULL_END

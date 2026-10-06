@@ -15,7 +15,10 @@
 @property (nonatomic, strong) UILabel *laber_W ;
 @property (nonatomic, strong) UILabel *typeDeviceName ;
 @property (nonatomic, strong) UILabel *laber_V_A ;
-
+@property (nonatomic, strong) UIColor *LabSelectColor ;
+@property (nonatomic, strong) UIColor *LabDefaultColor ;
+@property (nonatomic, assign) BOOL isConnet ;
+@property (nonatomic, assign) BOOL typeConnect ;
 @end
 
 
@@ -23,6 +26,10 @@
 
 -(void)initAddView {
     [self addSubview:self.bgView];
+    
+    self.LabSelectColor = [UIColor bs_colorFromARGB:@"#004098" ];
+    self.LabDefaultColor = [UIColor bs_colorFromARGB:@"#FFFFFF" ];
+    
     [self.bgView addSubview:self.bgLabView];
     [self.bgLabView addSubview:self.typeLab];
     
@@ -86,6 +93,17 @@
     NSString *typeW = @"--W";
     NSString *typeVA = @"--V / --A";
     NSInteger typeConnect = typeModel.typeConnect;
+    if ((self.isConnet != isConnet) || ( self.typeConnect !=typeConnect )) {
+        self.isConnet = isConnet ;
+        self.typeConnect = typeConnect ;
+        if (typeConnect && isConnet) {
+            self.typeLab.textColor = self.LabSelectColor;
+            self.typeStateLab.textColor = [UIColor bs_colorFromARGB:@"#004098"];
+        } else {
+            self.typeLab.textColor = self.LabDefaultColor;
+            self.typeStateLab.textColor = [UIColor bs_colorFromARGB:@"#757589"];
+        }
+    }
     if (isConnet) {
         if (typeConnect) {
             if (typeModel.typeState) {
@@ -147,14 +165,14 @@
 
 -(UILabel*)typeLab {
     if (!_typeLab) {
-        _typeLab = [UILabel bs_labelWithFont:[UIFont bs_PingFangBoldFontWithFontSize:14] textAlignment:NSTextAlignmentCenter textColor:[UIColor bs_colorFromARGB:@"#004098"]] ;
+        _typeLab = [UILabel bs_labelWithFont:[UIFont bs_PingFangBoldFontWithFontSize:14] textAlignment:NSTextAlignmentCenter textColor:self.LabDefaultColor] ;
     }
     return _typeLab;
 }
 
 -(UILabel*)typeStateLab {
     if (!_typeStateLab) {
-        _typeStateLab = [UILabel bs_labelWithFont:[UIFont bs_mediumFontWithFontSize:14] textAlignment:NSTextAlignmentRight textColor:[UIColor bs_colorFromARGB:@"#004098"]] ;
+        _typeStateLab = [UILabel bs_labelWithFont:[UIFont bs_mediumFontWithFontSize:14] textAlignment:NSTextAlignmentRight textColor:[UIColor bs_colorFromARGB:@"#757589"]] ;
     }
     return _typeStateLab;
 }

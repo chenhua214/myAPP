@@ -25,7 +25,6 @@ static NSString *const kBSBLEReadTypeCDeviceTimer  = @"BSBLEReadTypeCDeviceTimer
 {
     [self.device removeObserver:self forKeyPath:@"isConnected"];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    self.isReadDeviceCmdAgain = NO;
     [self stopReadCmd];
     [self stopReadTypeCCmd];
 }
@@ -39,11 +38,12 @@ static NSString *const kBSBLEReadTypeCDeviceTimer  = @"BSBLEReadTypeCDeviceTimer
 
 - (void)initData  {
     __weak typeof(self) weakSelf = self;
+    self.isReadDeviceCmdAgain = YES;
     self.device = (BSPowerBankDevice *)[[BSDeviceManager shareInstance] findDeviceWithIdentifier:self.model.sn];
     if (self.device.isConnected) {
         self.isConnected = YES;
-        [self readCommand];
-        [self ReadCmdToOnce];
+        [self readCmcForDeviceConnected];
+       
     }
     [self.device addObserver:self forKeyPath:@"isConnected" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:nil];
     self.device.dataDidChangedBlock = ^(BOOL success) {
@@ -74,7 +74,7 @@ static NSString *const kBSBLEReadTypeCDeviceTimer  = @"BSBLEReadTypeCDeviceTimer
             self.isConnected = isConnected;
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.85 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 if (isConnected) {
-                    [weakSelf readCommand];
+                    [weakSelf readCmcForDeviceConnected];
                 } else {
                     [weakSelf chageDdate];
                     [weakSelf stopReadCmd];
@@ -82,6 +82,12 @@ static NSString *const kBSBLEReadTypeCDeviceTimer  = @"BSBLEReadTypeCDeviceTimer
             });
         }
     });
+}
+
+#pragma mark 设备连接之后读取数据设备信息
+-(void)readCmcForDeviceConnected {
+    [self readCommand];
+    [self ReadCmdToOnce];
 }
 
 #pragma mark 读取设备信息
@@ -98,6 +104,7 @@ static NSString *const kBSBLEReadTypeCDeviceTimer  = @"BSBLEReadTypeCDeviceTimer
 
 -(void)stopReadCmd{
     [[BSGCDTimer shareInstance] cancelTimerWithName:kBSBLEReadDeviceTimer];
+    [[BSGCDTimer shareInstance] cancelTimerWithName:kBSBLEReadTypeCDeviceTimer];
 }
 
 /// 一直读取数据
@@ -173,6 +180,11 @@ static NSString *const kBSBLEReadTypeCDeviceTimer  = @"BSBLEReadTypeCDeviceTimer
     }];
     //  45H 46H电池剩余容量
     [self.device readValueWithStartCommand:BSPowerBankCmdBattery_R_Number_L endCommand:BSPowerBankCmdBattery_R_Number_H block:^(BOOL result, id  _Nullable responseDic) {
+        
+    }];
+    
+    //  0x003E  *   Lcd 设置
+    [self.device readValueWithStartCommand:BSPowerBankCmdLcdSetting_RW_state endCommand:BSPowerBankCmdLcdSetting_RW_state block:^(BOOL result, id  _Nullable responseDic) {
         
     }];
 }

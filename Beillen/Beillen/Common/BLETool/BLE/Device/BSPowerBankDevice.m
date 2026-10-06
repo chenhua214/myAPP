@@ -581,8 +581,18 @@
             self.typeC2.inputModelSet = cmdValue;
         }
             break;
-            
-            
+        case BSPowerBankCmdLcdSetting_RW_state:
+        {
+            ///<   0x003E  *   Lcd 设置
+            ///<   Bit0 显示时间 1 on/ 0 off
+            ///<   Bit1 成就互动开关1 on/ 0 off
+            ///<   Bit2-3 文字颜色设置 2 浅色/1 深色，0 默认
+            [self CmdDevice_LcdSettingState:cmdValue];
+            if (self.LcdStateType != cmdValue) {
+                self.LcdStateType = cmdValue;
+            }
+        }
+            break;
             
 //            BSPowerBankCmdBattery_R_Time_L
         case BSPowerBankCmdBattery_R_Time_L:
@@ -702,6 +712,53 @@
 }
 
 
+/// 0x0015  *   设备状态寄存器 数据处理
+-(void)CmdDevice_LcdSettingState:(NSInteger)value {
+    NSString *str10To16 = [NSString stringTo2Lenght16Hex:value];
+    NSString *str16To2 = [NSString getBinaryByHex:str10To16];
+    NSLog(@"str10To16 ===%@ ==str16To2 ==%@",str10To16,str16To2);
+    NSInteger length = str16To2.length;
+    if (length>4) {
+        NSString *subData0 = [str16To2 substringWithRange:NSMakeRange(length-1-0, 1)];
+        NSLog(@"subData====%@", subData0);
+        [self readDevice_LcdSettingStateByte:0 value:subData0.integerValue];
+        
+        
+        NSString *subData1 = [str16To2 substringWithRange:NSMakeRange(length-1-1, 1)];
+        NSLog(@"subData====%@", subData1);
+        [self readDevice_LcdSettingStateByte:1 value:subData1.integerValue];
+        
+        NSString *subData2_3 = [str16To2 substringWithRange:NSMakeRange(length-1-3, 2)];
+        /// 二进制转为 10进制
+        NSInteger subdataValue2_3 = [NSString getDecimalByBinary:subData2_3];
+        
+        NSLog(@"subData====%@", subData2_3);
+        [self readDevice_LcdSettingStateByte:2 value:subdataValue2_3];
+        
+    }
+   
+}
+
+#pragma mark  0x0015  *   设备状态寄存器 数据处理
+- (void)readDevice_LcdSettingStateByte:(NSInteger)cmdByte value:(NSInteger)value {
+    switch (cmdByte) {
+        case 0:
+            /// 显示时间
+            self.LcdTimeType = value;
+            break;
+        case 1:
+            ///  成就互动开关
+            self.LcdInteractType = value;
+            break;
+        case 2:
+            /// 文字颜色设置
+            self.LcdTextColorType = value;
+            break;
+            
+        default:
+            break;
+    }
+}
 
 #pragma mark  读取数据  开头和长度，连续指令
 - (void)readValueWithCommand:(BSPowerBankCommand)command  length:(NSInteger)length block:(BSResponseBlock)block
@@ -934,7 +991,29 @@
 
 }
 
-
+#pragma mark -    设置事件写入高低两个字节 信息
+/// command ：开始的功能码（功能码）
+/// cmdValue：设置值
+- (void)writeWithEventTwoByteCommand:(BSPowerBankCommand)command  cmdValue:(NSInteger)cmdValue block:(BSResponseBlock)block{
+    /// 功能码
+    NSString *commandStr = [NSString stringWithFormat:@"%02lx",command];
+    /// 数据
+    NSString *cmdValueStr = [NSString stringWithFormat:@"%04lx",cmdValue];
+    NSInteger length = cmdValueStr.length;
+    if (length!=4) {
+        NSLog(@"写入数据不是两个字节，不符合数据结构要求");
+        return;
+    }
+    NSString *firstTwo = [cmdValueStr substringToIndex:2];
+    NSString *lastTwo = [cmdValueStr substringFromIndex:length-2];
+    
+    /// 是否  连续操作：
+    /// 指令类型：0x00：读请求   0x01：写请求   0x02：响应   0x03：事件
+    /// Bit4  连续操作： 0x00：否  0x01：是
+    /// 连续写入：11     长度02
+    commandStr = [NSString stringWithFormat:@"%@%@%@%@%@",@"13",commandStr,@"02",lastTwo,firstTwo];
+    [self settingWriteCommand:commandStr end:@"55" block:block];
+}
 
 #pragma mark -    设置事件写入高低两个字节 信息
 /// command ：开始的功能码（功能码）

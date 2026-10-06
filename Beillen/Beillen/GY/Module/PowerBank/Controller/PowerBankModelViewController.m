@@ -96,6 +96,9 @@
     [self.device readValueWithStartCommand:BSPowerBankCmdInputType_RW_state_C1 endCommand:BSPowerBankCmdInputType_RW_state_C2 block:^(BOOL result, id  _Nullable responseDic) {
         [weakSelf updataForView];
     }];
+    [self.device readValueWithStartCommand:BSPowerBankCmdTypeC1_RW_OutputW endCommand:BSPowerBankCmdTypeC2_RW_OutputW block:^(BOOL result, id  _Nullable responseDic) {
+        
+    }];
 }
 
 

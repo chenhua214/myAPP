@@ -227,10 +227,10 @@
     
     self.typeLab.text = @"文本颜色";
     self.messageLab.text = @"该选项仅对壁纸页面生效";
-    [self upSelectBtnCenterView:typeView];
+    [self upDataForViewWithType:typeView];
 }
 
--(void)upSelectBtnCenterView:(NSInteger)type
+-(void)upDataForViewWithType:(NSInteger)type
 {
     if (type == 1) {
         self.bgBtnWhiteView.hidden = NO;
@@ -239,21 +239,21 @@
         self.bgBtnWhiteView.hidden = YES;
         self.bgBtnGrayView.hidden = NO;
     }
-    
-    if (self.delegate && [self.delegate respondsToSelector:@selector(eventsDidTouched:value:)]) {
-        [self.delegate eventsDidTouched:4 value:type];
-    }
 }
 
 -(void)clickBtn:(UIButton*)button {
     button.selected = !button.selected;
     
-    [self upSelectBtnCenterView:button.tag];
+    [self upDataForViewWithType:button.tag];
     if (button == self.whiteBtn) {
         self.grayBtn.selected = NO;
        
     } else if (button == self.grayBtn) {
         self.whiteBtn.selected = NO;
+    }
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(eventsDidTouched:value:)]) {
+        [self.delegate eventsDidTouched:4 value:button.tag];
     }
 }
 
@@ -392,6 +392,11 @@
         make.height.mas_equalTo(87);
         make.bottom.mas_equalTo(0);
     }];
+}
+
+-(void)upDataWithLcdTimeType:(NSInteger)LcdTimeType  LcdInteractType:(NSInteger)LcdInteractType{
+    self.timeView.selectBtn.selected = LcdTimeType;
+    self.interactView.selectBtn.selected = LcdInteractType;
 }
 
 -(void)clickWitchBtn:(UIButton*)button{
