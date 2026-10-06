@@ -390,7 +390,7 @@
         /// 图片类型
         [self.bgView addSubview:self.iconRightView];
         [self.iconRightView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.right.mas_equalTo(13);
+            make.right.mas_equalTo(-13);
             make.centerY.mas_equalTo(0);
             make.width.mas_equalTo(90);
             make.height.mas_equalTo(45);
