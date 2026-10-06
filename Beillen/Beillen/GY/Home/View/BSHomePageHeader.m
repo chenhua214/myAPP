@@ -89,7 +89,7 @@
 - (UIButton *)goAddBtn {
     if (!_goAddBtn) {
         _goAddBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_goAddBtn setImage:[UIImage imageNamed:@"home_add_devices"] forState:UIControlStateNormal];
+        [_goAddBtn setImage:[UIImage imageNamed:@"add_add_btn_icon"] forState:UIControlStateNormal];
         [_goAddBtn addTarget:self action:@selector(eventDidTouched:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _goAddBtn;
