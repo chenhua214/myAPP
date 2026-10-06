@@ -15,7 +15,7 @@
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UIImageView *imageTestView;
 @property (nonatomic, strong) PowerBankScreenSetView *selectTimeView;
-
+@property (nonatomic, strong) PowerBankScreenSetTextView *textView ;
 @end
 
 @implementation PowerBankScreenSetViewController
@@ -62,6 +62,15 @@
         make.width.mas_equalTo(self.scrollView).offset(0);
         make.height.mas_equalTo(261);
     }];
+    
+    [self.scrollView addSubview:self.textView];
+    [self.textView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.selectTimeView.mas_bottom).offset(sp_left);
+        make.left.mas_equalTo(0);
+        make.right.mas_equalTo(0);
+        make.width.mas_equalTo(self.scrollView).offset(0);
+        make.bottom.mas_equalTo(-40);
+    }];
 }
 
 /// 代理  PowerBankScreenSetViewDelegate
@@ -73,6 +82,8 @@
         NSLog(@"显示时间开关===%ld",value);
     } else if (eventsType == 3) {
         NSLog(@"成就互动开关===%ld",value);
+    } else if (eventsType == 4) {
+        NSLog(@"文本颜色===%ld",value);
     }
 }
 
@@ -104,6 +115,15 @@
        
     }
     return _selectTimeView;
+}
+
+-(PowerBankScreenSetTextView*)textView {
+    if (!_textView ){
+        _textView = [PowerBankScreenSetTextView new];
+        [_textView initAddViewWithType:1];
+        _textView.delegate = self;
+    }
+    return _textView;
 }
 
 @end

@@ -146,6 +146,208 @@
 
 
 
+
+
+@interface PowerBankScreenSetTextView()
+@property (nonatomic, strong) UIView *bgView ;
+@property (nonatomic, strong) UILabel *typeLab ;
+@property (nonatomic, strong) UILabel *messageLab ;
+
+@property (nonatomic, strong) UIView *bgBtnView ;
+@property (nonatomic, strong) UIButton *whiteBtn ;
+@property (nonatomic, strong) UIButton *grayBtn ;
+@property (nonatomic, strong) UIView *bgBtnWhiteView ;
+@property (nonatomic, strong) UIView *bgBtnGrayView ;
+@end
+
+@implementation PowerBankScreenSetTextView
+-(void)initAddViewWithType:(NSInteger)typeView {
+
+    CGFloat sp_left = 20;
+    [self addSubview:self.bgView];
+    [self.bgView addSubview:self.typeLab];
+    [self.bgView addSubview:self.messageLab];
+
+    [self.bgView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.left.bottom.right.mas_equalTo(0);
+    }];
+    [self.typeLab mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(sp_left);
+        make.right.mas_equalTo(-sp_left);
+        make.top.mas_equalTo(sp_left);
+    }];
+    [self.messageLab mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(sp_left);
+        make.right.mas_equalTo(-sp_left);
+        make.top.equalTo(self.typeLab.mas_bottom).offset(4);
+       
+    }];
+
+    [self.bgView addSubview:self.bgBtnView];
+    [self.bgBtnView addSubview:self.bgBtnWhiteView];
+    [self.bgBtnView addSubview:self.bgBtnGrayView];
+    [self.bgBtnView addSubview:self.whiteBtn];
+    [self.bgBtnView addSubview:self.grayBtn];
+    
+    [self.bgBtnView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(sp_left);
+        make.right.mas_equalTo(-sp_left);
+        make.top.equalTo(self.messageLab.mas_bottom).offset(10);
+        make.height.mas_equalTo(64);
+        make.bottom.mas_equalTo(-sp_left);
+    }];
+    
+    [self.whiteBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(8);
+        make.left.mas_equalTo(8);
+        make.bottom.mas_equalTo(-8);
+        make.right.equalTo(self.bgBtnView.mas_centerX);
+    }];
+    
+    [self.grayBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(8);
+        make.right.mas_equalTo(-8);
+        make.bottom.mas_equalTo(-8);
+        make.left.equalTo(self.bgBtnView.mas_centerX);
+    }];
+    
+    [self.bgBtnWhiteView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.width.mas_equalTo(self.self.whiteBtn.mas_width);
+        make.top.mas_equalTo(8);
+        make.bottom.mas_equalTo(-8);
+        make.centerX.equalTo(self.whiteBtn.mas_centerX);
+    }];
+    
+    [self.bgBtnGrayView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.width.mas_equalTo(self.self.grayBtn.mas_width);
+        make.top.mas_equalTo(8);
+        make.bottom.mas_equalTo(-8);
+        make.centerX.equalTo(self.grayBtn.mas_centerX);
+    }];
+    
+    self.typeLab.text = @"文本颜色";
+    self.messageLab.text = @"该选项仅对壁纸页面生效";
+    [self upSelectBtnCenterView:typeView];
+}
+
+-(void)upSelectBtnCenterView:(NSInteger)type
+{
+    if (type == 1) {
+        self.bgBtnWhiteView.hidden = NO;
+        self.bgBtnGrayView.hidden = YES;
+    } else if (type == 2) {
+        self.bgBtnWhiteView.hidden = YES;
+        self.bgBtnGrayView.hidden = NO;
+    }
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(eventsDidTouched:value:)]) {
+        [self.delegate eventsDidTouched:4 value:type];
+    }
+}
+
+-(void)clickBtn:(UIButton*)button {
+    button.selected = !button.selected;
+    
+    [self upSelectBtnCenterView:button.tag];
+    if (button == self.whiteBtn) {
+        self.grayBtn.selected = NO;
+       
+    } else if (button == self.grayBtn) {
+        self.whiteBtn.selected = NO;
+    }
+}
+
+- (UIView *)bgView{
+    if (!_bgView) {
+        UIView *view = [UIView new];
+        view.backgroundColor =[UIColor whiteColor];;
+        view.layer.cornerRadius = 32;
+        _bgView = view;
+    }
+    return _bgView;
+}
+
+-(UILabel*)typeLab {
+    if (!_typeLab) {
+        _typeLab = [UILabel bs_labelWithFont:[UIFont bs_mediumFontWithFontSize:18] textAlignment:NSTextAlignmentLeft textColor:[UIColor bs_colorFromARGB:@"#191C1E"]] ;
+    }
+    return _typeLab;
+}
+
+-(UILabel*)messageLab {
+    if (!_messageLab) {
+        _messageLab = [UILabel bs_labelWithFont:[UIFont bs_lightFontWithFontSize:16] textAlignment:NSTextAlignmentLeft textColor:[UIColor bs_colorFromARGB:@"#454558" alpha:0.4]] ;
+        _messageLab.numberOfLines = 2;
+    }
+    return _messageLab;
+}
+
+- (UIView *)bgBtnView{
+    if (!_bgBtnView) {
+        UIView *view = [UIView new];
+        view.backgroundColor = [UIColor bs_colorFromARGB:@"#F2F4F6"];
+        view.layer.cornerRadius = 32;
+        _bgBtnView = view;
+    }
+    return _bgBtnView;
+}
+
+- (UIView *)bgBtnWhiteView{
+    if (!_bgBtnWhiteView) {
+        UIView *view = [UIView new];
+        view.backgroundColor =[UIColor whiteColor];;
+        view.layer.cornerRadius = 24;
+        view.layer.borderColor = [UIColor bs_colorFromARGB:@"#004098"].CGColor;
+        view.layer.borderWidth = 1.5;
+        view.hidden = YES;
+        _bgBtnWhiteView = view;
+    }
+    return _bgBtnWhiteView;
+}
+
+- (UIView *)bgBtnGrayView{
+    if (!_bgBtnGrayView) {
+        UIView *view = [UIView new];
+        view.backgroundColor =[UIColor whiteColor];;
+        view.layer.cornerRadius = 24;
+        view.layer.borderColor = [UIColor bs_colorFromARGB:@"#004098"].CGColor;
+        view.layer.borderWidth = 1.5;
+        view.hidden = YES;
+        _bgBtnGrayView = view;
+    }
+    return _bgBtnGrayView;
+}
+    
+-(UIButton*)whiteBtn {
+    if (!_whiteBtn) {
+        _whiteBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_whiteBtn setTitle:@"白色" forState:UIControlStateNormal];
+        _whiteBtn.tag = 1;
+        [_whiteBtn setTitleColor:[UIColor bs_colorFromARGB:@"#454558"] forState:UIControlStateNormal];
+        [_whiteBtn setTitleColor:[UIColor bs_colorFromARGB:@"#191C1E"] forState:UIControlStateSelected];
+        [_whiteBtn addTarget:self action:@selector(clickBtn:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _whiteBtn;
+}
+
+-(UIButton*)grayBtn{
+    if (!_grayBtn) {
+        _grayBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_grayBtn setTitleColor:[UIColor bs_colorFromARGB:@"#454558"] forState:UIControlStateNormal];
+        [_grayBtn setTitleColor:[UIColor bs_colorFromARGB:@"#191C1E"] forState:UIControlStateSelected];
+        [_grayBtn setTitle:@"深灰色" forState:UIControlStateNormal];
+        _grayBtn.tag = 2;
+        [_grayBtn addTarget:self action:@selector(clickBtn:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _grayBtn;
+}
+
+@end
+
+
+
+
+
 @interface PowerBankScreenSetView()
 @property (nonatomic, strong) UIImageView *bgIconView ;
 @property (nonatomic, strong) UIView *bgView ;

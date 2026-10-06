@@ -19,6 +19,13 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 
+@interface PowerBankScreenSetTextView : UIView
+-(void)initAddViewWithType:(NSInteger)typeView;
+/// 按钮点击事件代理
+@property (nonatomic, weak) id <PowerBankScreenSetViewDelegate> delegate;
+@end
+
+
 @interface PowerBankScreenSetView : UIView
 /// 按钮点击事件代理
 @property (nonatomic, weak) id <PowerBankScreenSetViewDelegate> delegate;
