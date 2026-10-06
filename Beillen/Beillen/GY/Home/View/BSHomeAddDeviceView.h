@@ -9,7 +9,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface BSHomeAddDeviceView : UIView
+@interface BSHomeAddDeviceView : UICollectionViewCell
 /// 切换语言、更新内容
 - (void)updateOnChangeLanguages;
 @end

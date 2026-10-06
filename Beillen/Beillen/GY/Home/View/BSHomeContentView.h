@@ -9,7 +9,6 @@
 #import "BSHomePageHeader.h"
 NS_ASSUME_NONNULL_BEGIN
 @class BSHomeDataModel;
-@class BSHomeAddDeviceView;
 
 #define homeHeaderHeight 60
 #define homeCenterYScale 1.26
@@ -18,8 +17,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) BSHomePageHeader *headerView;
 /// Collection View
 @property (nonatomic, strong) UICollectionView *dataCollectionView;
-/// 添加新设备
-@property (nonatomic, strong) BSHomeAddDeviceView *addDeviceView;
 /// Banner Cell Size
 @property (nonatomic, assign) CGSize bannerSize;
 @property (nonatomic, assign) CGSize bannerCycleViewSize;
